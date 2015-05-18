@@ -1,0 +1,347 @@
+<?php 	
+	
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('ckEditor/ckeditor');	
+	echo $this->Html->script('empresas/ofertas');	
+	
+	$valor_desconto = 0;
+	$parcels = 1;
+	$ativoY = "ativo";	
+	$parcels_off_impost = 0;
+	
+	if($this->Session->check('addOffer.Offer.percentage_discount'))$valor_desconto = $this->Session->read('addOffer.Offer.percentage_discount');
+	
+	if($this->Session->check('addOffer.Offer')){
+		if($this->Session->read('addOffer.Offer.parcels')=='ACTIVE'){
+			$parcels = 1;
+			$ativoY = "ativo";	
+		}else{
+			$parcels = 0;
+			$ativoN = "ativo";	
+			$ativoY = "";
+		}
+		if($this->Session->read('addOffer.Offer.public')=='ACTIVE'){
+			$checkPublic = 'checked';
+			$check = '';
+		}else{
+			$check = 'checked';
+			$checkPublic = '';
+		}
+		if($this->Session->read('addOffer.Offer.parcels_off_impost')=='ACTIVE'){
+			$parcels_off_impost = 1;
+		}
+	}	
+?>
+
+
+<div id="popescondido" style="display:none">
+		<h2><span>Métricas</span><a href="javascript:void(0);" onClick="fechar_popUP();"; class="fechar"><img src="../../companies/img/icones/close.png"></a></h2>
+
+	<div class="alinha">
+		<div class="area-formulario" style="float:none;">
+			<label>Categoria</label>
+			<div class="select">
+				<input type="hidden" name="seila">
+				<strong>Selecione</strong>
+				<ul>
+					<?php foreach($categorias as $categoria){?>
+						<li valor="<?php echo $categoria['categories']['id'];?>"><?php echo $categoria['categories']['name'];?></li>					
+					<?php } ?>
+				</ul>
+			</div>
+		</div>	
+		<div id="dados-metricas">
+			
+		</div>
+		<div class="area-botoes" style="width:100%">
+			<button class="envio" id="envio">Salvar</button>					
+		</div>
+	</div>
+	</div>
+	
+<?php echo $this->Form->create('Offer',array('url'=>array('controller'=>'companies','action'=>'addOffer','offerFilters'),'type'=>'file'));?>
+<div class="item-direita-dados-ofertas">
+	
+	<div class="conteudo-de-agendamento" style="margin-top:20px;">
+		<h3 style="height:0px;">Agendamento da Oferta</h3>
+			<div class="area-formulario" style="width:130px; margin-right:0px;">
+				<label style="height:0px;">Data Inicial</label>
+				<?php echo $this->Form->input('begins_at', array('label'=>'','style'=>'width:115px; float:left; margin:0px 5px 5px 0px', 'class'=>'textbox', 'id'=>'calendario-inicio')); ?>				
+			</div>
+			<div class="area-formulario" style="width:200px; margin-right:20px;">
+				<label style="height:0px;">Data Final</label>
+				<?php echo $this->Form->input('ends_at', array('label'=>'','style'=>'width:115px; float:left; margin:0px 5px 5px 0px', 'class'=>'textbox', 'id'=>'calendario-fim')); ?>
+			</div>
+	</div>
+	<div class="conteudo-de-agendamento">
+		<h3 style="margin-bottom:0px; height:10px;">Valores</h3>		
+
+		<div class="area-formulario" style="width:125px; margin-right:20px; padding:0px !important;">
+			<label style="width:100px; text-align:left; padding:0px !important; height:10px;">Valor</label>
+			<?php echo $this->Form->input('value', array('label'=>'', 'id'=>'valor', 'class'=>'textbox')); ?>
+		</div>	
+		<div class="area-formulario" style="width:90px; margin-right:20px; float:none; padding:0px !important;">
+			<label style="width:60px; text-align:left; padding:0px !important; height:10px;">Desconto</label>
+			<?php echo $this->Form->input('percentage_discount', array('label'=>'', 'id'=>'desconto', 'value'=>$valor_desconto, 'class'=>'textbox', 'maxlength'=>'4')); ?>
+			<span  class="exemplo">Valor em %</span>
+		</div>	
+
+		<div class="area-formulario" style="width:70px; padding:0px !important; margin-top:-10px;">
+			<label style="width:70px; text-align:left; padding:0px !important; marign:0px !important; height:10px;">Peso</label>
+			<?php echo $this->Form->input('weight', array('label'=>'', 'id'=>'peso', 'class'=>'textbox', 'maxlength'=>'2')); ?>
+			<span  class="exemplo">Peso em Kg - 1.00</span>
+		</div>
+
+	</div>	
+</div>
+
+<div class="item-esquerda-dados-ofertas">
+
+	
+	<?php echo $this->Html->css('empresas/style_op');?>
+	
+		<br /><br /><div class="area-formulario" style="width:500px; height:80px; text-align:left; marign:20px 0 20px 0 !important; font-weight:bold; background:#E8E6EC;  border:1px dotted #CCC; -webkit-border-radius: 9px; -moz-border-radius: 9px; border-radius: 9px; -webkit-box-shadow:  0px 0px 4px 2px rgba(00, 00, 00, 0.2); box-shadow:  0px 0px 4px 2px rgba(00, 00, 00, 0.2);">
+
+<div style="margin:10px 0 0 170px;">
+		Essa é uma oferta...
+
+		<fieldset class="radios">
+			<label class="label_radio" for="radio-01"><input name="data[Offer][public]" id="radio-01" value="INACTIVE" type="radio" <?php echo $check;?>  checked="checked"/>
+            DIRECIONADA</label>
+			<label class="label_radio" for="radio-02"><input name="data[Offer][public]" id="radio-02" value="ACTIVE" type="radio" <?php echo $checkPublic;?> />
+            PÚBLICA</label>
+        </fieldset>
+</div>
+
+
+<script>
+    var d = document;
+    var safari = (navigator.userAgent.toLowerCase().indexOf('safari') != -1) ? true : false;
+    var gebtn = function(parEl,child) { return parEl.getElementsByTagName(child); };
+    onload = function() {
+        
+        var body = gebtn(d,'body')[0];
+        body.className = body.className && body.className != '' ? body.className + ' has-js' : 'has-js';
+        
+        if (!d.getElementById || !d.createTextNode) return;
+        var ls = gebtn(d,'label');
+        for (var i = 0; i < ls.length; i++) {
+            var l = ls[i];
+            if (l.className.indexOf('label_') == -1) continue;
+            var inp = gebtn(l,'input')[0];
+            if (l.className == 'label_check') {
+                l.className = (safari && inp.checked == true || inp.checked) ? 'label_check c_on' : 'label_check c_off';
+                l.onclick = check_it;
+            };
+            if (l.className == 'label_radio') {
+                l.className = (safari && inp.checked == true || inp.checked) ? 'label_radio r_on' : 'label_radio r_off';
+                l.onclick = turn_radio;
+            };
+        };
+    };
+    var check_it = function() {
+        var inp = gebtn(this,'input')[0];
+        if (this.className == 'label_check c_off' || (!safari && inp.checked)) {
+            this.className = 'label_check c_on';
+            if (safari) inp.click();
+        } else {
+            this.className = 'label_check c_off';
+            if (safari) inp.click();
+        };
+    };
+    var turn_radio = function() {
+        var inp = gebtn(this,'input')[0];
+        if (this.className == 'label_radio r_off' || inp.checked) {
+            var ls = gebtn(this.parentNode,'label');
+            for (var i = 0; i < ls.length; i++) {
+                var l = ls[i];
+                if (l.className.indexOf('label_radio') == -1)  continue;
+                l.className = 'label_radio r_off';
+            };
+            this.className = 'label_radio r_on';
+            if (safari) inp.click();
+        } else {
+            this.className = 'label_radio r_off';
+            if (safari) inp.click();
+        };
+    };
+</script>
+
+
+<!---------------------- 
+	Formato anterior   |
+------------------------
+<select name="data[Offer][public]" style="margin-top:20px;"><?php if($this->Session->check('addOffer.Offer.public'))echo "<option>".$this->Session->read('addOffer.Offer.public')."</option>"; ?><option>ACTIVE</option><option>INACTIVE</option></select>
+---------------------->
+		</div><!--area-formulario-->
+
+
+
+
+
+
+
+
+	<div class="area-formulario" style="width:90%; float:none; margin-top:20px;">
+		<br /><br />
+        <label style="height:4px;">Título da Oferta</label>
+		<?php echo $this->Form->input('title', array('label'=>'', 'class'=>'textbox')); ?>
+	</div>
+	<div class="area-formulario"  style="width:93%;">
+		<label style="height:20px;">Resumo da Oferta</label>
+		<textarea class="textarea" maxlength="255" name="data[Offer][resume]" style="width:90%; height:100px !important;"><?php if($this->Session->check('addOffer.Offer.resume'))echo $this->Session->read('addOffer.Offer.resume'); ?></textarea>		
+	</div>	
+</div>
+
+
+	<div class="area-formulario">
+		<label>Descricao</label>		
+		<textarea name="data[Offer][description]" editor="editor1" class="textbox ckeditor"><?php if($this->Session->check('addOffer.Offer.description'))echo $this->Session->read('addOffer.Offer.description'); ?></textarea>
+	</div>	
+	<div class="area-formulario">
+		<label>Especificações</label>
+		<textarea name="data[Offer][specification]" editor="editor1" class="textbox ckeditor"><?php if($this->Session->check('addOffer.Offer.specification'))echo $this->Session->read('addOffer.Offer.specification'); ?></textarea>
+
+
+	</div>
+
+
+
+
+	<div class="conteudo-de-metricas">
+		<h3 style="margin-bottom:-10px;">Opções do seu produto</h3>
+		<a href="javascript:void(0)" class="linkpopup linkAdicionarMetricas">Adicione as opções de<br>venda do seu produto</a><br>
+
+
+		
+
+
+	<div id="metricas-selecionadas" style="line-height:20px;">
+
+			<?php 
+				if(!empty($_SESSION['addOffer']['Offer']['metrics'])){
+					$metricas = json_decode($this->Session->read('addOffer.Offer.metrics'), true);
+					//pr($metricas);	
+					foreach($metricas as $metrica => $values){
+						echo "<strong style='margin-right:5px; text-transform:uppercase;'> {$metrica}: </strong>";
+						foreach($values as $value){
+							echo $value;	
+						}	
+						echo "<br>";
+					}
+				 }
+			?>
+		</div>
+
+
+			<div style="clear:both; width:90%; height:20px; border-bottom:1px dotted #999999;"></div>
+
+		
+        <h3>Parcelamento ?</h3>
+        <br />        
+		<div class="area-formulario">
+				<input type="hidden" value="<?php echo $parcels;?>" name="data[Offer][parcels]" />
+					<div class="radiobutton">
+						<a href="javascript:void(0);" name="parcelamento" class="verifica_parcelamento <?php echo $ativoY;?>" valor="1"><span>Sim</span></a>
+						<a href="javascript:void(0);" name="parcelamento" class="verifica_parcelamento <?php echo $ativoN;?>" valor="0"><span>Não</span></a>
+					</div>
+        </div>
+        
+    <div style="clear:both; height:24px;"></div>
+    <div class="juros-parcelamento">
+	    <div class="area-formulario">
+				<input type="hidden" value="<?php echo $parcels_off_impost;?>" name="data[Offer][parcels_off_impost]">			
+				<div class="etiqueta-on-off">
+					<span>Parcelamento com juros para esta oferta</span>
+					<div class="on-off" valor="<?php echo $parcels_off_impost;?>">										
+						<img src="https://secure.trueone.com.br/portal/app/webroot/img/icones/on-off.png">
+						<a href="javascript:void(0);"></a>
+					</div>			
+				</div>
+		</div>     
+   </div>
+
+		
+	</div>
+
+
+<style type="text/css">
+	#photo_principal, #photo1, #OffersPhotoPhoto1, #OffersPhotoPhoto2, #OffersPhotoPhoto3, #OffersPhotoPhoto4
+	{ border:1px dashed #666 !important; background:#EBEBEB !important; padding:9px; margin:2px; float:left; }
+</style>
+
+
+	<div class="upload">
+		<h3>Imagens da Oferta</h3>
+		<div class="area-formulario" style="float:left;">
+			<label style="height:12px;"><strong>Imagem Principal</strong></label>
+			<?php 
+				if ($this->Session->read('addOffer.Offer.photo') != null) {
+                                $img = $this->Session->read('addOffer.Offer');
+                                    echo "<img src='{$img['photo']}' class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer;','class'=>'removeOfferImage','id'=>'featured'));
+                             } else {
+                                    echo $this->Form->input('photo', array('label'=>'','type'=>'file', 'id'=>'photo_principal'));
+                             }
+			?>
+		</div>
+
+			<div style="clear:both;"></div>
+
+		<div class="area-formulario" style="padding:5px;">
+			<label style="height:12px;"><strong>Imagens da Galeria</strong></label>			
+				<?php
+								if ($this->Session->read('addOffer.OffersPhoto.0') != null) {
+                                $img = $this->Session->read('addOffer.OffersPhoto.0');
+                                    echo "<img src='{$img['photo']}' class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer','class'=>'removeOfferImage','id'=>'0'));
+                             } else {
+                                    echo $this->Form->input('OffersPhoto.photo.0', array('label'=>'','type'=>'file', 'id'=>'photo1'));
+                             }
+                             
+                          if ($this->Session->read('addOffer.OffersPhoto.1') != null) {
+                                $img = $this->Session->read('addOffer.OffersPhoto.1');
+                                    echo "<img src='{$img['photo']}' class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer','class'=>'removeOfferImage','id'=>'1'));
+                             } else {
+                                    echo $this->Form->input('OffersPhoto.photo.1', array('label'=>'','type'=>'file'));
+                             }
+                             
+							if ($this->Session->read('addOffer.OffersPhoto.2') != null) {
+                                $img = $this->Session->read('addOffer.OffersPhoto.2');
+                                    echo "<img src='{$img['photo']}'  class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer','class'=>'removeOfferImage','id'=>'2'));
+                             } else {
+                                    echo $this->Form->input('OffersPhoto.photo.2', array('label'=>'','type'=>'file'));
+                             }
+                             
+                             if ($this->Session->read('addOffer.OffersPhoto.3') != null) {
+                                    $img = $this->Session->read('addOffer.OffersPhoto.3');
+                                    echo "<img src='{$img['photo']}' class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer','class'=>'removeOfferImage','id'=>'3'));
+                             } else {
+                                    echo $this->Form->input('OffersPhoto.photo.3', array('label'=>'','type'=>'file'));
+                             }
+                             
+                             if ($this->Session->read('addOffer.OffersPhoto.4') != null) {
+                                $img = $this->Session->read('addOffer.OffersPhoto.4');
+                                    echo "<img src='{$img['photo']}' class='offer_image' />";
+                                    echo $this->Html->image('icones/remover.png',array('style'=>'float:left;cursor:pointer','class'=>'removeOfferImage','id'=>'4'));
+                             } else {
+                                    echo $this->Form->input('OffersPhoto.photo.4', array('label'=>'','type'=>'file'));
+                             }	
+                             
+			?>
+		</div>
+	</div>
+
+	<div class="area-botoes" style="width:95%; position:relative; top:50px !important;">				
+			<button class="envio">Próxima etapa</button>
+			<button class="cancelar">Cancelar</button>
+		
+	</div>
+<?php echo $this->Form->end();?>
+
+	
+	
+	

@@ -1,0 +1,13 @@
+<?php ?>
+
+<!-- Quando o usuario inicia o pagamento da compra com o cartão de crédito
+nós enviamos todas as informações da transação para o moip,
+como resposta temos um Token e um ID único que representa a transação,
+o uso do Token nos possibilita finalizar a transação! -->
+
+<div id="MoipWidget"
+     data-token="<?php echo $dados['token'] ?>"
+     callback-method-success="funcaoSucesso"
+     callback-method-error="funcaoFalha" style="display: none;"><?php echo $dados['token'] ?></div>
+
+

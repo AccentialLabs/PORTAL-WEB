@@ -1,0 +1,33 @@
+<?php ?>
+
+<span id="valida"><?php echo $trueOrFalse; ?></span>
+<div id='existent-comment'>
+    <!-- <?php
+//    $nota = $comentarios[0]['OffersComment']['evaluation'];
+//    $i = 5 - $nota;
+//    $cont = 1;
+//    for ($j = 0; $j < $nota; $j++) {
+//        
+    ?>
+         <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" class="img-rating-edit" id="//<?php echo $cont; ?>">
+         //<?php
+//        $cont++;
+//    }
+//    for ($f = 0; $f < $i; $f++) {
+//        
+    ?>
+         <img src="../img/icones/users-vitrine/star_empty.png" style="float: left; margin-left: 5px;" class="img-rating-edit" id="//<?php echo $cont; ?>">
+         //<?php
+//        $cont++;
+//    }
+    ?> -->
+    <input type="hidden" id="commented-id" value="<?php echo $comentarios[0]['OffersComment']['id']; ?>" />
+    <input type="text" id="commented-title" value="<?php echo $comentarios[0]['OffersComment']['title']; ?>">
+    <br/>
+    <textarea id="commented-desc"><?php echo $comentarios[0]['OffersComment']['description']; ?>
+    </textarea><br/><br/>
+    <button type="button" class='button-compra' onclick="upComment()" style="background: #f37165;">Salvar</button>
+    <button type="button" class='button-compra' style="background: #3399cc;">Cancelar</button>
+
+
+</div>

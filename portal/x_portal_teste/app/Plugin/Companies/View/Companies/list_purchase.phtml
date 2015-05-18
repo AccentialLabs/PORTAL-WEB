@@ -1,0 +1,135 @@
+<?php echo $this->Html->script('empresas/lista-de-compras');?>
+
+
+<?php if(is_array($checks)){
+	//pr($checks);exit;
+	?>
+
+
+<div class="opcoes-de-lista-de-compras">
+		<a href="javascript:void(0)" class="opcoes" title="concluido">Concluido</a>
+		<a href="javascript:void(0)" class="opcoes" title="pendente">Pendente</a>		
+		<a href="javascript:void(0)" class="opcoes ativo" title="tudinho">Todos</a>
+
+<div class="opcoes-de-filtros">
+		<a href="javascript:void(0);" class="link-de-opcoes">Opções de filtro</a>
+		<form method="POST" action="/portal/company/compras">
+			<div class="area-dos-filtros">
+				<div class="alinha">					
+					<label>Data Inicial</label><input type="text" name="calendario-inicio" id="calendario-inicio" alt="Data Inicial" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Inicial">
+					<label>Data Final</label><input type="text" name="calendario-fim" id="calendario-fim" alt="Data Final" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Final">
+					<label>Produto</label><input type="text" name="produto" alt="Produto" class="textbox pesquisaproduto" style="width:332px; float:left; margin:0px 5px 5px 0px" value="Produto">
+					<label>Comprador</label><input type="text" name="comprador" alt="Comprador" class="textbox pesquisacomprador" style="width:332px; float:left; margin:0px 5px 5px 0px" value="Comprador">
+					<input type="hidden" name="busca" value="1">
+					<div class="area-botoes" style="width:432px">
+						<button class="envio" type="submit">Filtrar</button>						
+					</div>					
+				</div>
+			</div>
+		</form>
+	</div>
+
+	</div>	
+<div id="div-content">
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao" style="margin:0px 0px 40px 0px">
+		<caption>Lista com compras efetuadas</caption>
+		<thead>
+			<tr>
+				<td>Data</td>
+				<td>Status</td>
+				<td>Produto</td>
+				<td>Comprador</td>
+				<td class="valor">Valor</td>
+				<td>Comentário</td>
+			</tr>
+		</thead>
+		<tbody>
+		<?php 
+		  if(is_array($checks)){
+		  	$valorUnit = 0;
+			foreach($checks as $check){				
+				$valorUnit = $check['Checkout']['total_value'] + $valorUnit;
+				$statusTr = "pendente";				
+				if($check['PaymentState']['moip_code']==4)$statusTr = "concluido";
+				//pr($check);exit;
+			?>
+			<tr status="<?php echo $statusTr;?>" valor="<?php echo $check['Checkout']['total_value'];?>">
+				<td><?php echo date('d/m/Y', strtotime($check['Checkout']['date']));?></td>
+				<td><?php echo $check['PaymentState']['name'];?></td>
+				<td><?php echo $check['Offer']['title'];?></td>
+				<td class="usuario"><?php echo $check['User']['name'];?></td>
+				<td class="valor">R$ <?php echo number_format($check['Checkout']['total_value'],2,',','.');?></td>				
+				<td class="comentario"><a href="javascript:void(0);">Detalhes da Compra</a></td>				
+			</tr>				
+				<tr class="linha_detalhe" style="display:none;">
+					<?php if($statusTr=='concluido' && !empty($check['Checkout']['comment'])){
+						$statusHidden = 0;
+						 if($check['Checkout']['comment']['status']=='ACTIVE')$statusHidden = 1;	
+					?>					
+					<td colspan="6">
+						<p>data do comentário: <strong><?php echo $check['Checkout']['comment']['date_register'];?></strong></p>
+						<p><?php echo $check['Checkout']['comment']['description'];?></p>
+						<p>
+						<div class="area-formulario">
+								<input type="hidden" value='<?php echo $statusHidden;?>'>
+								<div class="etiqueta-on-off">
+									<span>Publicar comentario</span>
+									<div class="on-off" valor="<?php echo $check['Checkout']['comment']['id'];?>">										
+										<img src="imagens/icones/on-off.png">
+										<a href="javascript:void(0);"></a>
+									</div>			
+								</div>
+						</div>		
+					</p>
+				</td>
+				<?php } ?>
+				<td colspan="6">				
+						<p>Endereco de Entrega: <strong><?php echo $check['Checkout']['address'].", ".$check['Checkout']['number'];?> - Bairro <?php echo $check['Checkout']['district'];?> - Cidade <?php echo $check['Checkout']['city'];?> - CEP <?php echo $check['Checkout']['zip_code'];?></strong></p>
+						<p>Status da compra: <strong><?php echo $check['PaymentState']['name'];?></strong></p>
+						<p>Valores: <strong>Total <?php echo $check['Checkout']['total_value'];?> - Frete <?php echo $check['Checkout']['shipping_value'];?> - Produto <?php echo $check['Checkout']['unit_value'];?></strong></p>
+						<p>Codigo MOIP: <strong><?php echo $check['Checkout']['transaction_moip_code'];?></strong></p>
+						<p>							
+					</p>
+				</td>
+			</tr>	
+			<?php 
+				}
+		  	  }else{
+		  	  	echo $checks;
+		  	  }
+			?>																			
+		</tbody>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td class="valor_total">Total<br>R$ <?php echo $valorUnit;?></td>
+				<td></td>
+			</tr>
+		</tfoot>
+		<?php echo "TOTAL POR FILTRO REALIZADO ".number_format($valor_total,2,',','.');?>
+	</table>
+	<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>
+</div>
+<?php }else{?>
+<div align="center"><?php echo $this->Html->image('content_box/compras.jpg');?></div>
+<div class="lista-de-ofertas">
+	<div class="alinhamento">
+		<div class="oferta-destaque-principal">
+		<div class="informes">
+			<h2><?php echo $checks;?></h2>
+			<!--<br>
+			<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+		</div>
+		</div>
+	</div>
+</div>
+<?php } ?>	
+<div class="refreshzinho">
+	<div class="loading">
+		<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+		<p>Aguarde enquanto o <strong>trueOne</strong> <br> carrega MAIS COMPRAS</p>
+	</div>
+</div>

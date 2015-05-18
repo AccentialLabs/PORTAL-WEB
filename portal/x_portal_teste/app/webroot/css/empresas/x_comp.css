@@ -1,0 +1,47 @@
+
+body {
+	/*-webkit-transform:rotate(45deg);
+	-moz-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	-o-transform:rotate(45deg);	*/
+	display: table;
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	position: absolute;
+	
+	background-repeat: no-repeat;
+}
+
+.top {
+	margin-left: 30px;
+	margin-top: 8px;
+}
+
+/* X_ PRE CADASTRO */
+.pre-cadastro-body {
+	width: 1000px;
+	height: auto;
+	display: table;
+	margin: 10px auto;
+	position: relative;
+	margin-top: 70px;
+}
+
+.topo {
+	width: 100%;
+	height: 50px;
+	background-color: #333;
+	z-index: 99999999;
+	position: relative;
+	position: fixed;
+}
+
+.teste-teste{
+		
+		border: 1px solid;
+	
+}

@@ -1,0 +1,38 @@
+<?php ?>
+<script>
+    $(function() {
+        $("#xis-login").click(function() {
+            $('#pop-login').fadeOut(300);
+            $("#mask").fadeOut(200);
+        });
+    });
+</script>
+<style>
+    /*#cabecalho-adv{
+        display: none;
+    }*/
+
+    /*    #adv-title-bar{
+            display: none;
+        }*/
+
+    .adv-logo{
+        margin-left: 15%;
+        width: 70%;
+        margin-top: 5%;
+    }
+</style>
+
+<div style=" top: 0; background: url('../img/adv/Login/adventa_background_resize.png') no-repeat center; 
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover; position: absolute ; width: 292px; height: 480px; font-family: Helvetica; font-size: 13px;">
+    <div style="cursor: pointer; background: url('../img/icones/users-vitrine/fechar.png') transparent; width: 12px; height: 12px; float: right; margin-right: 10px; margin-top: 10px; opacity: 0.8;" id="xis-login"></div> 
+    <br/>
+    <img src="../img/adv/Adventa Logo/Adventa-2.png" class="adv-logo"/>
+
+    <div onclick="vazio()" id="fazer-log" style="cursor:pointer; width: 85%; height: 40px; line-height: 40px; position: absolute; top: 200px; left: 23px;  background: #3399cc; color: #fff; text-align: center;">Entrar</div>
+    <div onclick="showCreate()" id="create-user" style=" cursor:pointer; width: 85%; height: 40px; position: absolute; left: 23px; top: 250px; background-color: rgba(255,255,255,0.4); font-family: Helvetica; color: #fff; text-align: center; line-height: 40px;">Cadastrar</div>
+    <div id="termos-uso" style=" cursor:pointer; width: 195px; height: 15px; position: absolute; left: 48px; top: 375px;"> </div>
+</div>

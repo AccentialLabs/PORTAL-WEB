@@ -1,0 +1,29 @@
+<?php?>
+   <script type="text/javascript">
+            var funcaoSucesso = function(data){
+                //alert('Sucesso\n' + JSON.stringify(data));
+                window.open(data.url);
+            };
+ 
+            var funcaoFalha = function(data) {
+                alert('Ops... Houve uma falha para gerar seu boleto! Confirme os dados da compra e tente novamente!');
+            };
+ 
+            pagarBoleto = function() {
+                var settings = {
+                    "Forma": "BoletoBancario"
+                }
+                MoipWidget(settings);
+            }
+        </script>
+<script type='text/javascript' src='https://www.moip.com.br/transparente/MoipWidget-v2.js' charset=ISO-8859-1"></script>
+
+
+<div id="MoipWidget"
+             data-token="<?php echo $dados['token']?>"
+             callback-method-success="funcaoSucesso"
+             callback-method-error="funcaoFalha"><?php echo print_r($dados);?></div>
+        <button id="pagarBoleto" style="margin-top: -76px;" class="button-compra" onclick="pagarBoleto()"> Imprimir Boleto </button>
+
+
+

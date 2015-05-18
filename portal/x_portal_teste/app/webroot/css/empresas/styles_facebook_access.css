@@ -1,0 +1,23 @@
+
+
+
+
+.Guide_Facebook
+{ width:915px; height:250px; margin:0 auto; }
+
+.Guide_Facebook_Icon
+{ position:absolute; z-index:2; width:152px; height:173px; top:72px; left:550px; }
+
+.Guide_Facebook_Install
+{ position:relative; z-index:1; width:457px; height:222px; float:left; }
+
+.Guide_Facebook_Invite
+{ position:relative; z-index:1; width:457px; height:222px; float:left; }
+
+	a.Guide_Facebook_IMGs:link, a.Guide_Facebook_IMGs:visited, a.Guide_Facebook_IMGs:active
+	{ text-decoration:none; border:0px; opacity:0.70; -moz-opacity: 0.70; filter: alpha(opacity=70); }
+	a.Guide_Facebook_IMGs:hover
+	{ opacity:0.99; -moz-opacity: 0.99; filter: alpha(opacity=99); }
+
+
+

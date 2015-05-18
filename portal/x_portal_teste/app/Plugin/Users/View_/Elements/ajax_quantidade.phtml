@@ -1,0 +1,74 @@
+&nbsp;
+	<div class="informes">
+		Cadastre seu endereço de entrega e seu frete será calculado
+		<!--<br>
+		<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+	</div>
+
+<p class="erro">
+<?php 
+	if($erro==true){		
+		echo "Ocorreu um erro no calculo do frete, talvez nao seja possivel o calculo com esta quantidade";
+	}
+?>
+</p>
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao">
+		<caption>Pedido: <?php echo $ultimaCompra;?></caption>
+		<thead>
+			<tr>
+				<td>Produto</td>
+				<td>Descrição</td>
+				<td>Quantidade</td>
+				<td>Valor</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><strong><?php echo $this->Session->read('Carrinho.Oferta.title');?></strong><br>cod: <?php echo $this->Session->read('Carrinho.Oferta.id');?></td>
+				<td><?php echo substr($this->Session->read('Carrinho.Oferta.description'), 0, 100);?></td>
+				<td><input id="purchase" type="text" class="textbox" value="<?php echo $this->Session->read('Carrinho.Opcoes.quantidade');?>" style="width:40px;"></td>
+				<td>R$ <?php echo number_format($this->Session->read('Carrinho.Oferta.value_total'), 2, ',', '.'); ?></td>
+				<td class="comentario"><a href="javascript:void(0);">ver mais</a></td>
+			</tr>
+			<tr class="linha_detalhe">
+				<td colspan="5">
+					<img src="imagens/produtos/20130118camisapolo/detalhe-foto2.jpg">
+					<h4><?php echo $this->Session->read('Carrinho.Oferta.title');?></h4>
+					<p><?php echo $this->Session->read('Carrinho.Oferta.description');?></p>
+					<p><strong>R$ <?php echo number_format($this->Session->read('Carrinho.Oferta.value'), 2, ',', '.'); ?></strong></p>
+				</td>
+			</tr>			
+			<tr>
+				<td colspan="2"></td>
+				<td class="destaque">
+					<span>frete</span><br>
+					<strong>Total</strong>
+				</td>
+				<td class="destaque">
+					<span>R$ <?php echo number_format($this->Session->read('Carrinho.Oferta.value_frete'), 2, ',', '.'); ?></span><br>
+					<strong>R$ <?php if($this->Session->read('Carrinho.Oferta.value_final') > 0)  echo number_format($this->Session->read('Carrinho.Oferta.value_final'), 2, ',', '.'); ?></strong>
+				</td>
+				<td></td>
+			</tr>
+
+		</tbody>
+	</table>
+
+	<div class="detalhe-endereco-entrega">
+		<h4>Endereço de entrega</h4>
+		<p><?php echo $this->Session->read('Carrinho.Endereco.endereco');?></p>
+		<p><strong><?php echo $this->Session->read('Carrinho.Endereco.cep');?></strong></p>
+		<p><?php echo $this->Session->read('Carrinho.Endereco.cidade');?> - <?php echo $this->Session->read('Carrinho.Endereco.uf');?></p>
+		<p class="previsao-de-entrega">
+		<strong>SEDEX</strong><br>
+		entrega em <?php echo $this->Session->read('Carrinho.Oferta.prazo_entrega');?> dias úteis<br></p>
+		<?php echo $this->Html->link('Alterar endereco', array('controller' => 'users', 'action' => 'shippingAddress', 'plugin' => 'users'));?>
+	</div>
+	
+<form action="checkout" method="post">
+	<div class="area-botoes">
+		<button class="envio"  id="sendToMoip">Fechar compra</button>
+		<button>Cancelar</button>
+	</div>
+</form>

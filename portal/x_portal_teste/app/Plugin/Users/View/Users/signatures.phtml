@@ -1,0 +1,80 @@
+<script>
+function EnviaForm(formulario){
+	document.forms[formulario].submit();
+}
+</script>
+<?php echo $this->Html->script('assinaturas');?>
+<?php if($contador==null)$contador=0;?>
+	<div class="informes">
+		Use esta tela para procurar Empresas participantes do programa e assinar ou cancelar o recebimento de ofertas personalizadas que forem publicadas por elas. Use a caixa de procura abaixo para procurar pelo Nome da Empresa e quando encontrar a que procura, clique no sinal de "+" para assinar ou no sinal "V" para cancelar
+		<!--<br>
+		<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+	</div>
+	
+	<h3>Você está recebendo ofertas de <strong><?php echo $contador;?></strong> empresas</h3>
+
+Pesquisar empresas
+<input type="text" class="txtPesquisa" value="pesquise aqui">
+<div id="pesquisa-company">						
+<table cellpadding="0" cellspacing="0" class="tabela-padrao tabela-assinaturas">
+		<caption>Lista de assinaturas</caption>
+		<thead>
+			<tr>
+				<td>Empresa</td>
+				<td style="width:100px;"></td>
+			</tr>
+		</thead>
+		
+		<tbody>					
+			<?php if(is_array($companies)){
+					$i = 0; 
+					foreach($companies as $company){?>
+			<tr>
+				<td><strong><?php echo $company['Company']['corporate_name'];?></strong><br><?php echo $company['Company']['fancy_name'];?>.<?php echo $company['Company']['email'];?>. </td>
+				<td><a href="javascript:void(0);" update="0" alt="<?php if($company['CompaniesUser']['status']=='ACTIVE'){echo "ativado";}else{echo"inativo";}?>" class="ativo-inativo ativado" title="<?php if($company['CompaniesUser']['status']=='ACTIVE'){echo "Desativar Assinatura";}else{echo"Assinar Empresa";}?>" id="<?php echo $company['CompaniesUser']['id'];?>">Ativar ou Desativar</a></td>
+			</tr>	
+			<tr class="linha_detalhe detalhe-assinaturas">
+				<td colspan="2">
+					<h4><?php echo $company['Company']['fancy_name'];?></h4>
+					<p>
+						<?php echo $company['Company']['description'];?>
+					<br>
+						<a href="mailto:maluf@paulipetro.com.br?subject=sss"><?php echo $company['Company']['email'];?></a><br>
+						<strong><?php echo $convite['CompaniesInvitationsFilter']['phone'];?></strong>
+					</p>
+
+					<div class="destaques">
+						<form action="/portal/user/" method="POST" id="a<?php echo $i;?>">
+							<a href="javascript:void(0);" id="submitFormOfertas" onclick="EnviaForm('<?php echo "a".$i;?>');">								
+								<?php echo $this->Html->image('Users.ofertas-para-voce.png');?>
+								<span><strong><?php echo $company['Company']['ofertas_perfil'];?></strong> ofertas dessa empresa são para o seu perfil<br><strong style="font-size:12px; color:#c06800;">clique e veja essas ofertas</strong></span>
+								<input type="hidden" name="hdAllCompany" value="2">
+								<input type="hidden" name="hdIdCOmpany" value="<?php echo $company['Company']['id'];?>">
+							</a>
+						 </form>
+						 <form action="/portal/user/" method="POST" id="b<?php echo $i;?>">
+							<a href="javascript:void(0);" id="submitFormOfertasPerfil" onclick="EnviaForm('<?php echo "b".$i;?>');">
+							<?php echo $this->Html->image('Users.ofertas-da-empresa.png');?>							
+								<span>Exitem <strong><?php echo $company['Company']['ofertas'];?></strong> ofertas cadastradas dessa empresa<br><strong style="font-size:12px; color:#c06800;">confira todas as ofertas cadastradas</strong></span>
+								<input type="hidden" name="hdAllCompany" value="1">
+								<input type="hidden" name="hdIdCOmpany" value="<?php echo $company['Company']['id'];?>">
+							</a>					  	
+						</form>
+					</div>
+
+				</td>
+			</tr>						
+			<?php $i++;}
+			}else{
+				echo $companies;
+			}
+			?>
+		</tbody>
+	</table>	
+</div>
+<div class="refreshzinho">
+	<div class="loading">
+		<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+		<p>Aguarde enquanto o <strong>trueOne</strong> <br> realiza sua busca</p>
+	</div>
+</div>

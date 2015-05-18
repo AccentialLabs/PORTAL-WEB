@@ -1,0 +1,18 @@
+<div class="topo">
+	<?php echo $this->Html->image('logo-bg-black.png', array('class'=>'logo'));?>	
+	<div class="oquehadenovo">
+		<a href="javascript:void(0);" class="abriroquehadenovo"><span>0</span></a>
+		<div class="conteudooquehadenovo">
+			<h2><span>O que há de novo</span><a href="javascript:void(0);"><img src="../img/icones/close.png"></a></h2>
+		</div>
+	</div>
+	<?php if($this->Session->check('userData.User')){?>
+	<div class="usuariologado">
+		<div class="abriropcoesusuario"><span><b><?php echo $this->Session->read('userData.User.name');?></b></span></div>
+		<div class="conteudoopcoesusuario">			
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/user/dados-cadastrais'); ?>';"><span>Meus Dados</span></a>
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/user/sair'); ?>';"><span>Sair</span></a>
+		</div>
+	</div>	
+	<?php } ?>
+</div>	

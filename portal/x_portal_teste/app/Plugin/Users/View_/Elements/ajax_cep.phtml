@@ -1,0 +1,10 @@
+
+	<?php if($this->Session->read('Carrinho.Oferta.value_frete')==''){ ?> 
+			<label class="cep_nao_encontrado">OCORREU UM ERRO NO CALCULO DO FRETE</label>	
+			
+	<?php }else{?>	
+	
+		Valor: <strong><?php echo $this->Session->read('Carrinho.Oferta.value_frete'); ?></strong><br>
+		Prazo para Entrega: <strong><?php echo $this->Session->read('Carrinho.Oferta.prazo_entrega'); ?></strong> dias úteis
+	<?php } ?>		
+	

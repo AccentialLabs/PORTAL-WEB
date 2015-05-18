@@ -1,0 +1,352 @@
+<?php	
+	echo $this->Html->script('jquery.tinycarousel.min');
+	echo $this->Html->script('empresas/dashboard');	
+	echo $this->Html->css('empresas/styles_facebook_access');
+?>
+
+<div class="Guide_Facebook" style="margin-top: -90px; margin-bottom: 50px;">
+
+
+	<div class="Guide_Facebook_Icon" style="left: 0px; position: relative; margin: 100px 0 -170px 385px;">		
+		<?php echo $this->Html->image('content_box/icon_facebook.png');?>
+	</div><!--Guide_Facebook_Icon-->
+
+	<?php if($this->Session->read('CompanyLoggedIn.Company.facebook_install')=='ACTIVE'){?>
+	<div class="Guide_Facebook_Install">
+		<a href="<?php echo $this->Html->url('/company'); ?>" class="Guide_Facebook_IMGs">			
+			<?php echo $this->Html->image('content_box/app_ok_facebook.png');?>
+		</a>
+	</div><!--Guide_Facebook_Install-->
+	
+	<div class="Guide_Facebook_Invite">
+		<a href="<?php echo $this->Html->url('/company/convites-facebook'); ?>" target="_blank" class="Guide_Facebook_IMGs">			
+			<?php echo $this->Html->image('content_box/box_invite_users.png');?>
+		</a>		
+	</div><!--Guide_Facebook_Invite-->
+	<?php }else{ ?>
+	<div class="Guide_Facebook_Install">
+			<a href="https://www.facebook.com/dialog/pagetab?app_id=447466838647107&next=http://facebook.com" target="_blank" class="Guide_Facebook_IMGs">
+				<?php echo $this->Html->image('content_box/box_install_application.png');?>			 
+			</a>
+		</div><!--Guide_Facebook_Install-->
+	
+		<div class="Guide_Facebook_Invite">
+			<a href="<?php echo $this->Html->url('/company/convites-facebook'); ?>" target="_blank" class="Guide_Facebook_IMGs">			
+				<?php echo $this->Html->image('content_box/box_invite_users.png');?>
+			</a>
+		</div><!--Guide_Facebook_Invite-->
+	<?php  } ?>
+
+
+</div><!--Guide_Facebook-->
+
+<?php 	
+	//verifica se � primeiro acesso
+	if(!empty($access)){		
+		
+		echo $this->Html->css('empresas/styles_home_access');			
+		echo $this->Html->script('tabmenu/js/jquery-1.3.1.min');
+		echo $this->Html->script('tabmenu/js/code');
+		echo $this->Html->css('/js/tabmenu/css/styles');		
+?>
+
+<div class="guideCompany">
+
+
+	<div class="guideCompany_title_01">
+    	<p class="guideCompany_title_01">Novo por aqui ?</p>
+		<strong>Siga os passos seguintes para comecar a utilizar o aplicativo.</strong>
+	</div><!--guideCompany_title_01-->
+
+
+
+
+	<p class="guideCompany_titlePag">
+		Navegacao pelo menu lateral
+	</p>
+
+
+<div class="box">
+		<ul id="tabMenu">
+			<li class="ofertas"></li>
+			<li class="dashboard"></li>
+			<li class="assinaturas"></li>
+			<li class="compras"></li>
+			<li class="convites"></li>
+			<li class="sair"></li>
+		</ul>
+
+
+	<div class="guideCompany_descriptionMenu">
+
+		<div class="guideCompany_descriptionBox" style="width:160px;">
+ 			<p class="guideCompany_titleDescription">Ofertas</p>
+			Listar ofertas cadastradas.<br>
+			Publico alvo.<br>
+			Cadastro de novas ofertas.
+		</div><!--guideCompany_descriptionBox-->
+
+		<div class="guideCompany_descriptionBox">
+ 			<p class="guideCompany_titleDescription">Dashboard</p>
+			 Inicio do sistema e<br>
+			gerenciamento de<br>
+			ofertas e pagamentos.
+		</div><!--guideCompany_descriptionBox-->
+
+		<div class="guideCompany_descriptionBox">
+ 			<p class="guideCompany_titleDescription">Assinaturas</p>
+			Lista de usuarios que<br>
+			estao assinando as<br>
+			suas ofertas.
+		</div><!--guideCompany_descriptionBox-->
+
+		<div class="guideCompany_descriptionBox">
+ 			<p class="guideCompany_titleDescription">Compras</p>
+			Gerenciamento principal<br>
+			de todas as compras<br>
+			de suas ofertas.
+		</div><!--guideCompany_descriptionBox-->
+
+		<div class="guideCompany_descriptionBox">
+ 			<p class="guideCompany_titleDescription">Convites</p>
+			Envio e gerenciamento de<br>
+			convites enviados<br>
+			aos usuarios.
+		</div><!--guideCompany_descriptionBox-->
+
+		<div class="guideCompany_descriptionBox" style="width:118px; background:none;">
+ 			<p class="guideCompany_titleDescription">Sair</p>
+			Deslogar totalmente<br>do sistema.
+		</div><!--guideCompany_descriptionBox-->
+
+	</div><!--guideCompany_descriptionMenu-->
+
+
+<div class="boxTop"></div>
+
+
+	<div class="boxBody">
+ 
+ 
+ 		<!--------- Ofertas --------->
+		<div id="ofertas" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/01_ofertas.jpg');?></li>				
+			</ul>  
+		</div>
+ 
+ 
+		<!--------- Dashboard --------->
+ 		<div id="dashboard" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/02_dashboard.jpg');?></li>
+			</ul>  
+		</div>
+
+
+		<!--------- Assinaturas --------->
+ 		<div id="assinaturas" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/03_assinaturas.jpg');?></li>
+			</ul>  
+		</div>
+ 
+ 
+		<!--------- Compras --------->
+ 		<div id="compras" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/04_compras.jpg');?></li>
+			</ul>  
+		</div>
+ 
+ 
+		<!--------- Convites --------->
+ 		<div id="convites" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/05_convites.jpg');?></li>
+			</ul>  
+		</div>
+ 
+ 
+		<!--------- Sair --------->
+ 		<div id="sair" class="show parent">
+ 			<ul>
+				<li><?php echo $this->Html->image('content_box/06_sair.jpg');?></li>
+			</ul>  
+		</div>
+ 
+ 
+	</div><!--boxBody-->
+</div><!--box-->
+
+
+</div><!--guideCompany-->
+
+<?php }else{ ?>
+
+<div class="dashboard">
+	<div class="area-ultimas-compras">	
+		<h2>Compras<strong> Finalizadas</strong></h2>
+		<?php 
+		if(is_array($checkouts)){ ?>
+		<div class="navegacao">
+ 			<a class="buttons prev" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+ 			<a href="javascript:void(0);" class="ver-todas" onclick="location.href='<?php echo $this->Html->url('/company/compras'); ?>';">ver todas</a>
+  			<a class="buttons next" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+		</div>
+		<?php } ?>
+		<div class="viewport">
+		<ul class="overview">
+		
+			<?php 
+			if(is_array($checkouts)){
+				foreach($checkouts as $compra){
+			?>					
+				
+			<li>
+				<div class="imagem">
+					<img src="<?php echo $compra['Offer']['photo'];?>" width="140" height="140" class="produto">
+					<img src="<?php echo $compra['User']['photo'];?>" width="80" height="80" class="usuario">
+				</div>
+				<div class="descricao">
+					<p class="texto-produto">
+						<strong style="font-size:14px;"><em><?php echo $compra['Offer']['title'];?></em></strong><br>
+						R$ <?php echo $compra['Checkout']['total_value'];?> 
+					</p>
+					<p class="texto-data-compra">compra efetuado <?php echo date('d/m/Y', strtotime($compra['Checkout']['date']));?></p>
+					<h3><?php echo $compra['User']['name'];?></h3>
+					<!-- 
+						RETIRANDO FUNCIONALIDADES PARA ENTREGA DE PRIMEIRA VERSAO  
+						<p class="compra-via">comprou via <strong>facebook</strong></p>
+					-->
+					<p class="status"><?php echo $compra['PaymentState']['name'];?></p>
+				</div>
+			</li>			
+			<?php }
+			}else{ echo "NENHUM REGISTRO ENCONTRADO"; }
+			?>	
+		</ul>
+		</div>
+
+	</div>
+	<div class="area-integracao-MoIP">
+		<h2>Compras<strong> Pendentes</strong></h2>
+
+		<?php		
+		if(is_array($pedidos)){ ?>
+		<div class="navegacao">
+ 			<a class="buttons prev" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+ 			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/compras'); ?>';" class="ver-todas">ver todas</a>
+  			<a class="buttons next" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+		</div>
+		<?php } ?>
+		<div class="viewport">
+		<ul class="overview">
+		<?php
+			if(is_array($pedidos)){ 
+				foreach($pedidos as $compra){
+				//pr($compra);exit;
+				  switch($compra['Checkout']['payment_method_id']){
+				  	case 73:
+				  		$img = 'Boleto.gif';
+				  	break;
+				  	default:
+				  		$img = 'cartao.jpg';
+				  	break;
+				  }
+			  				  	
+			?>		
+			<li>
+				<div class="imagem">
+					<?php echo $this->Html->image('Companies.dashboard/'.$img, array('class'=>'produto'));?>					
+				</div>
+				<div class="descricao">
+					<p class="texto-data-compra">compra efetuado <?php echo date('d/m/Y', strtotime($compra['Checkout']['date']));?></p>
+					<h3><?php echo $compra['User']['name'];?></h3>
+					<p class="status"><?php echo $compra['PaymentState']['name'];?></p>
+				</div>
+			</li>
+			<?php }
+			}else{ echo "NENHUM REGISTRO ENCONTRADO"; }
+			?>				
+		</ul>
+		</div>
+
+	</div>
+	<div class="area-ultimas-assinaturas">
+		<h2>Últimas <strong>Assinaturas</strong></h2>
+		<?php		
+		if(is_array($assinaturas)){ ?>
+			<div class="navegacao">
+	 			<a class="buttons prev" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+	 			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/assinaturas'); ?>';" class="ver-todas">ver todas</a>
+	  			<a class="buttons next" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+			</div>
+		<?php } ?>
+		<div class="viewport">						
+		<ul class="overview">
+		<?php 
+		if(is_array($assinaturas)){ 
+			foreach($assinaturas as $assinatura){
+				$nome = explode(" ", $assinatura['User']['name']);
+		?>								
+			<li>
+				<div class="imagem">
+					<img src="<?php echo $assinatura['User']['photo'];?>" width="70" height="70" class="produto">
+				</div>
+				<div class="descricao">
+					<p class="texto-data-compra">assinou dia <?php echo date('d/m/Y', strtotime($assinatura['CompaniesUser']['date_register']));?></p>
+					<h3><?php echo $nome[0];?></h3>
+					<p class="status"><?php echo $assinatura['User']['city'];?> - <?php echo $assinatura['User']['state'];?><br><?php if($assinatura['User']['idade']==date('Y')){ echo "Idade Nao informado";}else{echo $assinatura['User']['idade']." Anos";}?> </p>
+				</div>
+			</li>									
+			<?php }
+			}else{ echo "NENHUM REGISTRO ENCONTRADO"; }
+			?>			
+		</ul>
+		</div>
+
+	</div>
+	<div class="area-ultimas-ofertas">
+		<h2>Últimas <strong>Ofertas</strong></h2>
+		<?php		
+		if(is_array($ofertas)){ ?>
+		<div class="navegacao">
+ 			<a class="buttons prev" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+ 			<a href="javascript:void(0);" class="ver-todas" onclick="location.href='<?php echo $this->Html->url('/company/ofertas'); ?>';">ver todas</a>
+  			<a class="buttons next" href="#"><?php echo $this->Html->image('Companies.dashboard/icone-arrow-dashboard.png');?></a>
+		</div>
+		<?php } ?>
+		<div class="viewport">
+		<ul class="overview">				
+			<?php
+			if(is_array($ofertas)){  
+				foreach($ofertas as $oferta){?>
+			<li>
+				<div class="imagem">
+					<img src="<?php echo $oferta['Offer']['photo'];?>" width="140" height="140" class="produto">
+				</div>
+				<div class="descricao">
+					<p class="texto-data-compra">ofertado em <?php echo date('d/m/Y', strtotime($oferta['Offer']['begins_at']));?></p>
+					<h3><?php echo $oferta['Offer']['title']; ?></h3>
+					<p class="status">R$ <?php echo $oferta['Offer']['value']; ?></p>
+					<p><?php echo $this->Html->link('Editar Oferta', array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'resume', $oferta['Offer']['id'], 'editar'));?></p>				
+				</div>
+				<!-- 
+					RETIRANDO CONTEUDO PARA PRIMEIRA ENTREGA
+				<div class="total-visualizacoes">
+					<strong>1420</strong>  visualizações<br>
+					<span>visualizações da última semana<strong>12/02/2013 - 18/02/2013</strong></span>
+				</div>
+				-->				
+				
+				<div class="area-linha" id="area-linha2"></div>
+			</li>	
+			<?php }
+			}else{ echo "NENHUM REGISTRO ENCONTRADO"; }
+			?>	
+		</ul>
+		</div>		
+	</div>
+</div>
+<?php  } ?>

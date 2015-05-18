@@ -1,0 +1,262 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20/10/2014, 11:46:41
+    Author     : user
+*/
+
+.img-selector{
+    width: 10px; 
+    height: 10px;
+    background: #000000;
+    float: left;
+    margin-left: 3px;
+}
+
+#carousel {
+    width:100%;
+    height:100%;
+    margin:0 auto;
+}
+
+#slides {
+    overflow:hidden;
+    position:relative;
+    width:100%;
+    height:100%;
+
+}
+
+#slides ul {
+    position:relative;
+    left:0;
+    top:0;
+    list-style:none;
+    margin:0;
+    padding:0;
+    width:750px;
+}
+
+#slides li {
+    width:250px;
+    height:100%;
+    float:left;
+}
+
+#slides li img {
+
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+
+#slides li img:hover {
+
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+}
+
+#mask2{
+    width: 100%;
+    height: 100%;
+    background: red;
+}
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 90000;
+    background-color: #000;
+    opacity: 0.6;
+    display: none;
+}
+
+#pop {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 99999;
+    display: none;
+    font-family: Helvetica;
+}
+//
+
+.pop-comments{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    width: 90px;
+    height: 90px;
+    z-index: 999999;
+    font-family: Helvetica;
+}
+
+.tabela-dominios{
+    width: 100%;
+    height: 100%;
+}
+
+.vertical-text{
+    transform: rotate(-90deg);
+    font-family: Helvetica;
+    font-size: 12px;
+
+}
+.paleta-metrica{
+    border: 1px solid #dcdcdc;
+    height: 100%;
+    width: 8%;
+    font-family: Helvetica;
+    font-size: 12px;
+    text-align: center;
+    line-height: 800%;
+    background: #E6E8FA;
+    float: left;
+    line-height: 1000%;
+    cursor: pointer;
+}
+
+.paleta-metrica#conf{
+    line-height: 1500%;
+    float: right;
+}
+
+.div-metrica-Tamanho{
+    padding: 5px;
+    margin-left: 5px;
+    float: left;
+    font: Helvetica;
+    border: 1px solid #dcdcdc;
+}
+
+.div-metrica-Tamanho:hover{
+    outline: orange solid 1px;
+}
+
+#closePop{
+    color: orange;
+    text-decoration: none;
+    font-family: Helvetica;
+}
+
+#notify-email{
+    display: none; position: relative;
+    width: 100px; 
+    padding: 20px;
+    text-align: center;
+    font-family: Helvetica;
+    z-index: 9999999;
+    box-shadow: 5px 3px 5px 3px  gray;
+    color: #fff;
+    background: orange;
+}
+
+table{
+    width: 750px;
+    margin-top: 3px;
+    font-family: Helvetica;
+}
+td{
+    padding: 10px;
+    width: 25%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.corpo-img-selectores-horizontal{
+    z-index: 99999;
+    height: 15px; 
+    position: absolute;
+    top: 55%;
+    left: 17%;
+}
+
+.corpo-img-selectores{
+    z-index: 99999;
+    height: 15px; 
+    position: absolute;
+    top: 80%;
+    left: 9%;
+}
+
+.seletor-img{
+    background: #000;
+    opacity: 0.3;
+    width: 7px;
+    height: 7px;
+    float: left; 
+    text-align: center;
+    margin-left: 5px;
+    cursor: pointer;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
+    border: 1px solid #fff;
+}
+.offer-imgs{
+    border-bottom: 1px solid #dcdcdc
+}
+
+.img-zoom{
+    position: absolute;
+    z-index: 999999;
+    padding: 10px;
+    top: 10%;
+    background: #fff;
+    left: 23%;
+    display: none;
+}
+
+#fecha-img-zoom{
+    font-family: Helvetica;
+    font-size: 16px;
+    color: orange;
+    float: right;
+    cursor: pointer;
+}
+.photo-zoom{
+    margin-top: 5px;
+    max-width: 800px;
+    max-height: 530px;
+    border: 1px solid #dcdcdc;
+}
+#zoom-menu-photos{
+    bottom: 0;position: relative;
+}
+
+
+.lupa{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 50%;
+    top: 14.5%;
+    opacity: 0.3;
+    cursor: pointer;
+}
+
+.lupa-vert{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 72%;
+    top: 14.5%;
+    opacity: 0.4;
+    cursor: pointer;
+}
+

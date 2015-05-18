@@ -1,0 +1,73 @@
+
+.bg_refresh{
+    width:100%;
+    height:100%;
+    position: absolute;
+    top:0px;
+    left: 0px;
+    background-image: url('../../users/img/background/background-popup.png');
+    z-index:9999999999;
+    display: none;
+    box-shadow: inset 0px 0px 10px #333;
+}
+.area-refresh{
+    width: 100%;
+    height: 150px;
+    padding:10px 0px;
+    position: absolute;
+    background-color: #fff;
+    box-shadow: 0px 0px 10px #333;
+    z-index:9999999;
+    opacity: 0.9;
+    /*-webkit-transform:rotate(-45deg);/*for Chrome and Safari */
+    /*-ms-transform:rotate(-45deg);/*for IE9*/
+    /*-moz-transform:rotate(-45deg);/*for Firefox*/
+    /*-o-transform:rotate(-45deg);/*for Opera*/
+}
+.area-refresh p{
+    color:#a1a1a1;
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: -1px;
+
+}
+.area-refresh p strong{
+    color:#ff8800;
+}
+.area-refresh .loading{
+    width:418px;
+    height:218px;
+    /*background-image: url('../../users/img/background/background-loading.gif');*/
+    background-position: top;
+    background-repeat: no-repeat;	
+    margin:0px auto;
+    text-align: center;
+    position: relative;
+    top:10px;
+}
+.area-refresh .loading img{position: relative;}
+
+
+.refreshzinho{
+    width: 100%;
+    margin:20px auto;
+    height: auto;
+    display: none;
+    float: left;
+
+}
+.refreshzinho .loading{
+    width: auto;
+    display: table;
+    height: auto;
+    margin:0px auto;
+}
+.refreshzinho .loading img{float: left; margin:0px 10px; width: 48px; height:48px;}	
+.refreshzinho .loading p{
+    float: left;
+    position: relative;
+    top:-5px;
+}	
+.refreshzinho .loading p strong{
+    color:#ff8800;
+}

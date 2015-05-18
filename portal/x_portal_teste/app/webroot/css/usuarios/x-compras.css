@@ -1,0 +1,345 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20/10/2014, 11:21:38
+    Author     : Matheus Odilon
+*/
+#commented-title{
+    font-size: 16px;
+    font-family: Helvetica;
+    padding: 5px;
+    font-weight: bold;
+    width: 300px;
+}
+
+#commented-desc{
+    font-size: 12px;
+    font-family: Helvetica;
+    padding: 5px;
+    width: 300px;
+    max-width: 300px;
+    height: 200px;
+    max-height: 350px;
+    margin-top: 5px;
+}
+
+#offer-title-comment{
+    font-family: Helvetica;
+    color: #000;
+
+    font-weight: bold;
+    font-size: 18px;
+    border: 0px;
+}
+
+
+
+.img-rating{
+    cursor: pointer;
+    float: left;
+
+}
+
+.input-title{
+    padding-left: 5px;
+    font-family: Helvetica;
+    height: 30px;
+    width: 300px;
+    font-size: 14px;
+}
+
+.input-comentario{
+    padding-left: 5px;
+    font-family: Helvetica;
+    width: 300px;
+    height: 150px;
+    max-height: 300px;
+    max-width: 300px;
+    font-size: 14px;
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+.pop-confirm-comment{
+    position: absolute;
+    left: 55%;
+    top: 25%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}
+
+#ja-comentei{
+    position: absolute;
+    left: 50%;
+    top: 25%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}
+
+.pop-confirm2{
+    position: absolute;
+    left: 47%;
+    top: 25%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}  
+
+.pop-confirm{
+    position: absolute;
+    left: 53%;
+    top: 25%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}    
+.button-compra{
+    border: 0px; 
+    background: orange;
+    color: #fff;
+    padding: 10px; 
+    cursor: pointer;
+
+}
+
+#mask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 90000;
+    background-color: #000;
+    opacity: 0.6;
+    display: none;
+}
+
+table{
+    width: 99.8%;
+    border-collapse: collapse;
+}
+
+a{
+    color: gray;
+}
+
+th{
+    background: #FF8C00;
+    color: #ffffff;
+    font-family: Helvetica;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: normal;
+    padding: 10px;
+}
+
+td{
+    border: 1px solid #e6e6e6;
+    font-family: Helvetica;
+    padding: 10px;
+    color: gray;
+    font-size: 12px;
+    text-align: center;
+}
+
+td#td-offer{
+    padding-left: 0px;
+}
+
+.td-offer-esquerdo{
+    float: left;
+    margin-left: 10px;
+
+}
+
+.td-offer-direito{
+    float: left;
+    text-align: left;
+    height: 45px;
+    width: 240px;
+
+    margin-left: 5px;
+}
+
+.offer-photo{
+    width: 40px;
+    height: 45px;
+}
+
+strong{
+    color: #000;
+}
+
+.div-detalhes{
+    width: 100%;
+}
+
+.td-detalhe{
+    padding: 0px;
+    display: none;
+
+}
+
+.cont-detalhes{
+    padding-top: 10px;
+    width: 24%;
+    float: left;
+    border-right: 1px solid #dcdcdc;
+    height: 100px;
+    padding-left: 5px;
+    padding-bottom: 10px;
+
+}
+
+.cont-detalhes#pagamento{
+    border-right: 0px;
+}
+
+.detalhe-logo-empresa{
+    width: 100px;
+    height: 35px;
+    margin-left: 15px;
+    border: 1px solid #dcdcdc;
+}
+#detalhes-empresa{
+    text-align: left;
+}
+
+.icon-detalhe{
+    margin-left: 10px;
+
+}
+
+#ver-email{
+    margin-top: 10px;
+}
+
+#detalhes-prazo{
+    text-align: left;
+}
+
+#detalhes-pagamento{
+    text-align: left;
+}
+
+#detalhes-moip{
+    text-align: left;
+}
+
+.titulo-detalhe{
+    font-family: Helvetica;
+    color: #000;
+    text-align: right;
+    float: right;
+    font-weight: bold;
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.div-header{
+
+    height: 50px;
+}
+
+.pop-ver-pedido{
+    position: absolute;
+    left: 40%;
+    top: 5%;
+    margin-left: -140px;
+    margin-top: 25px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    max-height: 600px;
+    overflow: auto;
+    display: none;
+}
+.table-confirm{
+    width:430px;
+    border: 1px solid;
+}
+
+.table-confirm2{
+    width:540px;
+    border: 1px solid;
+}
+
+.table-confirm tr{
+    border: 0px;
+}
+
+.table-confirm td{
+    border: 0px;
+    padding: 1px;
+    font-family: Helvetica;
+}
+.table-confirm2 tr{
+    border: 0px;
+}
+
+.table-confirm2 td{
+    border: 0px;
+    padding: 1px;
+    font-family: Helvetica;
+}
+
+#loading{
+    position: absolute;
+    left: 47%;
+    top: 35%;
+    width: 100px;
+    height: 100px;
+    display: none;
+    z-index: 9999999;
+}
+
+.img-comenta{
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.img-comenta-block{
+    width: 25px;
+    height: 20px;
+    opacity: 0.4;
+}
+
+.img-resumo{
+    width: 20px;
+    height: 25px;
+    cursor: pointer;
+}
+
+

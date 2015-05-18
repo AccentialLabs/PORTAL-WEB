@@ -1,0 +1,146 @@
+<?php 
+	echo $this->Html->script('empresas/oferta-detalhada');
+		
+	if($this->Session->read('addOffer.Offer.percentage_discount') > 0){
+		//echo $this->Session->read('addOffer.Offer.value');exit;
+		$valor_original = str_replace(',','.',str_replace('.','',$this->Session->read('addOffer.Offer.value')));					
+		$valor = ($valor_original * (100 - $this->Session->read('addOffer.Offer.percentage_discount'))) / 100;		
+		$valor = number_format($valor, 2, ',', '.'); 		
+	}else{
+		$valor = $this->Session->read('addOffer.Offer.value');
+	}
+		
+	if(!empty($_SESSION['addOffer']['Offer']['metrics'])){			
+		$metricas = json_decode($this->Session->read('addOffer.Offer.metrics'), true);
+		$chaves = array_keys($metricas);	
+	}else{
+		$metricas = false;
+	}
+	
+?>
+
+<div class="oferta-detalhada">
+ <h3><?php echo $this->Session->read('addOffer.Offer.title');?></h3>
+
+	<div class="area-fotos">
+		<div class="seta-esquerda"></div>
+		<div class="seta-direita"></div>
+		<ul class="fotos-do-item">			
+		<?php foreach($this->Session->read('addOffer.OffersPhoto') as $photo){
+				if(!empty($photo)){							
+			?>
+				<li><img src="<?php echo $photo['photo'];?>"></li>
+		<?php 
+			  }
+			}
+		?>
+		</ul>
+	</div>
+	<div class="area-descricoes">
+		<div class="descricoes">
+			<div class="valor-do-produto">
+				<!-- <button class="linkpopup"><img src="imagens/botao-compre-agora.png"></button> -->
+				<span class="valor-antigo">R$ <?php echo $this->Session->read('addOffer.Offer.value');?></span>
+				<span class="valor">R$ <?php echo $valor;?></span>				
+				<span class="validade">oferta válida até <strong><?php echo $this->Session->read('addOffer.Offer.ends_at');?></strong></span>
+			</div>
+			<div class="texto-descritivos">
+				<h4><?php echo $this->Session->read('addOffer.Offer.title');?></h4>
+				<p><?php echo $this->Session->read('addOffer.Offer.resume');?></p>				
+			</div>
+		</div>	
+
+		<div class="opcoes">
+			<ul>
+				<li>
+					<a href="javascript:void(0);" onclick="javascript:return false;" class="chama-compartilhar-oferta"><?php echo $this->Html->image('Companies.icones/share-facebook_off.png');?><span>compartilhar oferta</span></a>
+					<div class="compartilhar-oferta">
+
+						<div class="area-icones">
+							<a href="javascript:void(0);" alt="por-email"><img src="../companies/img/icones/compartilhamento/email.png"></a>
+							<a href="javascript:void(0);" alt="por-twitter"><img src="../companies/img/icones/compartilhamento/twitter.png"></a>
+							<a href="javascript:void(0);" alt="por-facebook"><img src="../companies/img/icones/compartilhamento/facebook.png"></a>
+						</div>
+						<div class="por-email">
+							<input type="text" value="email">
+							<input type="text" value="senha">
+							<button>enviar</button>
+							<button class="cancelar">cancelar</button>
+						</div>
+						<div class="por-twitter">
+							twitter
+							<button class="cancelar">cancelar</button>
+						</div>
+						<div class="por-facebook">
+							facebook
+							<button class="cancelar">cancelar</button>
+						</div>						
+
+						<a href="javascript:void(0);" class="nao-agora">não compartilhar agora</a>
+					</div>
+				</li>								
+			</ul>
+		</div>
+
+
+	</div>
+
+
+
+
+
+	<?php if($metricas==true){?>
+		<div class="area-metricas">
+			<h4>Opções da peça</h4>
+			  <?php foreach($chaves as $chave){?>																   
+				<ul class='selecione-metrica'>
+					<li><div><span class="chave"><?php echo $chave;?></span><input type="text" value="Selecione" readonly="true"></div>
+					<ul>
+						<?php foreach($metricas[$chave] as $metrica){?>														
+							<li><a href="javascript:void(0);" tipo="<?php echo $chave;?>"><?php echo $metrica;?></a></li>
+						<?php } ?>							
+					</ul>
+				  </li>
+				</ul>
+				<?php } ?>					
+			</div>	
+	 <?php } ?>
+
+	<div class="area-informacoes-do-item">
+
+<ul class="abas">
+	<li class="ativo"><a alt="informacoes" href="javascript:void(0);">Informações</a></li>
+	<li><a alt="opnioes" href="javascript:void(0);">Especificações</a></li>
+	<li><a alt="descricoes" href="javascript:void(0);">Opiniões</a></li>
+</ul>
+
+
+
+
+
+<div class="area-abas">
+		<div class="informacoes">
+			<p><?php echo $this->Session->read('addOffer.Offer.description');?></p>
+		</div>
+	
+		<div class="opnioes conteudo-oculto">						
+				<p><?php echo $this->Session->read('addOffer.Offer.specification');?></p>			
+		</div>
+		
+		
+		<div class="descricoes conteudo-oculto">
+			<p>Ainda nao tem opinioes publicadas</p>
+		</div>
+</div>
+	</div>
+
+</div>
+<div class="area-botoes" style="width:95%;">
+<?php if($this->Session->read('addOffer.update')==true){?>			
+		<button class="envio" onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/publish'); ?>';">Publicar Oferta</button>
+		<button class="cancelar" onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/delete'); ?>';">Excluir Oferta</button>
+<?php }else{?>
+		<button class="envio" onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/publish'); ?>';">Publicar Oferta</button>
+		<button class="cancelar" onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/cancel'); ?>';">Cancelar</button>
+<?php }?>		
+	</div>

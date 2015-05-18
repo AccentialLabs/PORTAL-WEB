@@ -1,0 +1,24 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));	
+?>
+<h4><span>Dados Principais</span></h4>
+<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+<?php echo $this->Form->create('User', array('url'=>array('controller'=>'users','action'=>'cad_perfil')));?>	
+	<div class="area-formulario" style="width:22%;">
+		<label>Nome</label>
+		<input type="text" class="textbox" id="nome" name="data[User][name]">
+	</div>
+	<div class="area-formulario"style="width:22%;">
+		<label>Email</label>
+		<input type="text" class="textbox" id="email" name="data[User][email]">
+	</div>
+	<div class="area-formulario"style="width:22%;">
+		<label>Senha</label>
+		<input type="password" class="textbox" id="password" name="data[User][password]">
+	</div>	<br>
+	<input type="hidden" class="textbox" value="<?php echo $id_oferta;?>" name="id_oferta">
+	<div class="area-botoes">
+		<button class="enviar">Salvar</button>
+		<button>Cancelar</button>
+	<?php echo $this->Form->end();?>
+	</div><br><br><br><br><br><br><br><br><br><br><br>

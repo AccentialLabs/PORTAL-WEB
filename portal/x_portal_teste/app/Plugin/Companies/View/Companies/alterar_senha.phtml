@@ -1,0 +1,28 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('empresas/preferencias');
+	echo $this->Html->script('empresas/pack');	
+?>
+	<?php if(!empty($mensagem))echo "<font color='red'>{$mensagem}</font>"?>
+	<h4 style="margin-bottom:5px !important;"><span>Alterar Senha</span></h4>
+	<?php echo $this->Form->create('CompanySenha', array('url'=>array('controller'=>'companies','action'=>'preferencias', 'alterar-senha')));?>		
+	<div class="area-formulario"style="width:15%;">
+		<label>Senha atual</label>
+		<input type="password" class="textbox" name="senha_atual" id="senha_atual" value="<?php if($this->Session->check('userData.User.birthday'))echo $this->Session->read('userData.User.birthday');?>" id="data-nascimento" name="data[User][birthday]" style="width:150px;">
+	</div>
+	<div class="area-formulario"style="width:15%;">
+		<label>Nova Senha</label>
+		<input type="password" class="textbox" name="senha_nova" id="senha_nova" value="<?php if($this->Session->check('userData.User.birthday'))echo $this->Session->read('userData.User.birthday');?>" id="data-nascimento" name="data[User][birthday]" style="width:150px;">
+	</div>
+	<div class="area-formulario"style="width:15%;">
+		<label>Confirmar Senha</label>
+		<input type="password" class="textbox" name="senha_nova_confirm" id="senha_nova_confirm"  value="<?php if($this->Session->check('userData.User.birthday'))echo $this->Session->read('userData.User.birthday');?>" id="data-nascimento" name="data[User][birthday]" style="width:150px;">
+	</div>
+		<input type="hidden" name="hash" id="hash" value="<?php echo $this->Session->read('CompanyLoggedIn.Company.password');?>">
+		
+	<div class="area-botoes">
+		<button class="envio" id="envio_senha">Trocar Senha</button>
+		<button>Cancelar</button>
+	</div>
+<div id="aviso"></div>	
+<?php echo $this->Form->end();?>

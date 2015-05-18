@@ -1,0 +1,90 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('empresas/preferencias');		
+	if($this->Session->check('CompanyLoggedIn.CompanyPreference')){
+		$agenciaArray = explode('-', $this->Session->read('CompanyLoggedIn.CompanyPreference.agency'));
+		$contaArray	  = explode('-', $this->Session->read('CompanyLoggedIn.CompanyPreference.account'));
+		
+		if(!empty($agenciaArray[1])){
+			$agencia = $agenciaArray[0];		
+			$agenciaDigito = $agenciaArray[1];
+		}else{
+			$agencia = $agenciaArray[0];
+			$agenciaDigito = '';
+		}
+		
+		if(!empty($contaArray[1])){
+			$conta = $contaArray[0];		
+			$contaDigito = $contaArray[1];
+		}else{
+			$conta = $agenciaArray[0];
+			$contaDigito = '';
+		}
+	}
+?>
+<?php //pr($_SESSION);exit;?>
+<div class="informes">
+	Você recebe 30 dias apos a confirmação de pagamento do TRUEONE
+</div>
+
+	<h4><span>Dados Bancários</span></h4>
+		<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+			<div class="area-formulario" tamanho="20%">
+				<label>Banco</label>
+				<?php echo $this->Form->create('CompanyPreference', array('url'=>array('controller'=>'companies','action'=>'preferencias', 'dados-bancarios')));?>
+			<div class="select">			
+				<input type="hidden" name="data[CompanyPreference][bank]">
+				<strong><?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $this->Session->read('CompanyLoggedIn.CompanyPreference.bank');else echo "Selecione";?></strong>
+				<ul>
+					<li valor="Banco Alfa">Banco Alfa</li>
+					<li valor="Banco Banif">Banco Banif</li>
+					<li valor="Banco BMG">Banco BMG</li>
+					<li valor="Banco BTG Pactual">Banco BTG Pactual</li>
+					<li valor="Banco Citibank">Banco Citibank</li>
+					<li valor="Banco HSBC Bank Brasil">Banco HSBC Bank Brasil</li>
+					<li valor="Banco Itaú">Banco Itaú</li>
+					<li valor="Banco Marka">Banco Marka</li>
+					<li valor="Banco Mercantil do Brasil">Banco Mercantil do Brasil</li>
+					<li valor="Banco Panamericano">Banco Panamericano</li>
+					<li valor="Banco Prosper">Banco Prosper</li>
+					<li valor="Banco Rural Rural">Banco Rural Rural</li>
+					<li valor="Banco Safra Safra">Banco Safra Safra</li>
+					<li valor="Banco Santander">Banco Santander</li>
+					<li valor="Banco Sofisa">Banco Sofisa</li>
+					<li valor="Banco Topázio">Banco Topázio</li>
+					<li valor="Bradesco">Bradesco</li>
+					<li valor="Banco Credit Suisse">Banco Credit Suisse</li>
+					<li valor="Banco Intermedium">Banco Intermedium</li>
+				</ul>
+			</div>				
+
+			</div>						
+			<div class="area-formulario" tamanho="9%">
+				<label>Agencia</label><input type="text" class="textbox" style="width:42px; float:left; margin-right:7px;" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $agencia;?>" name="data[CompanyPreference][agency]">
+                	<span style="font-weight:bold; line-height:38px;">-</span> 
+				<input type="text" class="textbox" style="width:18px; float:right;" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $agenciaDigito;?>"  name="data[CompanyPreference][agency-digito]"></label>
+			</div>				
+			
+            <div class="area-formulario" tamanho="10%" style="float:none;">
+				<label>Conta</label><input type="text" class="textbox" style="width:51px; float:left; margin-right:9px;" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $conta;?>" name="data[CompanyPreference][account]">
+                	<span style="font-weight:bold; line-height:38px;">-</span> 
+				<input type="text" class="textbox" style="width:18px; float:right;" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $contaDigito;?>" name="data[CompanyPreference][account-digito]"></label>
+			</div>	
+
+	<div class="area-formulario" style="width:350px;">
+		<label>Nome do Titular da Conta</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $this->Session->read('CompanyLoggedIn.CompanyPreference.account_name');?>" name="data[CompanyPreference][account_name]">
+	</div>	
+	<div class="area-formulario" style="width:150px;">
+		<label>CPF</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.CompanyPreference'))echo $this->Session->read('CompanyLoggedIn.CompanyPreference.cpf');?>" name="data[CompanyPreference][cpf]">
+	</div>
+
+
+
+	
+	<div class="area-botoes">
+		<button class="envio">Salvar</button>
+		<button>Cancelar</button>
+	</div>
+	<?php echo $this->Form->end();?>

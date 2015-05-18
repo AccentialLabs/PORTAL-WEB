@@ -1,0 +1,43 @@
+<?php
+
+//Listagem dos elementos do sistema via rss
+// Intanciamos/chamamos a classe
+$rss = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><rss></rss>');
+$rss->addAttribute('version', '2.0');
+
+// Cria o elemento <channel> dentro de <rss>
+$canal = $rss->addChild('channel');
+
+// Adiciona sub-elementos ao elemento <channel>
+
+$canal->addChild('title', 'Novas Ofertas');
+
+$canal->addChild('link', 'http://www.treuone.com.br/');
+
+$canal->addChild('description', 'Receba nossas novas últimas ofertas.');
+
+// Inclui um <item> para cada resultado encontrado
+foreach ($offers as $offer) {
+    $id = $offer['Offer']['id'];
+    $titulo = $offer['Offer']['title'];
+    $texto = "<img src=\"{$offer['Offer']['photo']}\"> <br/>"
+            . "R$ {$offer['Offer']['value']} ";
+
+// Cria um elemento <item> dentro de <channel>
+    $item = $canal->addChild('item');
+// Adiciona sub-elementos ao elemento <item>
+    $item->addChild('title', $titulo);
+    $item->addChild('link', 'http://localhost/work/x_portal_teste/user/offerDetail?offer=' . $offer['Offer']['id']);
+    $item->addChild('description', $texto);
+    $item->addChild('value', $offer['Offer']['value']);
+}
+// Define o tipo de conteúdo e o charset
+header("content-type: application/rss+xml; charset=utf-8");
+
+// Entrega o conteúdo do RSS completo:
+
+echo $rss->asXML();
+
+exit;
+?>
+

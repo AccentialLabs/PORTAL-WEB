@@ -1,0 +1,862 @@
+
+@import url(lista-de-ofertas.css);
+@import url(formulario.css);
+@import url(jquery-ui-1.9.1.custom.css);
+@import url(rodape.css);
+@import url(login.css);
+
+
+body {
+	display: table;
+	height: 100%;
+	width: 100%;
+	margin:0px;
+	padding:0px;
+	font-size:14px;
+	font-family: Arial;
+	color:#575757;
+	background:-webkit-linear-gradient(top, #fbfbfb, #f9f9f9);
+	background:-moz-linear-gradient(top, #fbfbfb, #f9f9f9);
+	background:-ms-linear-gradient(top, #fbfbfb, #f9f9f9);
+	background:-o-linear-gradient(top, #fbfbfb, #f9f9f9);
+}
+
+
+h1{
+	width:100%;
+	float:left;
+	margin:0px;
+	padding:0px;
+	position: fixed;
+	margin-top: 50px;
+	display: block;
+	z-index: 9999;
+	background-image: url('../img/background/background-5.gif');
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+}
+h1 span{
+	position: relative;
+	top:18px;
+	left:40px;
+	float: left;
+	letter-spacing: -1px;
+}
+h1 strong{
+	font-style: italic !important;
+	display: block;
+	font-size:30px; 
+}
+h1 .img{
+	float: left;
+	width:90px;
+	overflow: hidden;
+	height: 75px;
+	margin-right: 10px;
+	padding:10px;
+	background-color:#535353;
+	border-left:8px solid #ffa800;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-image: url('../img/icones/seta.png');	
+	background-position: 101px 40px;
+}
+h1 .img img{
+	position: relative;
+	top:-118px;
+	left:-10px;
+	float: left;
+}
+
+.area-conteudo h2 img{
+	float:left;
+}
+
+.area-conteudo h2{
+	width:100%;
+	height:39px;
+	margin:20px auto;
+	padding:0px;
+	font-weight: normal;
+	font-size:26px;
+	display: table;
+	letter-spacing: -1px;	
+}
+.area-conteudo h2 span{
+	height:auto;
+	display: table;
+	float:left;
+	position: relative;
+	top:3px;
+	margin-right: 10px;
+}
+
+.area-conteudo h3{
+	display: block;
+	margin:20px 0px 5px 0px;
+	padding:5px 0px;
+	font-size: 18px;
+	font-weight: bold;
+	float: left;
+	width: 100%;
+
+}
+.area-conteudo h3 span{
+	height:auto;
+	display: table;
+	float:left;
+	position: relative;
+	top:3px;
+	margin-right: 10px;
+}
+.area-conteudo h3 .img{
+	position:absolute;
+	margin-top:-1px;
+	margin-left:-32px;
+	width:25px;
+	height:25px;	
+	display: none;
+	background-image:url('../img/icones/titulos-icones.png');
+	background-repeat:no-repeat;
+	background-position: 0px 100px;
+}
+
+
+.area-conteudo h4{
+	display: block;
+	margin:20px 0px 5px 0px;
+	padding:5px 0px;
+	font-size: 18px;
+	font-weight: normal;
+	font-style:italic; 
+	float: left;
+	width: 100%;
+}
+.area-conteudo h4 span{
+	height:auto;
+	display: table;
+	float:left;
+	position: relative;
+	top:3px;
+	margin-right: 10px;
+}
+.area-conteudo h4 .img{
+	position:absolute;
+	margin-top:-3px;
+	margin-left:-32px;
+	width:25px;
+	height:25px;	
+	background-image:url('../img/icones/titulos-icones.png');
+	background-repeat:no-repeat;
+	background-position: 0px 100px;
+}
+
+
+
+
+.topo{
+	width:100%;
+	height:50px;
+	background-color:#333;
+	z-index:99999999;
+	position: relative;
+	position: fixed;
+}
+.oquehadenovo{
+	display: table;
+	width:250px;
+	height:auto;
+	margin:0px;
+	position: absolute;
+	top:0px;
+	right:-8px;
+	padding:0px 10px;
+}
+.oquehadenovo a{
+	width:50px;
+	display: block;
+	height:50px;
+	color:#fff;
+	text-decoration: none;
+	text-align: center;
+	background:-webkit-linear-gradient(top, #ffa800, #f6bf00);
+	background:-moz-linear-gradient(top, #ffa800, #f6bf00);
+	background:-ms-linear-gradient(top, #ffa800, #f6bf00);
+	background:-o-linear-gradient(top, #ffa800, #f6bf00);
+}
+.oquehadenovo a span{
+	position: relative;
+	top:16px;
+}
+.oquehadenovo .conteudooquehadenovo{
+	width:250px;
+	background-color: #f6f6f6;
+	height:100%;
+	display: none;
+	position: absolute;
+	top: 50px;
+	padding:0px 0px 10px 0px;
+	box-shadow: 0px 0px 10px #999;
+}
+.oquehadenovo .conteudooquehadenovo h2{
+	background-image: none;
+	font-weight: normal;
+	letter-spacing: -1px;
+	width:100%;
+	padding:10px 0px;
+	background-color:#fff;
+	margin:0px;
+	border-bottom: 1px solid #dfdfdf;
+	font-size: 19px;
+}
+.oquehadenovo .conteudooquehadenovo h2 a{
+	background:none;
+	float: right;
+	width: auto;
+	height: auto;
+	position: absolute;
+	top: 15px;
+	right: 10px;
+	display: table;
+}
+.oquehadenovo .conteudooquehadenovo h2 a img{display:table;}
+.oquehadenovo .conteudooquehadenovo h2 span{
+	width:90%;
+	margin:0px auto;
+	display: block;
+}
+.oquehadenovo .conteudooquehadenovo h2 img{
+	display:none;
+}
+
+
+
+
+.area-conteudo{
+	width:86%;
+	display: block;
+	position: relative;
+	height:100%;
+	margin:145px 0px 0px 118px;
+	/*margin:135px 0px 0px 158px;*/
+	float:left;
+	z-index:99;
+	/*box-shadow: -10px 0px 10px #1b1b1b;	*/
+	padding:15px 0px 200px 50px;
+}
+.informes{
+	background-color:#dfdfdf;
+	border-radius: 5px;
+	padding:20px;
+	color:#888;
+	font-size: 13px;
+	text-shadow:0px 1px #fff;
+}
+.informes strong{
+	color:#ff9c00;
+	padding:0px 5px;
+}
+
+/*Inicio de Codigo de Area Esquerda*/
+
+
+
+
+.logo{
+	position: relative;	
+	top:15px;
+	left:28px;
+}
+
+.fixatopo{
+	position: fixed !important;
+	top:0px !important;
+	width: 100% !important;
+	z-index: 99999999999999999 !important;
+
+}
+
+
+
+
+
+.area-esquerda{
+	position: fixed;
+	left: 0px;
+	float: left;
+	top:0px;
+	padding:0px 0px;
+	margin:0px 0px 10px 0px;
+	border-left: 0px;
+	background-color:#3f3f3f;
+	width: 110px;
+	height: 100%;
+	display: table;
+	/*background-image: url('../img/background/background-5.gif');*/
+	border-left:8px solid #ffa800;
+}
+.area-esquerda ul{
+	width:110px;
+	list-style: none;
+	padding:00px 0px;
+	margin:0px auto;
+	float: left;
+	display: block;
+	position: relative;	
+	top:155px;
+}	
+
+
+
+.area-esquerda ul li a{
+	display: block;
+	color:#fff;
+	float: left;
+	height: 103px !important;
+	width: 100%;
+	text-decoration: none;
+	font-size: 13px;
+	text-align: left;
+	text-align:center;
+	overflow: hidden;
+}
+.area-esquerda ul li a img{position: relative; left:-4px;}
+
+
+
+/*Inicio de conteudo de OPcoes do Usuario no Topo*/
+.usuariologado{
+	float:right;
+	width:202px;
+	height:50px;
+	position: relative;
+	display: table;
+}
+.usuariologado .abriropcoesusuario{
+	width:202px;
+	height:50px;
+	display: table;
+	color:#999;
+	text-decoration: none;
+	text-align: center;
+	position: relative;
+	cursor: pointer;
+}
+.usuariologado .abriropcoesusuario img{
+	position: relative;
+	top:4px;
+}
+.usuariologado .abriropcoesusuario span{
+	position:relative;
+	top: 15px;
+}
+
+.usuariologado .conteudoopcoesusuario{
+
+	background-color:#f8f8f8;
+	display: none;
+	box-shadow: 0px 0px 10px #999
+}
+.usuariologado .conteudoopcoesusuario a{
+	text-decoration: none;
+	display: block;
+	border-bottom:1px solid #efefef;
+	padding:10px 0px;
+	text-align: right;
+	color:#535353;
+	font-size: 12px;
+}
+.usuariologado .conteudoopcoesusuario a:hover{
+	text-decoration: none;
+	display: block;
+	border-bottom:1px solid #efefef;
+	padding:10px 0px;
+	text-align: right;
+	color:#fff;
+	font-size: 12px;
+	background:-webkit-linear-gradient(top, #ffa800, #f6bf00);
+	background:-moz-linear-gradient(top, #ffa800, #f6bf00);
+	background:-ms-linear-gradient(top, #ffa800, #f6bf00);
+	background:-o-linear-gradient(top, #ffa800, #f6bf00);
+}
+.usuariologado .conteudoopcoesusuario a span{
+	display: block;
+	width:90%;
+	margin:0px auto;
+}
+
+
+
+
+/*Inicio de Codigo de Detalhes dos produtos*/
+.ver-descricoes{
+	font-size: 14px;
+	float: right;
+	position: relative;
+	right: 20px;
+	top:0px;
+	color:#535353;
+	text-decoration: none;
+	background-color: #f6bf00;
+	padding: 8px;
+	box-shadow:inset 0px 0px 10px #999;
+}
+.ver-descricoes:hover{
+	color:#000;
+}
+.detalhe-do-item{
+	float: left;
+	height: auto;
+	display: table;
+	width: 60%;
+}
+.detalhe-do-item .valor-do-produto span{
+	text-decoration: line-through;
+	font-size: 20px;
+	color:#999;
+	display: block;
+	width: 95%;
+	margin:0px auto;
+}
+.detalhe-do-item .valor-do-produto strong{
+	display: block;
+	width: 95%;
+	margin:0px auto;
+}
+.detalhe-do-item .valor-do-produto{
+	float: left;
+	width: 95%;
+	height: auto;
+	display: block;
+	font-size: 40px;
+	letter-spacing: -1px;
+	text-align: left;
+	border-top: 1px dashed #dfdfdf;
+	border-bottom: 1px dashed #dfdfdf;
+	padding:10px 0px;
+	background-color: #f3f3f3;
+}
+.fotos-do-item{
+	float: left;
+	height: auto;
+	display: table;
+	width: 38%;
+}
+.fotos-do-item .imagem-destaque{
+	box-shadow: 0px 0px 10px #999;
+	display: block;
+	height:447px;
+	width: 341px;
+}
+.thumb-destaque{
+	box-shadow: 0px 0px 10px #fff;
+	border:1px solid #dfdfdf;
+	opacity: 0.5;
+	margin:5px 2px 5px 0px;
+	width: 50px;
+	height: 50px;
+	float: left;
+	display: block;
+	cursor: pointer;
+}
+.ativa{
+	box-shadow: 0px 0px 10px #999;
+	opacity: 1;
+}
+.fotos-do-item a img{
+	width: 100%;
+	height:100%;
+}
+
+
+.area-informacoes-do-item{
+	float: left;
+	width: 98%;
+	height: auto;
+	display: table;
+}
+
+.area-abas p{
+	color:#535353;
+	font-size:12px;
+	line-height: 18px;
+	letter-spacing: 0px;
+}
+.conteudo-oculto{display: none;}
+.abas{
+	list-style: none;
+	width: 100%;	
+	height: auto;
+	display: table;
+	padding: 0px;
+	margin: 0px;
+	border-bottom:2px solid #dfdfdf;
+}
+.abas li{
+	width:auto;
+	padding:10px 20px;
+	float: left;
+	border:1px solid #dfdfdf;
+	margin:0px 1px;
+	margin-left: 0px
+}
+.abas li.ativo{
+	/*box-shadow:inset 0 0 10px #ccc;
+	background-color: #fbfbfb;	*/
+	background:-webkit-linear-gradient(top, #ffa800, #dfdfdf);
+	background:-moz-linear-gradient(top, #ffa800, #dfdfdf);
+	background:-ms-linear-gradient(top, #ffa800, #dfdfdf);
+	background:-o-linear-gradient(top, #ffa800, #dfdfdf);
+
+}
+.abas li.ativo a{
+	color:#525252;
+}
+.abas li a{
+	color:#999;
+	text-transform: lowercase;
+	text-decoration: none;
+	font-style:italic 
+}
+
+
+
+
+/*Inicio de Codigo Endereços e Fretes*/
+
+.detalhe-endereco-entrega{
+	width: 48%;
+	height: 230px;
+	display: table;
+	margin:0px auto;
+	float: left;
+	background-color:#efefef;
+	padding:0px 10px 10px 10px;
+	border-right: 1px solid #efefef;	
+}
+.detalhe-endereco-entrega .previsao-de-entrega{
+	color:red;
+	font-size: 12px;
+	font-style: italic;
+} 
+.detalhe-endereco-entrega a{
+	color:#ffa800;
+	font-weight: bold;
+}
+.detalhe-endereco-entrega h4, .detalhe-forma-pagamento h4{margin:10px auto;}
+.detalhe-forma-pagamento{
+	width: 45%;
+	height: 230px;
+	display: block;
+	margin:0px auto;
+	float: left;
+	padding:0px 10px 10px 30px;
+	border-left: 1px solid #fff;
+	overflow: hidden;
+	background-image: url('../img/logo-moip.png');
+	background-repeat: no-repeat;
+	background-position: right bottom; 
+
+}
+.detalhe-forma-pagamento .formulario{
+	float: left;
+	width: 98%;
+	height: auto;
+	display: table;
+}
+.detalhe-forma-pagamento input[type="radio"]{position: relative; top:-8px; margin-left: 20px; margin-right: 5px;}
+.detalhe-forma-pagamento input[type="text"]{
+	border:1px solid #ccc;
+	padding:5px;
+	color:#999;
+	box-shadow: 0px 0px 10px #ccc;
+	background:-webkit-linear-gradient(top, #fff, #efefef);
+	background:-moz-linear-gradient(top, #fff, #efefef);
+	background:-ms-linear-gradient(top, #fff, #efefef);
+	background:-o-linear-gradient(top, #fff, #efefef);	
+}
+.detalhe-forma-pagamento input[type="text"]:focus{color:#535353; box-shadow: inset 0px 0px 5px #dfdfdf;}
+.detalhe-forma-pagamento div{
+	float: left;
+	width: 98%;
+	height: 180px;
+	margin-bottom: 10px;
+}
+
+#selecione-o-meio a{
+	display: block;
+	float: left;
+	margin:5px;
+	color:#535353;
+	text-decoration: none;
+	border:1px solid #fff;
+	padding:10px;
+	box-shadow: 0px 0px 10px #ccc;
+	background:-webkit-linear-gradient(top, #fff, #efefef);
+	background:-moz-linear-gradient(top, #fff, #efefef);
+	background:-ms-linear-gradient(top, #fff, #efefef);
+	background:-o-linear-gradient(top, #fff, #efefef);		
+}
+#boleto-bancario, #cartao{
+	display: none;
+}
+#boleto-bancario input.btn{
+	border:1px solid #dfdfdf;
+	background-color:#fbfbfb;
+	padding:10px;
+	color:#535353;
+	box-shadow: 0px 0px 10px #ccc;
+	cursor: pointer;
+	font-size: 12px !important;
+}
+#boleto-bancario a.btn{
+	text-decoration: none;
+	padding:10px;
+	color:#535353;
+	text-shadow: 0px 1px 0px #fff;
+	cursor: pointer;
+	font-size: 14px !important;
+	border-left: 5px solid #ffa800;
+	display: block;
+	position: relative;
+	top:5px;
+	left:3px;
+}
+.copyright-pagamento{
+	float: right;
+	margin:0px;
+	padding:0px;
+	position: relative;
+	top:-20px;
+	height: auto;
+	left:15px;
+	opacity: 0.5;
+}
+
+
+
+
+
+
+/*Inicio de codigo Pagina Assinaturas*/
+
+.area-assinaturas{
+	width:200px;
+	height: auto;
+	display: block;
+	float: left;
+	margin-left:80px;
+	margin-top:100px;
+	position: absolute;
+	z-index: 9;
+}
+.txtPesquisa{
+	border:1px solid #dfdfdf;
+	padding: 8px;
+	border-radius: 15px;
+	background:-webkit-linear-gradient(top, #fff, #efefef);
+	background:-moz-linear-gradient(top, #fff, #efefef);
+	background:-ms-linear-gradient(top, #fff, #efefef);
+	background:-o-linear-gradient(top, #fff, #efefef);	
+	color:#999;
+	box-shadow: inset 0px 0px 4px #dfdfdf;		
+}
+.area-assinaturas .opcoes{
+	width:100px;
+	height: auto;
+	display: block;
+}
+.area-assinaturas .opcoes a{
+	position: relative;
+	display: block;
+	box-shadow: 0px 0px 10px #333;
+	color:#fff;
+	text-decoration: none;
+	background:-webkit-linear-gradient(top, #ff0000, #da193e);
+	background:-moz-linear-gradient(top, #fff, #da193e);
+	background:-ms-linear-gradient(top, #fff, #da193e);
+	background:-o-linear-gradient(top, #fff, #da193e);		
+	padding:10px;
+	border-radius: 10px 0px 0px 10px;
+	left:25px;
+}
+.area-assinaturas .opcoes a img{
+	width: 23px;
+}
+.area-assinaturas .opcoes a.ativo{
+	left:-15px;
+}
+
+.ativo-inativo{
+	width: 25px;
+	height:25px;
+	display: block;
+	text-indent: -9000px;
+	background-image: url('../img/icones/assinaturas/ativo-inativo.png');
+	background-position: top;
+	background-repeat: no-repeat;
+	float: right;
+	margin:0px 20px 0px 0px;
+}
+.ativado{
+	background-position: bottom;	
+}
+
+.tabela-assinaturas tbody td{
+	background:-webkit-linear-gradient(top, #fff, #efefef);
+	background:-moz-linear-gradient(top, #fff, #efefef);
+	background:-ms-linear-gradient(top, #fff, #efefef);
+	background:-o-linear-gradient(top, #fff, #efefef);		
+}
+
+.area-refresh{
+	width: 100%;
+	height: 300px;
+	padding:10px 0px;
+	position: fixed;
+	background-color: #fff;
+	box-shadow: 0px 0px 10px #333;
+	top:200px;
+	z-index:9999999;
+}
+.area-refresh p{
+	color:#a1a1a1;
+	text-transform: uppercase;
+	font-size: 20px;
+	letter-spacing: -1px;
+}
+.area-refresh p strong{
+	color:#ff8800;
+}
+.area-refresh .loading{
+	width:218px;
+	height:218px;
+	background-image: url('../img/background/background-loading.gif');
+	background-position: top;
+	background-repeat: no-repeat;	
+	float: left;
+	position: relative;
+	margin-left:20%;
+}
+
+
+
+
+/*Atualizacao campos de login 05 02 2013*/
+.campo-de-login{
+	padding:10px 0px 20px 0px !important;
+	display: table;
+	height: auto;
+	width: 98%;
+	margin:0px auto;
+	background:-webkit-linear-gradient(top, #fff, #efefef);
+	background:-moz-linear-gradient(top, #fff, #efefef);
+	background:-ms-linear-gradient(top, #fff, #efefef);
+	background:-o-linear-gradient(top, #fff, #efefef);
+
+}
+.campo-de-login h2{
+	width: 85%;
+	margin:10px auto;
+	color:#535353;
+	padding:0px;
+	background: transparent;
+	font-style: italic;
+	font-size: 18px;
+	letter-spacing: -1px;
+}
+.campo-de-login h2 img{display:none;}
+.campo-de-login input{
+	width: 80%;
+	margin:5px auto;
+}
+.campo-de-login a{
+	display: table;
+	float: left;
+	padding:0px !Important;
+	position: relative;
+	top:5px;
+	margin:1px auto;
+	width: 53%;
+	border:none !important;
+	font-size: 10px !important;
+	color:#d18c06 !important;
+	font-style: italic;
+}
+.campo-de-login a:hover{background: transparent !important; color:#000 !important; }
+.campo-de-login button{
+	border:none;
+	border-radius: 4px;
+	float: right;
+	padding:10px 20px;
+	margin-right: 20px;
+	width: auto !important;	
+}	
+
+
+
+
+/* inicio de codigo apenas FF */ 
+
+
+@-moz-document url-prefix() { 
+
+.lista-de-ofertas .oferta-destaque-principal  .botao-comprar{
+	position: absolute;
+	border:none;
+	margin-left:284px;
+	margin-top:-66px;
+	background-color: #81abd5;
+	font-size: 20px;
+	color:#fff;
+	padding:10px 20px 12px 20px;
+	font-weight: normal;
+	text-align: center;
+	height: auto;
+	border: 1px solid #6d99c4;
+	border-right: 0px;
+	text-decoration: none;
+}
+}
+@-moz-document url-prefix() { 
+.lista-de-ofertas .oferta-destaque-impar  .botao-comprar{
+	position: absolute;
+	z-index: 9;
+	border:none;
+	left:-0px;
+	top:100px;
+	background-color: #81abd5;
+	font-size: 14px;
+	color:#fff;
+	padding:15px 0px 14px 25px;
+	font-weight: normal;
+	text-align: right;
+	height: auto;
+	border: 1px solid #6d99c4;
+	border-right: 0px;
+	text-decoration: none;
+	
+}
+}
+@-moz-document url-prefix() { 
+.lista-de-ofertas .oferta-destaque  .botao-comprar{
+	position: absolute;
+	z-index: 9;
+	border:none;
+	left:96px;
+	top:104px;
+	background-color: #81abd5;
+	font-size: 14px;
+	color:#fff;
+	padding:12px 10px 14px 10px;
+	font-weight: normal;
+	text-align: center;
+	height: auto;
+	border: 1px solid #6d99c4;
+	border-right: 0px;
+	text-decoration: none;
+	border:1px solid red !important;
+}
+
+}

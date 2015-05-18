@@ -1,0 +1,276 @@
+<?php
+//Os arquivos foram nomeados da mesma forma para facilitar futuras manutenções
+echo $this->Html->css('usuarios/x-assinaturas');
+echo $this->Html->script('usuarios/x-assinaturas');
+?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+    $(function() {
+        $("#lupa").click(function() {
+            $("#busca-empresa").toggle(200);
+            $("#txt-busca").toggle(200);
+        });
+
+        $("#txt-busca").click(function() {
+            $("#busca-empresa").toggle(200);
+            $("#txt-busca").toggle(200);
+            $("#helper").fadeOut(100);
+        });
+
+        $("#helper-closer").click(function() {
+            $("#helper").toggle(200);
+        });
+
+    });
+
+    function submitForm(id) {
+        $("#compId").val(id);
+        document.getElementById('companiesProfile').submit();
+    }
+</script>
+<style>
+
+    #helper-closer{
+        width: 25px;
+        height: 25px;
+
+        z-index: 999;
+        position: absolute;
+        top: 23px;
+        right: 17px;
+        cursor: pointer;
+    }
+
+    .helper{
+        position: absolute;
+        top: 13%;
+        left: 7%;
+    }
+
+    .helper-text{
+        color: #fff;
+        font-family: Myriad Pro Light;
+        position: absolute;
+        top: 40px;
+        font-size: 20px;
+        left: 35px;
+        text-align: center;
+    }
+
+    table#list-style td{
+        border: 0px solid;
+        padding: 0px;
+    }
+
+    #title-bar-text-qtd{
+        color: #fff;
+        font-family: Helvetica;
+        margin-top: 7px;
+        margin-left: -90px;
+    }
+
+    #tabel-empresas{
+        width: 96%;
+        float: left;
+        margin-left: 4%;
+        border-collapse: collapse;
+        border: 0px solid;
+    }
+
+    //copy
+    #adv-signatures-photo{
+        width: 100px;
+        height: 100px;
+        background: #fff;
+    }
+
+    #adv-signatures-div-photo{
+        float: left;
+    }
+
+    #adv-signatures-div-title{
+        color: #808080;
+        margin-left: 20px;
+        float: left;
+        width: 80%;
+        margin-top: 20px;	
+    }
+
+    strong#compy-title{
+        font-size: 20px;
+        font-family: Tahoma;
+    }
+
+    span#compy-email{
+        font-family: Tahoma;
+    }
+
+    div#horizontal-bar{
+        height: 0.2px;
+        margin-top: 3px;
+        margin-bottom: 3px;
+        background: #ccc;
+        width: 110%;
+    }
+
+</style>
+<div  style="width: 400px;  height: 40px; float: left; color: #fff; font-family: Helvetica; top: 50px; left: 5%; z-index: 999; position: absolute;">
+    <img id="lupa" src="../img/adv/Pesquisar/lupa_branca.png" height="100%;" style="float: left; opacity: 0.8; cursor: pointer;"><input id="busca-empresa"  type="text" class="input-cadastrais" placeholder="Nome da empresa" style="display: none; width:300px; float: left; border: 0px solid;padding: 3px; margin-top:5px;" /><br/><div id="txt-busca" style="float: left;  margin-top: -8px; width: 200px;"> Buscar Empresas</div> 
+</div>
+
+<div style=" background: #ccc; position: fixed; height: 40px; text-align: center; width: 100%; top: 90px; left: 4%;">
+    <div id="title-bar-text-qtd"> 
+        Você está recebendo ofertas de <input type="text" id="qtd-signs" class="input-qtd-signs" value="<?php echo count($companies); ?>" readonly="true"/> empresas
+    </div>
+</div>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div style="width: 100%; height: 100%;  padding-top: 3.5px">
+
+    <form name="companiesProfile" id="companiesProfile" action="companiesProfile" method="post">
+        <input type="text" name="compId" id="compId" style="display: none;"/>                              
+    </form>
+    <div style="max-height: 600px; overflow: auto;  margin-top: 45px; border: 1px solid;" id="testa">
+        <table id="tabel-empresas">
+
+            <?php foreach ($companies as $company) { ?>
+                <tr id="<?php echo $company['Company']['id']; ?>">
+                    <!-- item assinatura -->
+                    <td id="<?php echo $company['Company']['id']; ?>">
+                        <div id="adv-signatures-div-photo">
+                            <?php if ($company['Company']['logo'] == 'UPLOAD_ERROR') { ?>
+                                <img src="http://accential.com.br/site/wp-content/uploads/2013/04/Accential_Logo_V.png" id="adv-signatures-photo" width="100px" height="100px;" />
+                            <?php } else { ?>
+                                <img src="<?php echo $company['Company']['logo']; ?>" id="adv-signatures-photo" width="100px" height="100px;" />
+                            <?php } ?>
+                        </div>
+                        <div id="adv-signatures-div-title">
+                            <strong id="compy-title" style="cursor: pointer;" onclick="submitForm(<?php echo $company['Company']['id']; ?>)"><?php echo $company['Company']['fancy_name']; ?></strong> <span id="compy-email"><i><?php echo $company['Company']['email']; ?></i></span>
+                            <div id="horizontal-bar"></div>
+                            <br/>
+                            <span id="compy-email"><?php
+                                if (!empty($company['Company']['description'])) {
+                                    echo substr($company['Company']['description'], 0, 400);
+                                } else {
+                                    echo "--";
+                                }
+                                ?></span>
+                        </div>
+                        <div style="float: right;">
+                            <img src="../img/adv/Assinaturas/blue_plus.png" style="width: 45px; opacity: 0.4;"/><br/>
+                            <a href="javascript: void(0);" id="<?php echo $company['Company']['id']; ?>" link="http://localhost/work/x_portal_teste/user/assinaturas/excluir?id=<?php echo $company['CompaniesUser']['id']; ?>" class="exclui"> <img src="../img/adv/Wishlist/excluir_3.png" style="width: 45px;" /></a>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+    <!-- header -->
+    <!--    <div style=" width: 1050px; height: 590px;left: 11%; top:15%; background: #fff; position: absolute;">
+           <div class="sign-header">
+                <div class="header-left">
+                    <div style="margin-top: 15px;"> <span class="header-left-title">Ache as empresas participantes do programa!</span><br/></div>
+                    <ul>
+                        <li>assinem ou cancele o recebimento de ofertas personalizadas que<br/> forem publicadas por elas.</li>
+                        <li>use a busca ao lado para procurar pelo nome da empresa.</li>
+                        <li>quando econtrar a que procura, clique nos ícones de <br/>
+                            "+" para assinar ou "X" para cancelar a assinatura. </li>
+                    </ul>
+    
+                </div>    
+    
+                <div class="header-right">
+                    <div style="margin-left: 30px; margin-top: 50px; text-align: left;">
+                        <span class="header-right-title">Buscar Empresas</span><br/>
+                        <input id="busca-empresa"  type="text" class="input-cadastrais" placeholder="pesquise aqui" /><br/>
+                        <button style="cursor: pointer; float: right;margin-right: 55px; background: orange; border: 1px solid; padding: 10px; padding-bottom: 8px; padding-top: 8px; color: #fff;">BUSCAR</button>
+                    </div>
+                </div>
+            </div>
+    
+             body 
+            <div class="barra-qtd">
+                Você está recebendo ofertas de <input type="text" id="qtd-signs" class="input-qtd-signs" value="<?php echo count($companies); ?>" readonly="true"/> empresas
+            </div>
+    
+            <div class="barra-title-tabela">
+                Empresas
+            </div>
+            <div style=" max-height: 300px; overflow: auto;" id="testa">
+                <table id="tabel-empresas">
+    <?php foreach ($companies as $company) { ?>
+                                                                        
+                                                                                            <tr id="<?php echo $company['Company']['id']; ?>">
+                                                                                                <td id="<?php echo $company['Company']['id']; ?>" onclick="mostraLinha(this.id);">
+                                                                                                    <div style="float: left;">
+                                                                                                        <img class="comp-logo" src="<?php echo $company['Company']['logo']; ?>" />
+                                                                                                    </div>
+                                                                                                    <div style="padding-left: 10px; font-size: 14px;">
+                                                                                                        <strong><?php echo $company['Company']['fancy_name']; ?></strong><br/>
+                                                                                                        <a href="mailto:<?php echo $company['Company']['fancy_name']; ?>?subject=Contato cliente TrueOne"><?php echo $company['Company']['email']; ?></a>
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                                <td id="botoes">
+                                                                                                    <a href="javascript: void(0);" class="assina" style="cursor: default;opacity: 0.3;"><img src="../img/icones/users-vitrine/bt_more.png" /></a>
+                                                                                                </td>
+                                                                                                <td id="botoes">
+                                                                                                    <a href="javascript: void(0);" id="<?php echo $company['Company']['id']; ?>" link="http://localhost/work/x_portal_teste/user/assinaturas/excluir?id=<?php echo $company['CompaniesUser']['id']; ?>" class="exclui"><img  src="../img/icones/users-vitrine/bt_remove_02.png" /></a>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                        
+                                                                                             DETALHES 
+                                                                                            <tr class="td-detalhe" id="details<?php echo $company['Company']['id']; ?>">
+                                                                                                <td><?php
+        if (!empty($company['Company']['description'])) {
+            echo $company['Company']['description'];
+        } else {
+            echo "Essa empresa não possui descrição.";
+        }
+        ?></td>
+                                                                        
+                                                                        
+                                                                                                <td colspan="2">
+                                                                                                    <span class="qtd-offers">
+        <?php if (!empty($company['Company']['ofertas_perfil'])) { ?>
+                                                                                                                                                                                Essa empresa possui<br/>
+                                                                                                                                                                                <span class="qtd-offers-bold"><?php echo $company['Company']['ofertas_perfil']; ?> ofertas<br/></span>
+                                                                                                                                                                                para o seu perfil
+            <?php
+        } else {
+            echo "Essa empresa não possui ofertas para o seu perfil";
+        }
+        ?>
+                                                                                                    </span><br/><br/>
+                                                                        
+        <?php echo $this->Form->create('Company', array('url' => array('controller' => 'users', 'action' => 'assinaturas', 'offersDirect', $company['Company']['id']))); ?>
+                                                                                                    <div class="ver-offers"><button class="ver-offers" type="submit" style="border: 0px; background: transparent;">► Veja essas ofertas</button></div><br/>
+                                                                        
+        <?php echo $this->Form->end(); ?>
+                                                                        
+                                                                                                    <div class="ver-offers"> ► Veja todas as ofertas dessa empresa</div> 
+                                                                        
+                                                                                                </td>
+                                                                                            </tr>
+    <?php } ?>
+                </table>
+    
+    
+            </div>
+        </div>-->
+</div>
+
+
+<!-- helper div -->
+<?php if (empty($companies)) { ?>
+    <div class='helper' id='helper'>
+        <img src='../img/adv/Assinaturas/box-help.png' usemap='#helpmap'/>
+        <div id='helper-closer'></div>
+        <div class='helper-text'>
+            Busque, siga as suas<br/>
+            empresas preferidas e<br/>
+            receba ofertas exclusivas
+        </div>
+    </div>
+    <?php
+}?>

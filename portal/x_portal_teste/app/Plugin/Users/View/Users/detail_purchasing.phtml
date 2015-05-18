@@ -1,0 +1,383 @@
+<?php		
+ 	echo $this->Html->script('bootstrap.min');
+ 	echo $this->Html->script('bootstrap-tab');
+ 	echo $this->Html->script('bootstrap-modal');
+ 	echo $this->Html->script('google-code-prettify/prettify'); 	
+	echo $this->Html->script('transparente');
+	echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+
+	//pr($_SESSION);
+	$metricas = json_decode($this->Session->read('Carrinho.Oferta.metrics'), true);
+	if(!empty($metricas)){
+		$chaves = array_keys($metricas);	
+	}else{
+		$metricas = false;
+	}
+		
+	
+?>
+
+
+<script type="text/javascript">
+$(function(){
+	$('.area-esquerda').tooltip({		
+		show: null,
+		open: function( event, ui ) {
+	       	//ui.tooltip.animate({ left: ui.tooltip.position().left + 10 }, "fast" );
+	     },
+		position: {
+	        my: "left+110",
+	        at: "left bottom-15"
+	    }
+	});	
+	// Inicio de codigo da animacao da area-esquerda
+	$('.area-esquerda li a').each(function(e, a){
+		$(a).attr('alt', $(this).attr('title'));		
+	});
+});
+
+</script>
+<script type='text/javascript' src='https://www.moip.com.br/transparente/MoipWidget-v2.js' charset='ISO-8859-1'></script>
+
+<div id="token">
+	<div id="MoipWidget" data-token="<?php echo $token; ?>" callback-method-success="sucesso" callback-method-error="erroValidacao"></div>
+</div>
+<div id="div-content">
+<p class="erro">
+<?php 
+	if($erro==true){		
+		echo "<p><h2><font color='red'>Ocorreu um erro no calculo do frete. Verifique a quantidade e o CEP informado</font></h2></p>";
+	}
+?>
+</p>
+
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao">
+		<caption>Pedido: <?php echo $this->Session->read('Carrinho.Oferta.id_pedido');?></caption>
+                
+		<thead>
+			<tr>
+
+			</tr>
+		</thead>
+		<tbody>
+
+			<tr class="linha_detalhe">
+				<td colspan="5">
+					<img src="<?php echo $this->Session->read('Carrinho.Oferta.photo');?>">
+					<div class="valor">
+						<ul class='selecione-metrica' style="position:relative; top:0px; ">
+							<li>
+								<div><span>Quantidade</span>
+									<input type="text" name="purchase" id="purchase" value="<?php echo $this->Session->read('Carrinho.Opcoes.quantidade');?>" style="width:60px; background-color:#fff; float:left; color:#333;">									
+									<a class="itens-input-quantidade menos" href="javascript:void(0);"><?php echo $this->Html->image('Users.icones/retirar-quantidade-metricas.jpg');?></a>
+									<a class="itens-input-quantidade mais" href="javascript:void(0);"><?php echo $this->Html->image('Users.icones/adicionar-quantidade-metricas.jpg');?></a>									
+								</div>
+							</li>
+						</ul>						
+						<strong>R$ <?php echo number_format($this->Session->read('Carrinho.Oferta.value_total'), 2, ',', '.');?></strong>
+						Frete:   <?php if($this->Session->read('Carrinho.Oferta.value_frete') > 0)  echo "R$".number_format($this->Session->read('Carrinho.Oferta.value_frete'), 2, ',', '.'); else echo "a ser calculado"; ?>
+						<strong>Total:  <?php if($this->Session->read('Carrinho.Oferta.value_final') > 0)  echo number_format($this->Session->read('Carrinho.Oferta.value_final'), 2, ',', '.'); else echo number_format($this->Session->read('Carrinho.Oferta.value_total'), 2, ',', '.');  ?></strong>						
+					</div>					
+					<h4><?php echo $this->Session->read('Carrinho.Oferta.title');?><br><strong>cod: <?php echo $this->Session->read('Carrinho.Oferta.id');?></strong></h4>
+					<div class="paragrafo-descricao"><?php echo $this->Session->read('Carrinho.Oferta.resume');?> </div>
+
+
+
+		<?php if($metricas==true){?>
+		<div class="area-metricas">
+		
+			<h4>Opções da peça</h4>	
+				<?php foreach($chaves as $chave){				
+					if(!empty($_SESSION['Carrinho']['Opcoes']['metricas'][$chave])){
+						$arrayComp = array_flip($_SESSION['Carrinho']['Opcoes']['metricas']);					
+						$key = array_search($chave, $arrayComp);	
+					}else{
+						$key = false;
+					}					
+					if(!$key)$key="selecione";
+							
+					?>					
+					
+					<ul class='selecione-metrica'>
+					<li><div><span class="chave"><?php echo $chave;?></span><input type="text" value="<?php echo $key;?>" readonly="true"></div>
+						<ul>
+							<?php foreach($metricas[$chave] as $metrica){?>														
+								<li><a href="javascript:void(0);" tipo="<?php echo $chave;?>"><?php echo $metrica;?></a></li>
+							<?php } ?>							
+						</ul>
+					</li>
+				</ul>	
+				<?php }?>																				
+		</div>									
+		<?php  } ?>
+				</td>
+			</tr>
+
+
+		</tbody>
+	</table>
+
+
+	<div class="area-detalhes">
+	<div class="detalhe-endereco-entrega">
+		<h4><div class="alinha">Endereço de entrega</div></h4>
+		<div class="alinha">
+		<div class="area-formulario">			
+			<input type="text" class="textbox" id="CEP" name="CEP" value="<?php if($this->Session->check('Carrinho.Endereco.cep')){ echo $this->Session->read('Carrinho.Endereco.cep');}else{echo"Digite seu CEP";}?>" size="15" maxlength="9" alt="Digite seu CEP" style="width:75px; float:left;">
+			<a href="javascript:void(0);" id="buscar_cep">Buscar endereco</a>			
+        </div>        	        
+			<div class="detalhes-do-endereco">
+			<div class="area-formulario" style="width:450px;">	
+                <input type="text" class="textbox" id="Endereco" name="Endereco" value="<?php if($this->Session->read('Carrinho.Endereco.endereco')!=''){ echo $this->Session->read('Carrinho.Endereco.endereco');}else{echo"Endereco";}?>" style="width:450px;" alt="Endereco">
+             </div>
+
+					<div style="clear:both;"></div>
+
+             <div class="area-formulario" style="width:100px;">   
+                <input type="text" class="textbox" id="Numero" name="Numero" value="<?php if($this->Session->check('Carrinho.Endereco.numero')){ echo $this->Session->read('Carrinho.Endereco.numero');}else{echo"Número";}?>" size="6" alt="Numero" style="width:100px;">
+             </div>
+             <div class="area-formulario" style="width:130px;">
+                <input type="text" class="textbox" id="Complemento" name="Complemento" value="<?php if($this->Session->check('Carrinho.Endereco.complemento')){ echo $this->Session->read('Carrinho.Endereco.complemento');}else{echo"Complemento";}?>"style="width:130px;" alt="Complemento">
+             </div>
+             <div class="area-formulario" style="width:170px;">
+                <input type="text" class="textbox" id="Bairro" name="Bairro" value="<?php if($this->Session->check('Carrinho.Endereco.bairro')){ echo $this->Session->read('Carrinho.Endereco.bairro');}else{echo"Bairro";}?>" style="width:170px;" size="9" alt="Bairro">
+             </div>
+
+					<div style="clear:both;"></div>
+
+             <div class="area-formulario" style="width:120px;">
+                <input type="text" class="textbox" id="Cidade" name="Cidade" value="<?php if($this->Session->check('Carrinho.Endereco.cidade')){ echo $this->Session->read('Carrinho.Endereco.cidade');}else{echo"Cidade";}?>" style="width:180px;" alt="Cidade">
+             </div>
+             <div class="area-formulario" style="width:30px;">
+                <input type="text" class="textbox" id="Estado" name="Estado" value="<?php if($this->Session->check('Carrinho.Endereco.estado')){ echo $this->Session->read('Carrinho.Endereco.estado');}else{echo"Estado";}?>" size="9" alt="Estado" style="width:30px;">
+             </div>
+
+					<div style="clear:both;"></div>
+
+             <div class="area-formulario">	
+                <input type="text" class="textbox" id="Descricao" name="Descricao" value="<?php if($this->Session->read('Carrinho.Endereco.descricao')!=''){ echo $this->Session->read('Carrinho.Endereco.descricao');}else{echo"Nome para o Local";}?>" style="width:450px;" alt="Nome para o Local">
+             </div>
+            </div>
+ 				 				
+ 				<div class="selecionar-enderecos">
+ 					<a href="javascript:void(0);" class='add-endereco'>Adicionar endereço</a>
+ 					<?php if(is_array($enderecos)){?>
+ 					<a href="javascript:void(0);" class="linkpopup">Escolher outro endereço</a>
+ 					<?php } ?>
+				</div>
+            </div>        
+		</div>
+	</div>
+</div>
+	<div class="area-detalhes">
+	<div class="detalhe-forma-pagamento" style="background: #F8F6CB;">
+		<h4>&nbsp;&nbsp;Formas de Pagamento</h4>
+		<div class="refreshzinho">
+			<div class="loading">
+				<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+				<p>Aguarde enquanto o <strong>trueOne</strong> <br> carrega o CONTEUDO</p>
+			</div>
+		</div>
+
+
+	<div style="width:200px; height:100px; margin:0 20px 0 10px; float:left;">
+		<img src="https://secure.trueone.com.br/portal/img/moip_ambienteseguro.png" />
+	</div>
+
+
+		<div class="alinha">
+		<div id="selecione-o-meio">
+			<h5>Modo de Pagamento</h5>
+			<a href="javascript:void(0);" caminho="boleto-bancario">Boleto</a>
+			<a href="javascript:void(0);" caminho="cartao">Cartão</a>
+		</div>
+		<div id="boleto-bancario">
+			<h5>Boleto Bancário</h5>
+			<div id="pag-boleto">
+				<input type="button" id="boleto" class="btn" valor="" value="Clique para gerar o boleto bancário">
+			</div>
+	 			<span id="link-boleto"></span>	
+		</div>
+		<div id="cartao">
+			<h5>Dados do Cartão</h5>      
+
+<div class="area-escolha-de-cartao">
+  <form id='dadosCartaoCredito' onsubmit = "return false;">
+	<div class="area-formulario" style="width:260px; height:20px !important; display:block !important; z-index:0;">
+		<input type="hidden" id="instituicao" name="instituicao" value="Mastercard">
+		
+		<div class="radiobutton">
+			<!-- FOI ADICIONADO O EVENTO ONCLICK NOS RADIOS -->
+			<a href="javascript:void(0);" onclick='javascript:calcularParcelasCartao();' id="calcular-btn"  valor="Visa"><span><?php echo $this->Html->image('icones/visa.gif', array('style'=>'position:relative; top:-5px;'));?></span></a>
+			<a href="javascript:void(0);" onclick='javascript:calcularParcelasCartao();' id="calcular-btn" valor="Mastercard"><span><?php echo $this->Html->image('icones/master.gif', array('style'=>'position:relative; top:-5px;'));?></span></a>
+			<a href="javascript:void(0);" onclick='javascript:calcularParcelasCartao();' id="calcular-btn" valor="AmericanExpress"><span><?php echo $this->Html->image('icones/amex.gif', array('style'=>'position:relative; top:-5px;'));?></span></a>
+		</div>
+
+	</div>
+
+		<!-- MENSAGEM DE CALCULANDO PARCELAS - O ANDREW (OU O EDSON) TEM QUE MEXER PRA DEIXAR MAIS LEGAL... -->
+		<br/>
+		<br/>
+		<div id='numParcelsMessage' style='display:none'>Calculando parcelas...</div>
+		<!-- FIM -->
+
+		
+		<ul class='selecione-metrica' style='display:none'>
+			<li>
+                <div id='numParcels'>
+                    <span class="span">Número de parcelas</span>
+                    <select id='parcels' name='parcels'></select>
+                </div>
+			</li>
+		</ul>
+
+		<!-- 
+		
+			if($this->requestParams['transaction']['paymentMethod'] == 'CreditCard') {
+
+				$minimunValue = '10.00';
+				$value = $this->requestParams['transaction']['value']; // valor da oferta
+				$num = floor($value / $minimunValue);
+
+				if($num >= 2) {
+					$parcels = ($num > 12 ? 12 : $num);
+					$moip->addParcel(2, $parcels, null, true);
+				}
+			}
+
+		<ul class='selecione-metrica'>
+		<input type="hidden" id="parcelas" readonly="true">
+			<li><div><span class="span">Parcelas</span><input type="text" readonly="true"></div>
+				<ul>
+					<?php 
+						$valor = 11; 
+						for($u=1; $valor>10; $u++){
+							$valor = $this->Session->read('Carrinho.Oferta.value_final')/$u;
+							if($u==11){
+								$valor = 9;									
+							}																 								 	  										
+						}
+						for($i=1; $i<=$u; $i++){
+						  $valor = $this->Session->read('Carrinho.Oferta.value_final')/$i;  	
+						?>
+						<li><a href="javascript:void(0);" class="cartao-credito" valor_parcela="<?php echo $i;?>"><?php echo $i;?>x R$ <?php echo number_format($valor, 2, ',', '.');?></a></li>					
+						<li><a href="javascript:void(0);" class="cartao-credito" valor_parcela="<?php echo $i;?>"><?php echo $i;?></a></li>
+					<?php } ?>					
+				</ul>
+			</li>
+		</ul>
+		-->	
+			
+              <div class="area-dados-de-cartao" style="float:left;">
+			
+			<input type="hidden" name="parcelamento" id="parcelamento" value="<?php echo $this->Session->read('Carrinho.Oferta.parcels');?>">
+			<input type="hidden" name="parcelamento_juros" id="parcelamento_juros" value="<?php echo $this->Session->read('Carrinho.Oferta.parcels_off_impost');?>">
+            <div class="area-formulario" style="width:850px;">
+			
+            <div style="float:left;">
+            <label style="font-size:11px;">Número do cartão</label>
+			<input type="text" class="textbox" id="NumeroCartao" name="Numero" value="" style="width:130px; float:left; margin-right:10px;" alt="Número do cartao" maxlength="16">
+            </div>
+             
+             <div style="float:left;">
+            <label style="font-size:11px;">Validade</label>
+			<input type="text" class="textbox" id="Expiracao" name="Expiracao" value="" style="width:70px; float:left; margin-right:10px;" alt="Validade" maxlength="5">
+            </div>
+             
+             <div style="float:left;">
+            <label style="font-size:11px;">Código de segurança</label>     
+			<input type="text" class="textbox" id="CodigoSeguranca" name="CodigoSeguranca" value=""  style="width:130px; float:left; margin-right:10px;" alt="Cod" maxlength="3">
+            </div>
+             <div style="float:left;">
+            <label style="font-size:11px;">Nome gravado no cartão</label>
+            <input class="textbox" type="text" id="Portador" name="Portador" value=""  style="width:315px;" alt="Nome gravado no cartão">
+            </div>
+            </div>
+            
+            <div class="area-formulario" style="width:850px; float:none;">   
+             
+             <div style="float:left;">
+            <label style="font-size:11px;">CPF</label>         
+            <input class="textbox" type="text" id="CPF" name="CPF" alt="CPF" style="width:98px; float:left; margin-right:10px;" maxlength="14">
+			</div>
+            
+            <div style="float:left;"> 
+            <label style="font-size:11px;">Data de nascimento</label>
+            <input class="textbox" type="text" id="DataNascimento" name="DataNascimento" style="width:82px; float:left; margin-right:10px" value="" alt="Data de Nascimento" maxlength="10">
+             </div>
+             
+             <div style="float:left;">
+            <label style="font-size:11px;">Telefone</label>
+            <input class="textbox" type="text" id="Telefone" name="Telefone" style="width:90px; " value="" alt="Telefone" maxlength="14">
+            </div>
+            </div>
+			<!-- <button class="fechar-compra">Confirmar Pagamento</button> -->
+			<!-- <img src="imagens/logo-moip.png" class="copyright-pagamento"> -->
+</div>
+
+		</div>
+
+
+
+	</div>
+	</div>
+	
+
+	
+	<div class="area-botoes" style="margin:0px auto;">
+		<button class="enviar" id="sendToMoip">Confirmar compra</button>				
+		<button class="cancelar" onclick="window.location.href='/portal/user/view-offer/<?php echo $this->Session->read('Carrinho.Oferta.id')?>'">Cancelar Compra</button>
+	</div>
+</form>
+	
+	<div id="popescondido" style="display:none">
+	
+	<h2><span>Selecione um endereco para esta compra</span><a href="javascript:void(0);" class="fechar" id="limpar-form"><?php echo $this->Html->image('icones/close.png');?></a></h2>
+		<div id="area-enderecos">
+			<table>	
+				<?php
+					if(is_array($enderecos)){
+						foreach($enderecos as $endereco){
+						$selecione = false;
+						if(empty($_SESSION['Carrinho']['Endereco']['complemento'])){
+							$_SESSION['Carrinho']['Endereco']['complemento'] = '';
+						}
+						if($this->Session->check('Carrinho.Endereco')){							
+							if($endereco['AditionalAddressesUser']['zip_code']==$_SESSION['Carrinho']['Endereco']['cep'] && $endereco['AditionalAddressesUser']['number']==$_SESSION['Carrinho']['Endereco']['numero'] && $endereco['AditionalAddressesUser']['complement']==$_SESSION['Carrinho']['Endereco']['complemento']) $selecione=true;	
+						}
+						else if($this->Session->check('Carrinho.Endereco.id')){
+							if($endereco['AditionalAddressesUser']['id']==$_SESSION['Carrinho']['Endereco']['id']) $selecione = true;	
+						}
+					?>
+					<tr>					
+						<td>Nome :</td>
+						<td><b><?php echo $endereco['AditionalAddressesUser']['label'];?></b></td>
+						<td>Num :</td>
+						<td><b><?php echo $endereco['AditionalAddressesUser']['number'];?></b></td>
+						<td>CEP :</td>
+						<td><b>
+						<?php 
+							echo $endereco['AditionalAddressesUser']['zip_code']; 
+							if($selecione==true){
+								echo " - SELECIONADO";
+							}else{
+								echo "<a href='javascript:void(0);' class='seleciona_endereco fechar' id_endereco='{$endereco['AditionalAddressesUser']['id']}'>Escolher</a>";	
+							}
+							echo "<a href='javascript:void(0);' class='excluir_endereco fechar' id_endereco='{$endereco['AditionalAddressesUser']['id']}'>X</a>";
+						?> 
+						</b></td>					
+					</tr>
+					<?php 
+							}
+						}else{
+							echo "VOCE NAO TEM ENDERECOS CADASTRADOS";	
+						} 
+					 ?>					
+			</table>			
+		</div>		
+	</div>	
+	
+</div>
+	
+

@@ -1,0 +1,192 @@
+<?php 	
+	echo $this->Html->script('empresas/ofertas');
+	//pr($offerFiltersData);exit;		
+?>
+	<div class="informes">
+	Use os filtros abaixo para selecionar o perfil de publico que deseja encontrar para convidar a seguir sua empresa<br>
+	</div>
+		<div class="selecao-genero">
+			<h5><strong>Genero</strong> <span>Escolha um genero</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+				<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>
+				<div class="area-grafico">
+					<?php
+						$percentTotal = 0; 
+						$countTotal = 0;
+						foreach($offerFiltersData['gender'] as $filter){
+							$percentTotal = $filter['percent'] + $percentTotal;
+							$countTotal = $filter['count'] + $countTotal;
+							//echo $filter['count'];exit;
+						?>
+						<div class="area"><label><?php echo $filter['name'];?></label><div class="area-item" usando="" quantidade="<?php echo $filter['count'];?>" tipo="gender" atributo="<?php echo $filter['name'];?>"><span class="item"></span><strong><?php echo $filter['percent'];?></strong></div></div>
+					<?php 
+						}
+						if($percentTotal < 100){
+							$percentual = 100 - $percentTotal;
+							$count = $offerFiltersData['target'] - $countTotal;
+							 							
+						?>
+						<div class="area"><label>Nao Informado</label><div class="area-item" usando="" quantidade="<?php echo $count;?>" tipo="gender" atributo=""><span class="item"></span><strong><?php echo $percentual;?></strong></div></div>
+						
+					<?php 
+						}
+					?>								
+				</div>
+			</div>	
+
+			<div class="resumo">
+				<div id="gender" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong> 
+				</div>
+			</div>
+		</div>
+
+
+
+<div class="selecao-genero">
+			<h5><strong>Localidade</strong> <span>Escolha localidade</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+				<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>
+				<div class="area-grafico">
+					<?php
+						$percentTotal = 0; 
+						foreach($offerFiltersData['location'] as $filter){
+							$percentTotal = $filter['percent'] + $percentTotal;
+						?>
+						<div class="area"><label><?php echo $filter['name'];?></label><div class="area-item" usando="" quantidade="<?php echo $filter['count'];?>" tipo="location" atributo="<?php echo $filter['name'];?>"><span class="item"></span><strong><?php echo $filter['percent'];?></strong></div></div>
+					<?php 
+						}
+						if($percentTotal < 100){
+							$percentual = 100 - $percentTotal;
+						?>
+						<div class="area"><label>Nao Informado</label><strong><?php echo $percentual;?></strong></div>
+					<?php 
+						}
+					?>								
+				</div>
+			</div>	
+
+			<div class="resumo">
+				<div id="location" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong> 
+				</div>
+			</div>
+		</div>
+	
+	
+		<div class="selecao-genero">
+			<h5><strong>Faixa Etária</strong> <span>Escolha um genero</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+			<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>
+				<div class="area-grafico">
+					<?php foreach($offerFiltersData['age_group'] as $age){
+							if($age['percent']> 0){
+							?>
+							<div class="area"><label><?php echo $age['label'];?></label><div class="area-item" usando="" quantidade="<?php echo $age['count'];?>" tipo="age_group" atributo="<?php echo $age['label'];?>"><span class="item"></span><strong><?php echo $age['percent'];?></strong></div></div>
+					<?php }
+					} ?>												
+				</div>
+			</div>	
+			<div class="resumo">
+				<div id="age_group" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong>
+				</div>
+			</div>			
+		</div>
+	
+		<div class="selecao-genero">
+			<h5><strong>Política</strong> <span>Escolha um genero</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+			<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>				
+				<div class="area-grafico">
+					<?php
+						$percentTotal = 0; 
+						foreach($offerFiltersData['political'] as $filter){
+							$percentTotal = $filter['percent'] + $percentTotal;
+						?>
+						<div class="area"><label><?php echo $filter['name'];?></label><div class="area-item" usando="" quantidade="<?php echo $filter['count'];?>" tipo="political" atributo="<?php echo $filter['name'];?>"><span class="item"></span><strong><?php echo $filter['percent'];?></strong></div></div>
+					<?php 
+						}
+						if($percentTotal < 100){
+							$percentual = 100 - $percentTotal;
+						?>
+						<div class="area"><label>Nao Informado</label><strong><?php echo $percentual;?></strong></div>
+					<?php 
+						}
+					?>								
+				</div>
+			</div>	
+			<div class="resumo">
+				<div id="political" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong>
+				</div>
+				<!-- <strong>você escolheu:</strong> <a href="javascript:void(0);">masculino <span>[200]</span></a> <a href="javascript:void(0);">feminino <span>[200]</span></a> -->
+			</div>			
+		</div>		
+		
+		<div class="selecao-genero">
+			<h5><strong>Relacionamento</strong> <span>Escolha um genero</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+			<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>				
+				<div class="area-grafico">
+					<?php
+						$percentTotal = 0; 
+						foreach($offerFiltersData['relationship_status'] as $filter){
+							$percentTotal = $filter['percent'] + $percentTotal;
+						?>
+						<div class="area"><label><?php echo $filter['name'];?></label><div class="area-item" usando="" quantidade="<?php echo $filter['count'];?>" tipo="relationship_status" atributo="<?php echo $filter['name'];?>"><span class="item"></span><strong><?php echo $filter['percent'];?></strong></div></div>
+					<?php 
+						}
+						if($percentTotal < 100){
+							$percentual = 100 - $percentTotal;
+						?>
+						<div class="area"><label>Nao Informado</label><strong><?php echo $percentual;?></strong></div>
+					<?php 
+						}
+					?>
+				</div>
+			</div>	
+			<div class="resumo">
+				<div id="relationship_status" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong>
+				</div>
+				<!-- <strong>você escolheu:</strong> <a href="javascript:void(0);">masculino <span>[200]</span></a> <a href="javascript:void(0);">feminino <span>[200]</span></a> -->
+			</div>			
+		</div>
+
+
+		<div class="selecao-genero">
+			<h5><strong>Religião</strong> <span>Escolha um genero</span><img src="../../companies/img/icones/seta-esquerda-link.png" class="seta-prabaixo"></h5>
+			<div class="graficos-gerais">
+			<div class="selecionar-tudo"><a href="javascript:void(0);"><img src="../../companies/img/icones/icone-check.png">selecionar todos os filtros</a></div>				
+				<div class="area-grafico">
+				<?php
+						$percentTotal = 0; 
+						foreach($offerFiltersData['religion'] as $filter){
+							$percentTotal = $filter['percent'] + $percentTotal;
+						?>
+						<div class="area"><label><?php echo $filter['name'];?></label><div class="area-item" usando="" quantidade="<?php echo $filter['count'];?>" tipo="religion" atributo="<?php echo $filter['name'];?>"><span class="item"></span><strong><?php echo $filter['percent'];?></strong></div></div>
+					<?php 
+						}
+						if($percentTotal < 100){
+							$percentual = 100 - $percentTotal;
+						?>
+						<div class="area"><label>Nao Informado</label><strong><?php echo $percentual;?></strong></div>
+					<?php 
+						}
+					?>												
+				</div>
+			</div>	
+			<div class="resumo">
+				<div id="religion" contador="1">
+					<strong>Você ainda não escolheu nenhum filtro</strong>
+				</div>
+				<!-- <strong>você escolheu:</strong> <a href="javascript:void(0);">masculino <span>[200]</span></a> <a href="javascript:void(0);">feminino <span>[200]</span></a> -->
+			</div>			
+		</div>
+
+	
+	<div class="area-botoes" style="width:95%;">
+		<button class="envio" onclick="location.href='<?php echo $this->Html->url('/company/convites-usuarios/resume'); ?>';">Fazer convites</button>
+		<button class="cancelar" onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/cancel'); ?>';">Cancelar</button>
+	</div>

@@ -1,0 +1,874 @@
+<?php
+$social = $this->Session->read('compSocial.companies_social_networks');
+$ocorrencia = $this->Session->read('Offer.recurrence');
+?>
+<script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
+<script>
+    function vertOrHor(orientation) {
+
+        if (orientation == 'vertical') {
+            $('#dash-vertical').css("display", "block");
+            $('#detalhe-vertical').css("display", "block");
+            $('#dash-horizontal').css("display", "none");
+            $('#detalhe-horizontal').css("display", "none");
+
+            document.getElementById("offerOrientation").value = 'VERTICAL';
+
+        } else if (orientation == 'horizontal') {
+            $('#dash-vertical').css("display", "none");
+            $('#detalhe-vertical').css("display", "none");
+            $('#dash-horizontal').css("display", "block");
+            $('#detalhe-horizontal').css("display", "block");
+
+            document.getElementById("offerOrientation").value = 'HORIZONTAL';
+
+        }
+
+    }
+
+    var featherEditor = new Aviary.Feather({
+        apiKey: '6d23908a9ca644e3',
+        apiVersion: 3,
+        tools: ['draw', 'stickers', 'enhance', 'crop', 'resize', 'frames', 'effects', 'rotate', 'adjustments', 'focus', 'splash', 'meme', 'text', 'cosmetic'],
+        onSave: function(imageID, newURL) {
+            var img = document.getElementById(imageID);
+            img.src = newURL;
+        },
+        postUrl: ''
+    });
+
+    function launchEditor(id, src) {
+        featherEditor.launch({
+            image: id,
+            url: src
+        });
+        return true;
+    }
+</script>
+
+<style>
+
+    .vertOrHor{
+        border: 1px solid;
+        height: 50px;
+        width: 70px;
+        float: right;
+        background: #ffffff;
+        border-color: #999999;
+        font-family: Helvetica;
+        color: #999999;
+        font-size: 14px;
+        text-align: center;
+        background-repeat: no-repeat;
+        background-position: center 45px;
+        padding-top: 20px;
+        cursor:pointer;
+        margin-left: 10px; 
+        margin-top: 10px;
+    }
+
+    .vertOrHor#selectHor{
+        margin-top: 30px;
+    }
+
+    .teste{
+        color: red;
+    }
+
+    .tabela-dominios{
+        width: 100%;
+        height: 100%;
+    }
+
+    .vertical-text{
+        transform: rotate(-90deg);
+        font-family: Helvetica;
+        font-size: 12px;
+
+    }
+    .paleta-metrica{
+        border: 1px solid #dcdcdc;
+        height: 100%;
+        width: 8%;
+        font-family: Helvetica;
+        font-size: 12px;
+        text-align: center;
+        line-height: 800%;
+        background: #E6E8FA;
+        float: left;
+    }
+
+    .paleta-metrica#conf{
+        line-height: 1000%;
+    }
+
+</style>
+<div class="fundo-cad-ofer" style="height: 80%; margin-left: 0.1px; margin-top: 0.1px;">
+
+    <!-- LADO ESQUERDO -->
+    <div class="lado-esquerdo-cad-ofer" style="height: 100%;">
+        <div class="botao-lateral-esquerdo-ver-ofertas"
+             onclick="AlteraClasse1('botao-lateral-esquerdo-ver-ofertas')">
+            <br />ver<br /> ofertas <br />
+        </div>
+        <div class="botao-lateral-esquerdo-cad-ofertas"
+             onclick="AlteraClasse1('botao-lateral-esquerdo-cad-ofertas')"
+             id="teste">
+            <br />cadastrar oferta <br />
+        </div>
+        <div class="botao-lateral-esquerdo-meu-publico"
+             onclick="AlteraClasse1('botao-lateral-esquerdo-meu-publico')">
+            <br />meu <br />publico <br />
+        </div>
+
+        <div id="selectHor" class="vertOrHor" onclick="vertOrHor('horizontal');">
+            Template <br/>
+            Horizontal
+        </div>
+        <div id="selectVert" class="vertOrHor" onclick="vertOrHor('vertical');">
+            Template <br/>
+            Vertical
+        </div>
+
+
+
+        <div class="botoes-esquerdo-inferior-cad-ofer">
+            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'visulizaOferta', 'incluir'), 'type' => 'file')); ?>
+            <button type="submit" style="margin-left: 0px; background: transparent; border: 0px;">
+                <div class="botoes-laranja-cad-ofer" style=" background: #3399cc;color: #fff;  cursor: pointer; padding: 5px;">PUBLICAR</div>
+            </button>
+            <input type="hidden" name="data[Offer][orientation]" id="offerOrientation" />
+            <?php echo $this->Form->end(); ?>
+        </div>
+    </div>
+
+    <!-- MEIO - CORPO - RENDERIZA TODO CONTEUDO AQUI-->
+    <div class="meio-cad-ofer" style="height: 535px;">
+
+        <!-- VER OFERTAS CONTEUDO -->
+        <div id="cont-ver-ofertas">
+            <div class="menu-cabecalho-cad-ofer">
+                <div class="ver-ofertas-botao" onclick="testeTeste('1')">Todas</div>
+                <div class="ver-ofertas-botao">ativas</div>
+                <div class="ver-ofertas-botao">inativas</div>
+                <div class="ver-ofertas-botao-filtro">opcoes de filtro</div>
+            </div>
+            <hr id="cad-ofer-ver"
+                style=" margin-top: -5px; border-top: 1px solid #eeeeee;" />
+        </div>
+
+        <!-- MEU PUBLICO -->
+        <div id="cont-meu-publico">
+            <div class="meu-publico-cabecalho-cad-ofer">
+                <div class="cabecalho-titulo-cad-ofer">
+                    <div class="cabecalho-titulo-texto-cad-ofer">
+                        Quantidade de usuarios <br /> cadastrados na sua base
+                    </div>
+                </div>
+                <div class="cabecalho-qtd-cad-ofer">999.999.999.999</div>
+            </div>
+
+
+            <div class="cont-botoes-rodape">CONTEUDO</div>
+
+            <div class="meu-publico-rodape-cad-ofer">
+                <div class="meu-publico-rodape-botao" name="meuCheck1"></div>
+                <div class="meu-publico-rodape-botao"></div>
+                <div class="meu-publico-rodape-botao"></div>
+                <div class="meu-publico-rodape-botao"></div>
+                <div class="meu-publico-rodape-botao"></div>
+                <div class="meu-publico-rodape-botao"></div>
+            </div>
+        </div>
+
+        <!-- PRÉ VISUALIZAÇÃO DA OFERTA -->
+
+        <div id="pre-visualiza-offer" style="height: 100%;">
+            <div id="pre-cont-esquerdo" style="float: left; width: 45%; height: 100%; background: #eeeeee;">
+                <div class="linha-numero-laranja" style="background: #3399cc;">1</div>
+                <div class="linha-par-nome">
+                    <span class="texto-linha">Pré-visualização da oferta no Dashboard</span>
+                </div>
+                <!-- LAYOUT DA OFERTA -->
+                <div style="width:  280px; height: 300px; background: #ffffff; margin-left: 20%; margin-top: 15%; text-align: center;">
+                    <!-- Layout horizontal -->
+                    <div id="dash-horizontal2" style="width: 100%; height: 100%; display: none;" >
+                        <div style="line-height: 250%; font-family: Helvetica; text-align: center; width: 100%; height: 8%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 12px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+                        <div id="offer-pic" style="width: 100%; height: 55%;">
+                            <div id="img-novo" style="float: left; margin-top: -5px; position: absolute; z-index: 900;"><?php echo $this->Html->image('icones/ofertas/icon_novo.png'); ?></div>
+                            <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 100%; height: 100%;  border-bottom: 1px solid #dcdcdc;" id="offer-image">
+                            <div id="btn-more" style="margin-top: -45px;  width: 35px; height: 38px; left: 39%; z-index: 900; position: absolute;"><?php echo $this->Html->image('icones/ofertas/bt_more.png'); ?></div>
+                        </div>
+                        <div style="border: 1px solid #cdcdcd; width: 100%; height: 32%; border-left: 0px; border-right: 0px;">
+                            <div style="border: 1px solid #dcdcdc; float: left; height: 99%; width: 49.5%; border-left: 0px;" id="cont-esquerdo">
+                                <div id="estrelas" style="width: 100%; height: 23%; border-bottom: 1px solid #dcdcdc;">
+                                    <div style="margin-top: 12px;">
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_half.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_empty.png" style="float: left; margin-left: 5px;" >
+                                        <span style="float: left; font-family: Helvetica; margin-left: 5px; font-size: 13px; color: #FFD700;">+100</span>
+                                    </div>
+                                </div>
+                                <div id="company-pic" style="width: 100%; height: 63%;">
+                                    <img src="<?php
+                                    if (!empty($this->Session->read('CompanyLoggedIn.Company.logo'))) {
+                                        echo $this->Session->read('CompanyLoggedIn.Company.logo');
+                                    } else {
+                                        echo "http://www.logo-designer.co/wp-content/uploads/2014/01/Charlotte-Hornets-Basketball-NBA-Brand-Identity-Logo-Design-6.jpg";
+                                    }
+                                    ?>" style="width: 99%; height: 100%;">
+
+                                </div>
+                            </div>
+                            <div style="border: 1px solid #dcdcdc; float: left; height: 99%; width: 49.5%; border-right: 0px" id="cont-direito">
+                                <div style=" width: 100%; height: 60%;">
+                                    <div style="font-family: Helvetica; text-align: left; padding-top: 5%; padding-left: 10%; font-size: 13px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div>
+                                    <div style="font-family: Helvetica; text-align: left; padding-top: 5%; padding-left: 10%; font-size: 13px; color: #000000;"><span>Por </span><span style="font-size: 21px; text-decoration: none;">R$<?php echo str_replace('.', ',', $offer['Offer']['discounted_value']); ?></span></div>
+                                </div>
+                                <div style="border-top: 1px solid #dcdcdc; width: 101%; height: 39%; bottom: 0;"><img src="../../img/icones/ofertas/bt_comprar.png" style="width: 100%; height: 100%;"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2px;"></div>
+                        <span id="validade" style="padding-top: 3px; font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?> - 9 em estoque  </span>
+                    </div>
+
+                    <!-- Layout vertical -->
+                    <div id="dash-vertical2" style="width: 100%; height: 100%; display: none;">
+                        <div style="line-height: 250%; font-family: Helvetica; text-align: center; width: 100%; height: 8%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 12px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+                        <div style="height: 87%; width: 100%;">
+                            <div id="vert-esquerdo" style="width:49.5%; height: 100%; border: 1px solid #dcdcdc; border-left: 0px; float: left;">
+                                <div id="img-novo" style="float: left; margin-top: -5px; position: absolute; z-index: 900;"><?php echo $this->Html->image('icones/ofertas/icon_novo.png'); ?></div> 
+                                <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 100%; height: 100%;" id="offer-image">
+                                <div id="btn-more" style="margin-top: -43px;  width: 35px; height: 38px; left: 26.6%; z-index: 900; position: absolute;"><?php echo $this->Html->image('icones/ofertas/bt_more.png'); ?></div>
+                            </div>
+
+                            <div id="vert-direito" style="width:49%; height: 99.5%;  float: left; border-top: 1px solid #dcdcdc;">
+                                <div id="precos" style="width: 100%; height: 35%; font-family: Helvetica; font-size: 13px;">
+                                    <div style="font-family: Helvetica; text-align: left; padding-top: 18%; padding-left: 10%; font-size: 13px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div>
+                                    <div style="font-family: Helvetica; text-align: left; padding-top: 5%; padding-left: 10%; font-size: 13px; color: #000000;"><span>Por </span><span style="font-size: 21px; text-decoration: none;">R$<?php echo str_replace('.', ',', $offer['Offer']['discounted_value']); ?></span></div>
+                                </div>
+                                <div style="border-top: 1px solid #dcdcdc; height: 15%; width: 102.5%; bottom: 0;"><img src="../../img/icones/ofertas/bt_comprar.png" style="width: 100%; height: 100%;"></div>
+                                <div id="estrelas" style="width: 100%; height: 11%; border-bottom: 1px solid #dcdcdc;">
+                                    <div style="margin-top: 15px; text-align: center;">
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_half.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_empty.png" style="float: left; margin-left: 5px;" >
+
+                                    </div>
+                                </div>
+                                <div id="company-pic" style="width: 101%; height: 32.5%; border-bottom: 1px solid #dcdcdc;">
+                                    <img src="http://www.logo-designer.co/wp-content/uploads/2014/01/Charlotte-Hornets-Basketball-NBA-Brand-Identity-Logo-Design-6.jpg" style="width: 99%; height: 100%;">
+                                </div>
+                            </div>
+                        </div><div style="float: left; width: 100%; text-align: center;">
+                            <span id="validade" style="padding-top: 3px; font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?> - 9 em estoque  </span>
+                        </div></div>
+
+                    <style>
+                        .max-list-style-image{
+                            width: 100%;
+                            height: 65%;
+                        }
+
+                        .max-list-style-title{
+                            padding-top: 5px;
+                            padding-left: 10px;
+                            font-family: MyriadProRegular;
+
+                            color: #6E6E6E;
+                            font-size: 1em;
+                            text-align: left;
+                        }
+
+                        .max-list-style #campo-botoes{
+                            width: 55%;
+                            float: left;
+                            margin-top: 15px;
+                            height: 55px;
+                            padding-bottom: -10px;
+                        }
+
+                        .max-list-style #campo-precos{
+                            width: 40%;
+                            float: left;
+                            font-family:  Myriad Pro Light;
+                            color: #808080;
+                            font-size: 12px;
+                            margin-left: 10px;
+                            margin-top:23px;
+                            text-align: left;
+                        }
+
+                        .max-list-style #campo-precos #por{
+                            font-size: 22px;
+                        }
+
+                        .max-list-style{
+                            border: 1px solid #999;
+
+                            width: 280px;
+                            height: 300px;
+                            float: left;
+                            background: #fff;
+                            // display: none;
+                        }
+
+                        .max-list-style:hover{
+                            cursor: pointer;
+                            background: #f4f4f4;
+
+                        }
+
+                        .max-list-style-left-side{
+                            width: 55%;
+                            height: 90%;
+                            margin-top: 5px;
+                            float: left;
+                        }
+
+                        .max-list-style-right-side{
+                            width: 43.5%;
+                            height: 56%;
+                            float: left;
+                            margin-top: 35%;
+                        }
+
+                        #campo-botoes-vert{
+                            float: right;
+                            margin-top: 35px;
+                            height: 55px;
+                        }
+
+                        @font-face {
+                            font-family: helveticaneue;
+                            src: url('../fonts/MyriadProLight.otf');
+                        }
+
+                        @font-face {
+                            font-family: MyriadProRegular;
+                            src: url("../fonts/MyriadPro-Regular.otf") format("opentype");
+                        }
+
+                        @font-face {
+                            font-family: MyriadProLight;
+                            src: url("../fonts/MyriadProLight.otf") format("opentype");
+                        }
+
+                        @font-face {
+                            font-family: MyriadProSemibold;
+                            src: url("../fonts/MyriadPro-Semibold.otf") format("opentype");
+                        }
+
+
+                        @font-face{
+                            font-family: Myria;
+                            src: url("../fonts/MyriadProLight.otf") format("opentype");
+                        }
+
+                        @font-face{
+                            font-family: Aliquam;
+                            font-style: normal;
+                            font-weight: normal;
+                            src: url(../fonts/Aliquam.ttf);
+                        }
+
+                        @font-face{
+                            font-family: AliquamREG;
+                            font-style: normal;
+                            font-weight: normal;
+                            src: url(../fonts/AliquamREG.ttf);
+                        }
+
+                        #campo-precos-vert{
+                            float: left;
+                            font-family: helveticaneue;
+                            color: #808080;
+                            font-size: 12px;
+                            margin-left: 10px;
+                            margin-top: 25px;
+                        }
+                        .campo-precos-vert{
+                            float: left;
+                            font-family: helveticaneue;
+                            color: #808080;
+                            font-size: 12px;
+                            margin-left: 10px;
+                            margin-top: 25px;
+                            text-align: left;
+                        }
+
+                        .campo-precos-vert #por{
+                            font-size: 22px;
+                        }
+
+                    </style>
+
+                    <!-- VERTICAL -->
+                    <div class="max-list-style" style="display: none;" id="dash-vertical">
+                        <div class="max-list-style-title">Nike Air Max</div>
+                        <div class="max-list-style-left-side">
+                            <img src="http://54.94.182.35/adventa/uploads/offers/5514737399e23.jpg" width="100%" height="100%"/>
+                        </div>
+
+                        <div class="max-list-style-right-side">
+                            <div id="campo-precos-vert" class="campo-precos-vert">
+                                <span>De R$<?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></span><br/>
+                                <span>POR: <span style='font-size:20px; font-family: MyriadProSemibold;'>R$<?php
+                                        $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                                        $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                                        $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                                        echo number_format($valorComDesconto, 2, ',', '.');
+                                        ?></span></span><br/>
+                                <span>12x R$00,00</span>
+                            </div>
+                            <div id="campo-botoes-vert">
+                                <img id="max-comprar"  src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-2.png" class='max-list-style-button' style="height: 100%; float: right; margin-top: 15px; margin-right: -5px;"/>
+                                <img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-3.png" class='max-list-style-button' style='height: 100%; float: right; margin-top: 15px; margin-right: -15px;'/>
+                                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'))); ?>
+
+                                <button type="submit" style="float:right; padding: 0; background: transparent; cursor: pointer; border: 0px solid; height: 100%;" id="max-submit">
+                                </button>
+
+                                <?php echo $this->Form->end(); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HORIZONTAL -->
+                    <!-- MAX OFFER STYLE -->
+                    <div class="max-list-style" id="dash-horizontal">
+                        <div class="max-list-style-title">Nike Air Max 90</div>
+                        <img src="http://54.94.182.35/adventa/uploads/offers/5514737399e23.jpg" class="max-list-style-image"/>
+                        <div id="campo-precos">
+                            <span>De R$<?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></span><br/>
+                            <span>POR: <span style='font-size:20px; font-family: MyriadProSemibold;'>R$<?php
+                                    $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                                    $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                                    $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                                    echo number_format($valorComDesconto, 2, ',', '.');
+                                    ?></span></span><br/>
+                            <span>12x R$00,00</span>
+                        </div>
+                        <div id="campo-botoes">
+                            <img id="max-comprar"  src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-2.png" class='max-list-style-button' style="height: 100%; float: right; margin-top: 15px; margin-right: -5px;"/>
+                            <img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-3.png" class='max-list-style-button' style='height: 100%; float: right; margin-top: 15px; margin-right: -15px;'/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div id="pre-cont-direito" style="border-left: 1px solid #dddddd; float: left; width: 53.6%; height: 100%; background: #eeeeee;">
+                <div class="linha-numero-laranja" style="background: #3399cc;">2</div>
+                <div class="linha-par-nome">
+                    <span class="texto-linha">Pré-visualização da oferta detalhada</span>
+                </div>
+
+                <!-- fundo pré visualização detalhada -->
+                <div style="margin-left: 4.3%; width: 92%; height: 78%; background: #ffffff; margin-top: 5%; text-align: center; display: none;">
+                    <!-- Layout horizontal -->
+                    <div style="width: 100%; height: 100%; display: none;" id="detalhe-horizontal">
+                        <div style="line-height: 480%; font-family: Helvetica; text-align: center; width: 100%; height: 13%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 12px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+                        <div style="width: 100%; height: 45%;">
+                            <div id="offer-pic" style="width: 52%; height: 100%; float: left;">
+                                <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 100%; height: 100%;  border-bottom: 1px solid #dcdcdc;" id="offer-image">
+                            </div>
+                            <div style="float: left; width: 46.6%; height:100%; border-bottom: 1px solid #dcdcdc;">
+                                <div style=" height: 71%; width: 94%; border-bottom: 1px solid #dcdcdc; font-family: Helveica15-Thin; padding-left: 10px; padding-right: 10px; font-size: 12px;">
+                                    <span style="margin-left: 10px;">
+                                        <div style="font-family: Helvetica; color: gray; word-break:break-all; width: 100%; margin-top: 10px; text-align: left; font-size: 12px;">
+                                            <?php echo substr(strip_tags($offer['Offer']['description'], '<(.*?)>'), 0, 366) . '...'; ?>
+                                        </div>
+
+                                    </span>
+                                </div>
+                                <div style="height: 28%; width: 102.5%;">
+                                    <div style="float: left; width: 48%; height: 100%; border-bottom: 1px solid #dcdcdc;">
+                                        <div style="font-family: Helvetica; text-align: left; padding-top: 4%; padding-left: 7%; font-size: 12px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div>
+                                        <div style="font-family: Helvetica; text-align: left; padding-top: 4%; padding-left: 7%; font-size: 12px; color: #000000;"><span>Por </span><span style="font-size: 20px; text-decoration: none;">R$<?php echo str_replace('.', ',', $offer['Offer']['discounted_value']); ?></span></div>
+                                    </div>
+
+                                    <div style="float: left; width: 52%; height: 100%; border-bottom: 1px solid #dcdcdc;"><img src="../../img/icones/ofertas/bt_detalhe_comprar.png" style="width: 100%; height: 100%;"></div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="width: 100%; height: 12%; ">
+                            <div style="width: 51.5%; height: 100%; float: left;">
+                                <div style="width:45%; height: 100%; float: left; margin-left: 3.5%; ">
+                                    <img src="../../img/icones/ofertas/bt_compartilhar.png" style="width: 100%; margin-top: 15%;">
+                                </div>
+                                <div style="width:45%; height: 100%; float: left;">
+                                    <img src="../../img/icones/ofertas/bt_enviaramigo.png" style="width: 100%; margin-top: 15%; margin-left: 8%;">
+                                </div>
+                            </div>
+                            <div style="width: 48.3%; height: 100%; border-left: 1px solid #dcdcdc; border-bottom: 1px solid #dcdcdc; float: left;">
+                                <div style="border-right: 1px solid #dcdcdc; font-size: 12px; width: 48%; height: 100%; float: left; font-family: Helvetica;">
+                                    <div style="margin-top: 5px;">em até <b style="font-size: 14px;">24x</b> de</div>
+                                    <div style="font-size: 16px; margin-top: 5px;"><b>R$ 99,99</b></div>
+                                </div>
+                                <div style="width: 100%; height: 100%;">
+                                    <div style="margin-top: 14px;">
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_half.png" style="float: left; margin-left: 5px;" >
+                                        <img src="../../img/icones/ofertas/star_empty.png" style="float: left; margin-left: 5px;" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="width: 100%; height: 27%; padding-top: 2%;">
+                            <div style="margin-left: 2%; height: 60%; border: 1px solid #dcdcdc; width: 22.5%; float: left;">
+                                <img src="http://www.logo-designer.co/wp-content/uploads/2014/01/Charlotte-Hornets-Basketball-NBA-Brand-Identity-Logo-Design-6.jpg" style="width: 100%; height: 100%;"/>
+                                <div id="validity" style="width: 100%; text-align: center; padding-top: 8px;">
+                                    <span id="validade" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?>   </span>
+                                    <span id="estoque" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Faltando 9 em estoque!   </span>
+                                </div>
+                            </div>
+                            <div style="height:90%; float: left; margin-left: 2%; width: 71%; border: 1px solid #dcdcdc; ">
+                                <div id="tabela-dominios" class="tabela-dominios" >
+                                    <!-- PALETAS DE MÉTRICAS -->
+                                    <!-- métrica de tamanho --> 
+                                    <div id="paleta-metrica" class="paleta-metrica">
+                                        <p class="vertical-text">Tamanho </p>
+                                    </div>
+
+                                    <div style=" height: 100%; width: 83%; float: left;">
+                                        <div class="metrica-titulo" style=" height: 100%; width: 10%; line-height: 500%;">
+                                            <p class="vertical-text">Cor</p>
+                                        </div>
+                                        <div>
+                                        </div>
+                                    </div>
+
+                                    <div id="conf" class="paleta-metrica">
+                                        <p class="vertical-text">Configurações </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout vertical-->
+                    <div style="width: 100%; height: 100%;" id="detalhe-vertical">
+                        <div style="line-height: 480%; font-family: Helvetica; text-align: center; width: 100%; height: 13%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 12px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+                        <div style="width: 100%; border-bottom: 1px solid #dcdcdc; height: 70%;">
+                            <div id="quadro-foto" style="width: 29%; border-right: 1px solid #dcdcdc; height: 100%; float: left;">
+                                <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 100%; height: 100%;" id="offer-image">
+                            </div>
+                            <div id="quadro-desc-preco" style="float: left; height: 100%; width: 70.3%; border-bottom: 1px solid #dcdcdc;">
+                                <div id="quadro-desc" style="float: left; padding-left: 15px; padding-top:10px; padding-right: 10px; border-bottom: 1px solid #dcdcdc; border-right: 1px solid #dcdcdc; width: 50%; height: 53%;">
+                                    <div style="font-family: Helvetica; color: gray; word-break:break-all; white-space: nomal;  width: 100%; text-align: left; font-size: 12px;">
+                                        <?php echo $offer['Offer']['description'] . '...'; ?>
+                                    </div>
+                                </div>
+                                <div id="quadro-preco" style="height: 56.5%; width: 43%; float: left; border-bottom: 1px solid #dcdcdc;">     
+                                    <div style="width:  101%; height: 29%; border-bottom: 1px solid #dcdcdc;">
+                                        <div style="float: left; font-family: Helvetica; text-align: left; padding-top: 4%; padding-left: 7%; font-size: 12px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div>
+                                        <div style="float: right;font-family: Helvetica; text-align: left;  padding-right: 4%; font-size: 12px; color: #000000;"><span>Por </span><span style="font-size: 20px; text-decoration: none;">R$<?php echo str_replace('.', ',', $offer['Offer']['discounted_value']); ?></span></div>
+                                    </div>
+                                    <div style="line-height: 300%; font-family: Helvetica; width: 101%; height: 23%; border-bottom: 1px solid #dcdcdc; font-size: 12px; text-align: center;">
+                                        em até <b style="font-size: 14px;">24x</b> de <b style="font-size: 14px;">R$ 99,99</b>
+                                    </div>
+                                    <div style="width: 101%; height: 29%; border-bottom: 1px solid #dcdcdc;"><img src="../../img/icones/ofertas/bt_detalhe_comprar.png" style="width: 100%; height: 100%;"></div>
+                                    <div style="width: 101%; height: 15%;">
+                                        <div style="margin-top: 4px;">
+                                            <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                            <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                            <img src="../../img/icones/ofertas/star_complete.png" style="float: left; margin-left: 5px;" >
+                                            <img src="../../img/icones/ofertas/star_half.png" style="float: left; margin-left: 5px;" >
+                                            <img src="../../img/icones/ofertas/star_empty.png" style="float: left; margin-left: 5px;" >
+                                            <span style="float: left; font-family: Helvetica; margin-left: 5px; font-size: 13px; color: #FFD700;">+100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>      
+                        </div>
+
+
+                        <div id="bottom-infos" style="width: 100%; height: 16%;">
+                            <div style="width: 29%; height: 100%; float: left;">
+                                <div style="margin-top: 18px;">
+                                    <span id="validade" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?>   </span>
+                                    <br/>  <span id="estoque" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Faltando 9 em estoque!   </span>
+                                </div>
+                            </div>
+                            <div style="width: 20%; height: 100%; float: left;">
+                                <img src="../../img/icones/ofertas/bt_enviaramigo.png" style="width: 100%; margin-top: 5px;">
+                                <img src="../../img/icones/ofertas/bt_compartilhar.png" style="width: 100%; margin-top: 5px;">
+                            </div>
+                            <div style="float: right; width: 23%; height: 84%; margin-right: 5px; margin-top: 5px;">
+                                <img src="http://www.logo-designer.co/wp-content/uploads/2014/01/Charlotte-Hornets-Basketball-NBA-Brand-Identity-Logo-Design-6.jpg" style="border:1px solid #dcdcdc; width: 100%; height: 100%;"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- LAYOUTS ADV -->
+
+
+                </div>
+
+
+                <style>
+                    #adv-mosaic-style-item-offer{
+                        width: 200px;
+                        height: 200px;
+                        margin-top: 30px;
+                        margin-left: 50px;
+                        float: left;
+                        cursor: pointer;
+                        border: 1px solid #ccc;
+                    }
+
+                    #adv-div-mosaic-photo{
+                        width: 200px;
+                        height: 200px;   
+                        -webkit-transition: all 1s ease; /* Safari and Chrome */
+                        -moz-transition: all 1s ease; /* Firefox */
+                        -ms-transition: all 1s ease; /* IE 9 */
+                        -o-transition: all 1s ease; /* Opera */
+                        transition: all 1s ease;
+                    }
+
+                    #adv-div-mosaic-photo:hover{
+                        -webkit-transform:scale(1.25); /* Safari and Chrome */
+                        -moz-transform:scale(1.05); /* Firefox */
+                        -ms-transform:scale(1.05); /* IE 9 */
+                        -o-transform:scale(1.05); /* Opera */
+                        transform:scale(1.05);
+
+                    }
+
+                    #adv-mosaic-style-precos{
+                        width: 100%;
+                        opacity: 0.9;
+                        background: #fff;
+                        position: relative;
+                        bottom: -5px;
+                        height: 55px;
+                        color: #6E6E64;
+                    }
+
+                    #adv-mosaic-style-precos-sub{
+                        opacity: 1;
+                        float: left;
+                        font-family: Tahoma;	
+                        margin-bottom: 5px;
+                        margin-top: 7px;
+                        margin-left: 8px;
+                    }
+
+                    #adv-mosaic-style-imgs-sub{
+                        float: right;
+                        height: 20px;
+                        margin-top: 15px;
+
+                    }
+
+                    #adv-mosaic-style-imgs-sub img{
+                        height: 45px;
+                    }
+
+                    #adv-mosaic-style-precos-not-disc{
+                        font-size: 11px;
+                    }
+
+                    #list-style-item-offer{
+                        background: #fff;
+                        float: left;
+                        border: 1px solid #dcdcdc;
+                        border-top: 0px;
+                        border-left: 0px;
+                        margin-left: 50px; 
+                        margin-top: 30px;
+                        -webkit-transition: all 1s ease; /* Safari and Chrome */
+                        -moz-transition: all 1s ease; /* Firefox */
+                        -ms-transition: all 1s ease; /* IE 9 */
+                        -o-transition: all 1s ease; /* Opera */
+                        transition: all 1s ease;
+                    }
+
+                    #list-style-item-offer:hover{
+                        -webkit-transform:scale(1.25); /* Safari and Chrome */
+                        -moz-transform:scale(1.05); /* Firefox */
+                        -ms-transform:scale(1.05); /* IE 9 */
+                        -o-transform:scale(1.05); /* Opera */
+                        transform:scale(1.05);
+                    }
+
+                    #div-list-style-dados{
+                        float: left;       
+                        background: #fff;
+                        color: #6E6E6E;
+                        height: 125px;
+                        width: 270px;
+                    }
+
+                    #div-list-style-offer-photo{
+                        float: left;
+                        background: #808080;
+                    }
+
+                    #div-list-style-title{
+                        font-family: MyriadProRegular;
+                        font-size: 20px;
+                        margin-top: 20px;
+                        width: 100%;
+                        margin-left: 20px;
+                    }
+
+                    #div-list-style-precos{
+                        margin-left: 20px;
+                        font-family: MyriadProRegular;
+                        margin-top: 10px;
+                        font-size: 14px;
+                        float: left;
+                    }
+
+                    #div-list-style-preco-desc{
+                        margin-top: 2px;
+                        margin-bottom: 2px;
+                        text-style: bold;
+                        font-size: 20px;
+                        font-family: Helvetica;
+                    }
+
+                    #div-list-style-desconto{
+                        float: left;
+                        margin-top: 37px;
+                        margin-left: 5px;
+                        -moz-border-radius: 64px;
+                        -webkit-border-radius: 64px;
+                        font-family: Tahoma;
+                        padding: 5px;
+                        background: #f37165;
+                        text-align: center;
+                        font-size: 12px;
+                    }
+
+                    #div-list-style-botoes{
+                        float: right;
+                        margin-top: 31px;
+                    }
+
+                    #div-list-style-botoes img{
+                        width: 60px;
+                    }
+
+                    #div-list-style-btn-share{
+                        float: left;
+                        margin-right: -20px;
+                    }
+
+                    #div-list-style-btn-buy{
+                        float: left}
+
+                    #list-style-offer-photo{
+                        width: 140px;
+                        height: 125px;
+                    }
+                </style>
+
+                <!-- LAYOUT OFFERS ADV -->
+                <!-- estilo mosaico -->
+                <div id="adv-mosaic-style-item-offer" class="adv-mosaic-style-item-offer"> 
+
+                    <div id="adv-div-mosaic-photo" style="background: url('http://54.94.182.35/adventa/uploads/offers/5514737399e23.jpg') no-repeat center; -webkit-background-size: cover;
+                         -o-background-size: cover;
+                         -moz-background-size: cover;
+                         background-size: cover;">
+                        <div style="width: 100%; height: 140px;" onClick="document.forms['form-<?php echo $offer['Offer']['id']; ?>'].submit();">
+
+                        </div>
+
+                        <div id="adv-mosaic-style-precos">
+                            <div id="adv-mosaic-style-precos-sub">
+                                <div id="adv-mosaic-style-precos-not-disc">DE R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></div>
+                                <div>POR <span style='font-family: MyriadProSemibold;'>R$ <?php
+                                        $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                                        $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                                        $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                                        echo number_format($valorComDesconto, 2, ',', '.');
+                                        ?></span></div>
+                                <div style='font-size: 10px;'>
+                                    12x R$000,00 
+                                </div>
+                            </div>
+                            <div id="adv-mosaic-style-imgs-sub">
+                                <img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-3.png" style="float: left; margin-right: -18px;" />
+                                <div style="float: left;">
+                                    <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'))); ?>
+
+                                    <button type="submit" style="float:left; padding: 0; background: transparent; cursor: pointer; border: 0px solid;" >
+                                        <img src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-2.png" style="cursor: pointer;"/>
+                                    </button>
+
+                                    <?php echo $this->Form->end(); ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- estilo lista -->
+                <div id="list-style-item-offer" class="list-style-item-offer">
+                    <div id="div-list-style-offer-photo">
+                        <img src="http://54.94.182.35/adventa/uploads/offers/5514737399e23.jpg" id="list-style-offer-photo" />
+                    </div>
+                    <div id="div-list-style-dados">
+                        <div id="div-list-style-title">
+                            <span>Nike Air Max 90
+                                <?php echo $offer['Offer']['title']; ?>
+                            </span>
+                        </div>
+                        <div id="div-list-style-precos">
+                            <div style="text-decoration:line-through; color: #999; font-family: MyriadProLight;">de R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?> </div>
+
+                            <div id="div-list-style-preco-desc"><span style='color: #999; font-size: 10px; font-family: MyriadProLight;'>POR:</span>
+                                <span style='font-family: MyriadProSemibold;'>R$<?php
+                                    $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                                    $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                                    $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                                    echo number_format($valorComDesconto, 2, ',', '.');
+                                    ?></span>
+                            </div>
+                            <div style='color: #999; font-family: MyriadProLight;'>12x de R$8,40 </div>
+                        </div>
+                        <!--
+                        <div id="div-list-style-desconto">
+                        <?php echo $offer['Offer']['percentage_discount']; ?>%<br/>
+                            off
+                        </div> -->
+                        <div id="div-list-style-botoes">
+                            <div id="div-list-style-btn-share"><img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-3.png" /> </div>
+                            <div id="div-list-style-btn-buy">
+
+                                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'))); ?>
+
+                                <button type="submit" style="float:left; padding: 0; background: transparent; cursor: pointer; border: 0px solid;" >
+                                    <img src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-2.png" style="cursor: pointer;"/>
+                                </button>
+                                <?php echo $this->Form->end(); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edição da imagem
+        <a href="#" onclick="return launchEditor('offer-image',
+                   '<?php echo $offer['Offer']['photo']; ?>');">Edit!</a> -->
+    </div>
+</div>

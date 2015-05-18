@@ -1,0 +1,337 @@
+<?php
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+$server = $_SERVER['SERVER_NAME'];
+$endereco = $_SERVER ['REQUEST_URI'];
+$nota = 0;
+foreach ($comments as $com) {
+    $nota = $nota + $com['offers_comments']['evaluation'];
+}
+
+$nota = $nota / count($comments);
+?>
+
+<style>
+    #adv-mosaic-style-item-offer{
+        width: 200px;
+        height: 200px;
+        float: left;
+        margin-right: 2px;
+        margin-top: 2px;
+        cursor: pointer;
+    }
+
+    #adv-div-mosaic-photo{
+        width: 200px;
+        height: 200px;
+    }
+
+    #adv-mosaic-style-precos{
+        width: 100%;
+        opacity: 0.8;
+        height: 100px;
+        background: #000;
+        position: relative;
+        bottom: -10px;
+        height: 50px;
+        color: #fff;
+    }
+
+    #adv-mosaic-style-precos-sub{
+        opacity: 1;
+        float: left;
+        font-family: Tahoma;
+        margin-bottom: 5px;
+        margin-top: 5px;
+        margin-left: 8px;
+    }
+
+    #adv-mosaic-style-imgs-sub{
+        float: right;
+        height: 20px;
+    }
+
+    #adv-mosaic-style-imgs-sub img{
+        height: 37px;
+        margin-left: 3px;
+        margin-top: 5px;
+    }
+
+    #adv-mosaic-style-precos-not-disc{
+        font-size: 12px;
+    }
+
+    #comp-prof-direito{
+        width: 47%;
+        height: 88%;
+        right: 0;
+        top: 11%;
+        border: 1px solid #f4f4f4;
+        position: fixed;
+        overflow: auto;
+        overflow-x: hidden
+    }
+
+    #comp-prof-esquerdo{
+        border-right: 1px solid #cccccc; 
+        width: 48%;
+        margin-left: 3.5%;
+        height: 100%;
+        top: 11%;
+        float: left;
+        position: fixed;
+    }
+
+    #comp-prof-photo{
+        width: 40%;
+        margin-left: 15px;
+        margin-top: 15px;
+        float: left;
+        height: 150px;
+        background: #fff;
+        border: 1px solid #ccc;
+    }
+
+    #comp-prof-infos{
+        height: 150px;
+        margin-top: 15px;
+        margin-left: 15px;
+        float: left;
+        font-family: Myriad Pro;
+        color: #808080;
+        font-size: 22px;
+        width: 55%;
+
+        padding-bottom: 3px;
+    }
+
+    #comp-resume{
+        font-size: 12px;
+        color: #999;
+    }
+
+    #comp-prof-infos-corpo{
+        font-size: 14px;
+        color: #666;
+        font-family: Myriad Pro;
+        margin-left: 15px;
+        margin-top: 15px;
+        width: 40%;
+
+        float: left;
+    }
+
+    #comp-prof-nota{
+        width: 55%;
+        margin-left: 15px;
+        float: left;
+
+        height: 60px;
+        margin-top: 10px;
+    }
+
+    #comp-prof-table{
+        width: 90%;
+
+    }
+
+    #comp-prof-table td{
+        text-align: center;
+        color: #999;
+    }
+
+    #comp-prof-table th{
+        font-family: Myriad Pro;
+        color: #666;
+    }
+
+    #comp-prof-commnets{
+        width: 100%;
+        height: 52%;
+        float: left;
+        margin-top: 20px;
+        overflow: auto;
+    }
+
+    #comp-prof-comments-title{
+        font-family: Myriad Pro;
+        color: #808080;
+        font-size: 20px;
+        margin-left: 15px;
+        margin-top: 20px;
+    }
+
+    #comp-prof-commnets-corpo{
+        width: 100%;
+        height: 77%;
+    }
+
+    #comment{
+        margin-left: 15px;
+        font-family: Myriad Pro;
+        font-size: 14px;
+        color: #999;
+    }
+
+    #comment-title{
+        color: #666;
+        font-size: 16px;
+    }
+
+    #comment-author{
+        color: #666;
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    hr{
+        border: 0;
+        height: 1px;
+        opacity: 0.5;
+        background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        background-image: -moz-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        background-image: -ms-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+        background-image: -o-linear-gradient(left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    }
+</style>
+<!--lado esquerdo -->
+<!--companies info -->
+<div id = "comp-prof-esquerdo">
+
+    <div id = "comp-prof-photo">
+        <img src = "<?php echo $company[0]['Company']['logo']; ?>" width = "100%" height = "100%;"/>
+    </div>
+
+    <div id = "comp-prof-infos">
+        <div><?php echo $company[0]['Company']['fancy_name']; ?></div>
+        <div id = "comp-resume"><?php echo substr($company[0]['Company']['fancy_name'], 0, 516) ?>...</div>
+    </div>
+
+
+    <div id = "comp-prof-infos-corpo">
+        <?php echo $company[0]['Company']['address'] . ', ' . $company[0]['Company']['number']; ?><br/>
+        Bairro <?php echo $company[0]['Company']['district'] . ' - ' . $company[0]['Company']['city'] . ' - ' . $company[0]['Company']['state']; ?> <br/>
+        CEP <?php echo $company[0]['Company']['zip_code']; ?><br/>
+        Telefone: <?php echo $company[0]['Company']['phone']; ?><br/>
+        e-mail: <a href = "mailto:hyundai@teste.com"><span style = "color: #3399cc; cursor: pointer;"><?php echo $company[0]['Company']['email']; ?></span></a>
+    </div>
+
+    <div id = "comp-prof-nota">
+        <table id = "comp-prof-table">
+            <tr>
+                <th>Avaliação</th>
+                <th>Assinaturas</th>
+                <th>Ofertas</th>
+            </tr>
+            <tr>
+                <td>
+                    <?php
+                    if ($nota == 0) {
+                        echo "";
+                    } else {
+                        for ($e = 0; $e < $nota; $e++) {
+                            ?>
+                            <img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;"/> 
+                            <?php
+                        }
+                    }
+                    ?>
+<!--                    <img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;"/>
+<img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;" />
+<img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;" />
+<img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;" />
+<img src = "../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width = "25px;" />-->
+                </td>
+                <td><?php echo count($signs); ?></td>
+                <td><?php echo count($offers); ?></td>
+            </tr>
+        </table>
+
+        <a href="http://localhost/work/x_portal_teste/user/companiesProfile/sign/<?php echo $company[0]['Company']['id']; ?>">
+
+            <button type="submit" style="cursor: pointer; padding: 0; border: 0px solid; width: 90%; height: 70%; background: #3399cc; color: #fff; font-size: 16px; margin-top: 5px; line-height: 43px;">Assinar</button>
+        </a>
+
+    </div>
+
+    <div id = "comp-prof-commnets">
+        <div id = "comp-prof-comments-title">Comentários:</div>
+        <hr />
+        <div id = "comp-prof-commnets-corpo">
+            <?php foreach ($comments as $comment) {
+                ?>
+                <div id="comment">
+                    <div id="comment-title"><div style="float: left; margin-top: 5px; margin-right: 5px;"><strong><?php echo $comment['offers_comments']['title']; ?></strong></div>  
+
+                        <?php
+                        $nota = $comment['offers_comments']['evaluation'];
+                        for ($i = 0; $i < $nota; $i++) {
+                            ?>
+                            <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;" class="comment-star"/>
+
+                        <?php }
+                        ?>
+                                                                                                                           <!-- <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;" class="comment-star"/>
+                                                                                                                            <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;"class="comment-star" />
+                                                                                                                            <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;" class="comment-star"/>
+                                                                                                                            <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;" class="comment-star"/>
+                                                                                                                            <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" width="25px;" class="comment-star"/>
+                        -->
+                    </div>
+
+                    <div>"<?php echo $comment['offers_comments']['description']; ?>"</div>
+                    <div id="comment-author">Por: <?php echo $comment['users']['name']; ?> em <?php echo date('d/m/Y', strtotime($comment['offers_comments']['date_register'])); ?></div>
+                    <hr />
+                </div>
+            <?php } ?>
+        </div>
+    </div>
+
+</div>
+
+<div id="comp-prof-direito">
+    <div id="comp-prof-comments-title">Ofertas:</div>
+    <?php foreach ($offers as $offer) { ?>
+        <div id="adv-mosaic-style-item-offer"> 
+            <div id="adv-div-mosaic-photo" style=" background: url('<?php echo $offer['Offer']['photo']; ?>') no-repeat center; -webkit-background-size: cover;
+                 -o-background-size: cover;
+                 -moz-background-size: cover;
+                 background-size: cover;">
+                <div style="width: 100%; height: 140px;" onClick="document.forms['form-<?php echo $offer['Offer']['id']; ?>'].submit();">
+                    <form name="form-<?php echo $offer['Offer']['id']; ?>" action="offerDetail?offer=<?php echo $offer['Offer']['id']; ?>" method="post"></form>
+                </div>
+
+                <div id="adv-mosaic-style-precos">
+                    <div id="adv-mosaic-style-precos-sub">
+                        <div id="adv-mosaic-style-precos-not-disc">De R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></div>
+                        <div>Por R$ <?php
+                            $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                            $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                            $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                            echo number_format($valorComDesconto, 2, ',', '.');
+                            ?></div>
+                    </div>
+                    <div id="adv-mosaic-style-imgs-sub">
+                        <img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-1.png" style="float: left;" />
+                        <div style="float: left;">
+                            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'))); ?>
+
+                            <button type="submit" style="float:left; padding: 0; background: transparent; cursor: pointer; border: 0px solid;" >
+                                <img src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-1.png" style="cursor: pointer;"/>
+                            </button>
+
+                            <?php echo $this->Form->end(); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <?php } ?>
+</div>
+
+
+

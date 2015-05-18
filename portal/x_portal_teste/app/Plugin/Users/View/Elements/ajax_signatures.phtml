@@ -1,0 +1,92 @@
+<?php ?>
+<input type="text" id="ajax-qtd" value="<?php echo count($companies); ?>" />
+<div id="ajax-table">
+
+    <table id="tabel-empresas">
+        <?php foreach ($companies as $company) { ?>
+            <tr id="<?php echo $company['Company']['id']; ?>">
+                <!-- item assinatura -->
+                <td id="<?php echo $company['Company']['id']; ?>">
+                    <div id="adv-signatures-div-photo">
+                        <?php if ($company['Company']['logo'] == 'UPLOAD_ERROR') { ?>
+                            <img src="http://accential.com.br/site/wp-content/uploads/2013/04/Accential_Logo_V.png" id="adv-signatures-photo" width="100px" height="100px;" />
+                        <?php } else { ?>
+                            <img src="<?php echo $company['Company']['logo']; ?>" id="adv-signatures-photo" width="100px" height="100px;" />
+                        <?php } ?>
+                    </div>
+                    <div id="adv-signatures-div-title">
+                        <strong id="compy-title"><?php echo $company['Company']['fancy_name']; ?></strong> <span id="compy-email"><i><?php echo $company['Company']['email']; ?></i></span>
+                        <div id="horizontal-bar"></div>
+                        <br/>
+                        <span id="compy-email"><?php
+                            if (!empty($company['Company']['description'])) {
+                                echo substr($company['Company']['description'], 0, 400);
+                            } else {
+                                echo "--";
+                            }
+                            ?></span>
+                    </div>
+                    <div style="float: right;">
+                        <a href="javascript: void(0);" onclick="assinar('http://localhost/work/x_portal_teste/user/assinaturas/assina?id=<?php echo $company['Company']['id']; ?>')" class="assina"   ><img src="../img/adv/Assinaturas/blue_plus.png" style="width: 45px;"/><br/></a>
+                        <a href="javascript: void(0);" id="<?php echo $company['Company']['id']; ?>" link="http://localhost/work/x_portal_teste/user/assinaturas/excluir?id=<?php echo $company['CompaniesUser']['id']; ?>" class="exclui"> <img src="../img/adv/Wishlist/excluir_3.png" style="width: 45px;" /></a>
+                    </div>
+                </td>
+            </tr>
+        <?php } ?>
+    </table>
+
+<!--    <table id="tabel-empresas" style="margin-top: 0px;">
+    <?php foreach ($companies as $company) { ?>
+            <tr id="<?php echo $company['Company']['id']; ?>">
+                <td id="<?php echo $company['Company']['id']; ?>" onclick="mostraLinha(this.id);">
+                    <div style="float: left;">
+        <?php if ($company['Company']['logo'] == 'UPLOAD_ERROR') { ?>
+                                <img src="http://accential.com.br/site/wp-content/uploads/2013/04/Accential_Logo_V.png" class="comp-logo" />
+        <?php } else { ?>
+                                <img class="comp-logo" src="<?php echo $company['Company']['logo']; ?>" />
+        <?php } ?>
+                    </div>
+                    <div style="padding-left: 10px; font-size: 14px;">
+                        <strong><?php echo $company['Company']['fancy_name']; ?></strong><br/>
+                        <a href="#"><?php echo $company['Company']['email']; ?></a>
+                    </div>
+                </td>
+                <td id="botoes">
+                    <a href="javascript: void(0);" onclick="assinar('http://localhost/work/x_portal_teste/user/assinaturas/assina?id=<?php echo $company['Company']['id']; ?>')" class="assina"   ><img src="../img/icones/users-vitrine/bt_more.png" /></a>
+                </td>
+                <td id="botoes">
+                    <a href="javascript: void(0);" id="<?php echo $company['Company']['id']; ?>" link="http://localhost/work/x_portal_teste/user/assinaturas/excluir?id=<?php echo $company['CompaniesUser']['id']; ?>" class="exclui"><img  src="../img/icones/users-vitrine/bt_remove_02.png" /></a>
+                </td>
+            </tr>
+
+             DETALHES 
+            <tr class="td-detalhe" id="details<?php echo $company['Company']['id']; ?>">
+                <td><?php
+        if (!empty($company['Company']['description'])) {
+            echo $company['Company']['description'];
+        } else {
+            echo "Essa empresa não possui descrição.";
+        }
+        ?></td>
+
+
+                <td colspan="2">
+                    <span class="qtd-offers">
+        <?php if (!empty($company['Company']['ofertas'])) { ?>
+                                Essa empresa possui<br/>
+                                <span class="qtd-offers-bold"><?php echo $company['Company']['ofertas']; ?> ofertas<br/></span>
+                                para o seu perfil
+        <?php
+        } else {
+            echo "Essa empresa não possui ofertas para o seu perfil";
+        }
+        ?>
+                    </span><br/><br/>
+                    <div class="ver-offers">► Veja essas ofertas</div><br/>
+
+                    <div class="ver-offers">► Veja todas as ofertas dessa empresa</div> 
+                </td>
+            </tr>
+<?php } ?>
+</table>-->
+</div>

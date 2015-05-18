@@ -1,0 +1,65 @@
+<?php pr($_SESSION);?>
+<h2><span><strong>Dados</strong> de entrega</span></h2>
+&nbsp;
+	<div class="informes">
+		Cadastre seu endereço de entrega e seu frete será cadastrado
+		<!--<br>
+		<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+	</div>
+	<form method="POST" action="/portal/user/purchase-details" id="formEnd">
+	
+	
+	
+	<?php if($this->Session->read('Carrinho.public')==true){?>
+		<div class="area-formulario inteiro" tamanho="400">
+			<label>Nome</label>
+			<input type="text" class="textbox nome" value="" name="nome">
+		</div>
+		<div class="area-formulario inteiro" tamanho="200">
+			<label>Email</label>
+			<input type="text" class="textbox endereco" value="" name="email">
+		</div>		
+		<div class="area-formulario inteiro" tamanho="200">
+			<label>Senha</label>
+			<input type="password" class="textbox endereco" value="" name="senha">
+		</div>
+	<?php } ?>
+	<br>
+	<div id="ajax-cep"></div>
+	<a href="javascript:void(0);" id="linkcep">Calcular CEP</a>
+	<div class="area-formulario" tamanho="220">
+		<label>Cep</label>
+		<input type="text" class="textbox cep" maxlength="8" value="<?php if($this->Session->check('Carrinho.Endereco.cep')){ echo $this->Session->read('Carrinho.Endereco.cep');}elseif($this->Session->check('userData.User.zip_code')){echo $this->Session->read('userData.User.zip_code');}?>" name="cep" id="cep">
+		<span class="exemplo">Digite Somente Números</span>
+	</div>
+	<div class="area-formulario inteiro">
+		<label>Endereço</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('Carrinho.Endereco.endereco')){ echo $this->Session->read('Carrinho.Endereco.endereco');}elseif($this->Session->check('userData.User.address')){echo $this->Session->read('userData.User.address');}?>" name="endereco">
+		<span class="exemplo">Ex: rua maria jose, 32</span>
+	</div>
+	<div class="area-formulario" tamanho="220">
+		<label>Bairro</label>
+		<input type="text" class="textbox cidade" value="<?php if($this->Session->check('Carrinho.Endereco.bairro')){ echo $this->Session->read('Carrinho.Endereco.bairro');}elseif($this->Session->check('userData.User.district')){echo $this->Session->read('userData.User.district');}?>" name="bairro">
+	</div>	
+	<div class="area-formulario" tamanho="150">
+		<label>UF</label>
+		<input type="text" class="textbox uf" value="<?php if($this->Session->check('Carrinho.Endereco.uf')){ echo $this->Session->read('Carrinho.Endereco.uf');}elseif($this->Session->check('userData.User.state')){echo $this->Session->read('userData.User.state');}?>" name="uf">
+	</div>
+	<div class="area-formulario" tamanho="220">
+		<label>Cidade</label>
+		<input type="text" class="textbox cidade" value="<?php if($this->Session->check('Carrinho.Endereco.cidade')){ echo $this->Session->read('Carrinho.Endereco.cidade');}elseif($this->Session->check('userData.User.city')){echo $this->Session->read('userData.User.city');}?>" name="cidade">
+	</div>
+	<div class="area-formulario" tamanho="150">
+		<label>Numero</label>
+		<input type="text" class="textbox uf" value="<?php if($this->Session->check('Carrinho.Endereco.numero')){ echo $this->Session->read('Carrinho.Endereco.numero');}elseif($this->Session->check('userData.User.number')){echo $this->Session->read('userData.User.number');}?>" name="numero">
+	</div>
+	
+	
+	<div class="area-botoes">
+		<button class="envio">Continuar</button>
+		<button>Cancelar</button>
+	</div>
+
+</form>
+
+	

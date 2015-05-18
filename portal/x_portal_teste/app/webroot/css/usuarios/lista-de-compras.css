@@ -1,0 +1,100 @@
+
+/*Inicio de Codigo Area de destaques ultimas compras*/
+
+.destaque-ultimas-compras{
+list-style: none;
+padding: 0px;
+margin: 0px;
+float: left;
+width: 98%;
+border-top:1px solid #efefef;
+}
+.destaque-ultimas-compras li{
+	padding:0px;
+	overflow: hidden;
+	height: 30px;
+	border:1px solid #efefef;
+	border-top:1px solid #fff;
+	border-bottom:1px solid #999;
+	background-image:url('../../imagens/icones/seta-baixo.png');
+	background-repeat: no-repeat;
+	background-position: 710px 5px;
+}
+.destaque-ultimas-compras li h2, .destaque-ultimas-compras li h3, .destaque-ultimas-compras li h4{
+	height: 22px !important;
+	margin:0px !important;
+	padding:8px 30px 0px 30px !important;
+	font-size: 12px !important;
+
+	font-weight: normal !important;
+	letter-spacing: 0px !Important;
+	float: left !important;
+	width: auto;
+
+}
+.destaque-ultimas-compras li h2{
+	font-weight: bold !important;
+	text-transform: uppercase;
+	
+	text-align: center;
+	color: #535353;	
+
+}
+.destaque-ultimas-compras li h3{
+	text-transform: uppercase;
+	
+	text-align: center;
+	color: #535353;
+}
+.destaque-ultimas-compras hr{
+	float: left;
+	width: 100%;
+	margin:0px;
+}
+.destaque-ultimas-compras li h5{
+	font-size: 14px;
+	text-align: left !important;
+	display: table;
+	margin:10px 0px 0px 15px;
+	width: 95%;
+	letter-spacing:0px !important;
+	border-top: 1px dotted #333;
+	padding: 10px 0px 0px 0px;
+}
+
+.destaque-ultimas-compras p{
+
+	font-size: 12px;
+	text-align: left !important;
+	padding:5px 0px !Important;	
+	line-height: 18px !important;
+	margin:10px 15px;
+	width: 95%;
+	letter-spacing:0px !important;
+
+
+}
+
+.destaque-ultimas-compras p strong{
+	font-size: 12px !important;
+	display: inline !important;
+
+	letter-spacing:0px !important;
+}
+.destaque-ultimas-compras select{width:98%;}	
+.destaque-ultimas-compras textarea{width:98%; height: 100px;}
+.destaque-ultimas-compras .alterar-status span{
+	float: left;
+	width: 350px;
+	margin-right: 10px;
+}
+.destaque-ultimas-compras .alterar-status span.historico{
+	background-color:#f8f8f8 !important;
+	border:1px solid #efefef;
+	height: 150px;
+	padding:10px;
+	margin:0px;
+	width: 320px;
+
+}
+.destaque-ultimas-compras .link-alterar-status{color:#535353; font-weight: bold;}

@@ -1,0 +1,32 @@
+<div class="topo">
+	<img src="img/logo-bg-black.png" class="logo"> 
+	<div class="oquehadenovo">
+		<a href="javascript:void(0);" class="abriroquehadenovo"><span>0</span></a>
+		<div class="conteudooquehadenovo">
+			<h2>
+				<span>O que há de novo</span><a href="javascript:void(0);"><img
+					src="../img/icones/close.png"></a>
+			</h2>
+		</div>
+	</div>
+	<div class="usuariologado">
+		<div class="abriropcoesusuario">
+							
+		<?php echo $this->Html->link('Entrar',array('controller'=>'users','action'=>'login', 'plugin'=>'users'),array('class'=>'link-topo-portal-deslogado-entrar'));?>
+		<?php echo $this->Html->link('Cadastrar',array('controller'=>'users','action'=>'cad_perfil', 'plugin'=>'users'),array('class'=>'link-topo-portal-deslogado-cadastrar'));?>										
+
+				</div>
+		<!--
+				<div class="conteudoopcoesusuario">
+					<div class="campo-de-login">
+						<h2>Faça seu login</h2>
+						<input type="text" class="textbox" value="Usuário">
+						<input type="password" class="textbox" value="Senha">
+						<button class="envio">acessar</button>
+						<a href="">esqueci minha senha</a>
+						<a href="">cadastrar novo usuário</a>
+					</div>
+				</div>
+				-->
+	</div>
+</div>

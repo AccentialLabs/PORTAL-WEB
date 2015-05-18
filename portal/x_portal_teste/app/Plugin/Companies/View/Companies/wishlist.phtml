@@ -1,0 +1,74 @@
+<?php echo $this->Html->script('empresas/wishlist');
+
+
+
+if(empty($desejos)){
+				
+?>
+
+<div align="center"><?php echo $this->Html->image('content_box/wishlist.jpg');?></div> 
+
+<?php } ?>
+
+<div id="div-content">
+<?php echo "<b>".$mensagem."</b>";?>
+<table cellpadding="0" cellspacing="0" class="tabela-padrao">
+		<caption>O que seu cliente deseja?</caption>
+		<thead>
+			<tr>
+				<td>Cliente</td>
+				<td>Produto</td>				
+				<td>Data da Solicitação</td>
+				<td>Data Limite para oferta</td>
+				<td>Você tem?</td>
+			</tr>
+		</thead>
+		<tbody>
+		  <?php foreach($desejos as $desejo){?>
+			<tr>
+				<td><strong><?php echo $desejo['User']['name'];?></strong><br><em><?php echo $desejo['User']['city'];?>, <?php echo $desejo['User']['state'];?></em></td>
+				<td><strong><?php echo $desejo['UsersWishlist']['name'];?></strong><br><?php echo $desejo['UsersWishlist']['description'];?></td>
+				<td><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['date_register']));?></td>
+				<td><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['ends_at']));?></td>				
+				<td>
+					<a href="javascript:void(0);" alt="eu tenho" title="eu tenho" class="eu-tenho">eu tenho</a>
+					<a href="javascript:void(0);" alt="não tenho" title="não tenho" class="nao-tenho" id_linha_registro="<?php echo $desejo['UsersWishlistCompany']['id'];?>">não tenho</a>
+				</td>
+			</tr>
+			
+			<tr class="linha_detalhe_desejos">
+				<td colspan="5">
+			<?php echo $this->Form->create('Wishlist', array('url'=>array('controller'=>'companies','action'=>'wishlist')));?>	
+			<div class="area-formulario" style="margin-left:10px;">
+				<label><strong>Eu tenho a oferta certa</strong></label>
+				<div class="select">
+	
+					<input type="hidden" name="id_oferta">
+					<strong>selecione uma oferta para este desejo</strong>
+					<ul>
+						<?php foreach($ofertas as $oferta){?>
+							<li valor="<?php echo $oferta['Offer']['id'];?>"><?php echo $oferta['Offer']['title'];?></li>
+						<?php } ?>					
+					</ul>
+				</div>
+			</div>	
+		 	
+			<div class="area-botoes" style="margin:0px;">		
+					<input type="hidden" name="id_linha" value="<?php echo $desejo['UsersWishlistCompany']['id'];?>">				
+					<button type="submit" class="cadastrar-oferta">Enviar esta oferta</button>
+				<?php echo $this->Form->end();?>							
+			</div>
+			<button class="envio" onclick="location.href='<?php echo $this->Html->url('/company/desejos/offer_user/'.$desejo['UsersWishlistCompany']['id']); ?>';">Cadastrar uma nova oferta</button>
+			</td>
+		</tr>	
+		<?php } ?>	
+		</tbody>
+	</table>
+	<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>
+</div>
+<div class="refreshzinho">
+	<div class="loading">
+		<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+		<p>Aguarde enquanto o <strong>trueOne</strong> <br> carrega MAIS DESEJOS</p>
+	</div>
+</div>

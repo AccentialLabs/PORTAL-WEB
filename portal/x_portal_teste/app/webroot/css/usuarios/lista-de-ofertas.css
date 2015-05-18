@@ -1,0 +1,218 @@
+.lista-de-ofertas .topo{
+	border-bottom: 8px solid #ffa800;
+	box-shadow: 0px 0px 5px #666;
+}
+.lista-de-ofertas .alinhamento{
+	height: auto;
+	display: table;
+	margin:0px auto;
+	width:1000px;
+	position: relative;
+	margin-top:58px;
+	margin-bottom:20px;
+}
+.lista-de-ofertas .oferta-destaque-principal .descricoes{
+	float: left;
+	width:50%;
+	height:100%;	
+	background-color:#ffa800;
+
+}
+.lista-de-ofertas .oferta-destaque-principal .descricoes .seta-de-ofertas{
+	position: absolute;
+	/*top:25%;*/
+	left:47%;
+	width: 200px;
+	height:51px;
+}
+
+
+
+.lista-de-ofertas .oferta-destaque-principal .descricoes .seta-de-ofertas img{position: relative;z-index: 9999;}
+.lista-de-ofertas .oferta-destaque-principal .descricoes .seta-de-ofertas span{
+	background-color:#333;
+	color:#fff;
+	position: absolute;
+	height: auto;
+	width: auto;
+	top:2px;
+	left:31px;
+	z-index:0;
+	padding:15px 15px 15px 40px;
+	display: none;
+	box-shadow: 0px 0px 10px #333;
+}
+
+
+
+.seta-de-ofertas img{
+	
+	/*-webkit-transform: scale(0.9);
+	-moz-transform: scale(0.9);
+	-o-transform: scale(0.9);
+	-ms-transform: scale(0.9);*/
+}
+	
+
+
+
+.lista-de-ofertas .oferta-destaque-principal{
+	width:1000px;
+	height:333px;
+}
+.lista-de-ofertas .oferta-destaque-principal h2{
+	margin:25px auto 0px auto;
+	width: 90%;
+	text-transform: uppercase;
+	color:#333;
+	background: none !important;
+	font-size: 28px;
+}
+.lista-de-ofertas .oferta-destaque-principal h2 img{display: none;}
+.lista-de-ofertas .oferta-destaque-principal p{
+	color:#333;
+	margin:5px auto;
+	width: 90%;
+	height:40%;
+}
+.lista-de-ofertas .oferta-destaque-principal p.marca{
+	font-size:16px;
+	color:#8d4b00;
+	font-style: italic;
+	margin:0px auto 20px auto;
+	height:auto;
+}
+.lista-de-ofertas .oferta-destaque-principal p.valor-de{
+	color:#9c5300;
+	font-size:16px;
+	text-decoration:line-through;
+	height:auto;
+}
+.lista-de-ofertas .oferta-destaque-principal p.valor-por{
+	color:#fff;
+	font-weight: bold;
+	font-size:38px;
+	height:auto;
+}
+.lista-de-ofertas .oferta-destaque-principal .imagem_destaque{
+	float: left;
+	width: 50%;
+	height:100%;
+	overflow: hidden;
+	display: block;
+	box-shadow: inset 0px 0px 5px #333;
+}
+.lista-de-ofertas .oferta-destaque-principal .imagem_destaque img{
+	width: 120%;
+	height: 120%;
+}
+
+
+
+
+
+
+
+.lista-de-ofertas .abriropcoesusuario{
+	color:#fff !important;
+	font-style: italic;
+	width:240px !important;
+}
+
+.lista-de-ofertas .oferta-destaque .descricoes{
+	float: left;
+	width:50%;
+	height:100%;	
+	background-color:#ffa800;
+	z-index:9999;
+	position: relative;
+
+}
+
+.lista-de-ofertas .oferta-destaque .descricoes .seta-de-ofertas{
+	position: absolute;
+	float: right;
+	top:60%;
+	left:89%;
+	z-index:0 !Important;
+	width: 200px;
+	height:51px;
+	display: block;	
+}
+.lista-de-ofertas .oferta-destaque .descricoes .seta-de-ofertas img{position: relative;z-index: 9999;}
+.lista-de-ofertas .oferta-destaque .descricoes .seta-de-ofertas span{
+	background-color:#333;
+	color:#fff;
+	position: absolute;
+	height: auto;
+	top:2px;
+	left:28px;
+	z-index:0;
+	padding:15px 15px 15px 40px;
+	display: none;
+	box-shadow: 0px 0px 10px #333;
+}
+.lado-direito-esquerdo{left:-10% !important; }
+.lado-direito-esquerdo span{left:-71% !important; padding:15px 40px 15px 15px !important;}
+
+.lista-de-ofertas .oferta-destaque{
+	width:500px;
+	float: left;
+	height:167px;
+}
+.lista-de-ofertas .oferta-destaque h2{
+	margin:15px auto 0px auto;
+	padding:0px;
+	width: 90%;
+	height: auto;
+	text-transform: uppercase;
+	color:#333;
+	background: none !important;
+	font-size: 150%;
+
+}
+.lista-de-ofertas .oferta-destaque h2 img{display: none;}
+.lista-de-ofertas .oferta-destaque p{
+	color:#333;
+	margin:5px auto;
+	width: 90%;
+	height:auto;
+	font-size:80%;
+	position: relative;
+}
+.lista-de-ofertas .oferta-destaque p.principal{overflow: hidden;height:28%;}
+.lista-de-ofertas .oferta-destaque p.marca{
+	font-size:80%;
+	color:#8d4b00;
+	font-style: italic;
+	margin:0px auto 10px auto;
+	height:auto;
+
+}
+.lista-de-ofertas .oferta-destaque p.valor-de{
+	color:#9c5300;
+	font-size:80%;
+	text-decoration:line-through;
+	height:auto;
+}
+.lista-de-ofertas .oferta-destaque p.valor-por{
+	color:#fff;
+	font-weight: bold;
+	font-size:140%;
+	height:auto;
+}
+.lista-de-ofertas .oferta-destaque .imagem_destaque{
+	float: left;
+	width: 50%;
+	height:100%;
+	overflow: hidden;
+	display: block;
+	box-shadow: inset 0px 0px 10px #333;
+	z-index:9999;
+}
+.lista-de-ofertas .oferta-destaque .imagem_destaque img{
+	width: 120%;
+	height: 120%;
+	z-index:9;
+}
+

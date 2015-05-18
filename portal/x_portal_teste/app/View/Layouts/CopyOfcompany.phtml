@@ -1,0 +1,24 @@
+-- Trigger DDL Statements
+DELIMITER $$
+
+USE `accential_2`$$
+
+CREATE TRIGGER `users_update` BEFORE INSERT 
+    ON `users`
+
+    FOR EACH ROW BEGIN 
+
+        SET @photo = NEW.photo;
+        SET @gender = NEW.gender;
+		
+		IF @photo = '' THEN		
+	        IF @gender = 'male' THEN 		           	                     	            
+	            SET NEW.photo = 'http://acclabs.accential.com.br/uploads/img-users/male.jpg';		
+	        END IF;
+	        
+	        IF @gender = 'female' THEN 		
+	            UPDATE `users` SET photo = 'http://acclabs.accential.com.br/uploads/img-users/female.jpg';	
+	        END IF;
+	        
+		END IF;
+    END$$

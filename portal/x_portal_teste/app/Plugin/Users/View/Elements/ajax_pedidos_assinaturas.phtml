@@ -1,0 +1,73 @@
+<?php if(is_array($convites)){?>
+<div class="area-botoes" style="width:100%; height:auto !important; padding:0px !important; margin:0px; position:relative;">
+		
+		<button class="cancelar" onclick="location.href='<?php echo $this->Html->url('/user/pedidos-assinaturas/cancelar'); ?>';">Excluir todas as solicitações</button>
+		
+	</div>
+   <table cellpadding="0" cellspacing="0" class="tabela-padrao tabela-assinaturas">
+		<caption>Convites enviados</caption>
+		<thead>
+			<tr>
+				<td>Empresa</td>
+				<td style="width:100px;"></td>
+			</tr>
+		</thead>
+		<tbody>
+		
+			<?php foreach($convites as $convite){?>								
+			<tr>
+				<td><strong><?php echo $convite['CompaniesInvitationsFilter']['company'];?></strong><br>Assine nosso feed e receba nossas ofertas</td>
+				<td>
+					<a href="javascript:void(0);" alt="excluir" class="excluir" linha_registro="<?php echo $convite['CompaniesInvitationsUser']['id']?>" title="Excluir Pedido">Excluir Pedido Assinatura</a>
+					<a href="javascript:void(0);" alt="ativado" class="ativo-inativo ativado" id_empresa="<?php echo $convite['CompaniesInvitationsFilter']['company_id'];?>" linha_registro="<?php echo $convite['CompaniesInvitationsUser']['id']?>" title="Assinar Empresa">Ativar ou Desativar</a>
+				</td>
+			</tr>
+			<tr class="linha_detalhe detalhe-assinaturas">
+				<td colspan="2">
+					<h4><?php echo $convite['CompaniesInvitationsFilter']['company'];?></h4>
+					<p>
+						<?php echo $convite['CompaniesInvitationsFilter']['description'];?>
+					<br>
+						<a href="mailto:maluf@paulipetro.com.br?subject=sss"><?php echo $convite['CompaniesInvitationsFilter']['email'];?></a><br>
+						<strong><?php echo $convite['CompaniesInvitationsFilter']['phone'];?></strong>
+					</p>
+					<div class="destaques">
+						<form action="/portal/user/" method="POST" id="formPostOfertas">
+							<a href="javascript:void(0);" id="submitFormOfertas">								
+								<?php echo $this->Html->image('Users.ofertas-para-voce.png');?>
+								<span><strong><?php echo $convite['CompaniesInvitationsFilter']['ofertas_perfil'];?></strong> ofertas dessa empresa são para o seu perfil<br><strong style="font-size:12px; color:#c06800;">clique e veja essas ofertas</strong></span>
+								<input type="hidden" name="hdAllCompany" value="2">
+								<input type="hidden" name="hdIdCOmpany" value="<?php echo $convite['CompaniesInvitationsFilter']['company_id'];?>">
+							</a>
+						 </form>
+						 <form action="/portal/user/" method="POST" id="formPostOfertasPerfil">
+							<a href="javascript:void(0);" id="submitFormOfertasPerfil">
+							<?php echo $this->Html->image('Users.ofertas-da-empresa.png');?>							
+								<span>Exitem <strong><?php echo $convite['CompaniesInvitationsFilter']['ofertas'];?></strong> ofertas cadastradas dessa empresa<br><strong style="font-size:12px; color:#c06800;">confira todas as ofertas cadastradas</strong></span>
+								<input type="hidden" name="hdAllCompany" value="1">
+								<input type="hidden" name="hdIdCOmpany" value="<?php echo $convite['CompaniesInvitationsFilter']['company_id'];?>">
+							</a>					  	
+						</form>
+					</div>
+				</td>
+			</tr>	
+			<?php } ?>		
+						
+		</tbody>
+		</div>	
+		
+	</table>
+	<?php }else{?>
+	<div class="lista-de-ofertas">
+	<div class="alinhamento">
+		<div class="oferta-destaque-principal">
+		<div class="informes">
+			<h2><?php echo $convites;?></h2>
+			<!--<br>
+			<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+		</div>
+		</div>
+	</div>
+</div>
+<?php }?>
+<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>

@@ -1,0 +1,559 @@
+<?php
+//O arquivo foi nomeado da mesma forma para facilitar uma futura manunteção
+echo $this->Html->script("empresas/x-offers");
+?>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<style>
+    .pause-play{
+        width: 20px;
+        cursor: pointer;
+    }
+    .qtd-invisible{
+        display: none;
+    }
+    .vendas-inferior-botao-hover{
+        background: #f37165;
+        color: #ffffff;
+        width: 10%;
+        text-align: center;
+        height: 25px;
+        float: left;
+        line-height: 30px;
+        margin-left: 1.5%;
+    }
+
+    #statistics{
+        text-align: center;
+    }
+
+    a {
+        text-decoration: none;
+        color: #999999;
+    }
+
+    th#titulo{
+        width: 27%;
+        font-size: 12px;
+    }
+
+    td#titulo{
+        width: 27.5%;
+        text-align: left;
+        font-size: 12px;
+    }
+
+    th#valor{
+        width: 8%;
+        text-align: center;
+    }
+
+    td#valor{
+        width: 8%;
+        text-align: center;
+    }
+
+    th#inicio{
+        width: 8%;
+        text-align: center;
+    }
+
+    td#inicio{
+        width: 8%;
+        text-align: center;
+    }
+
+    th#final{
+        width: 8%;
+        text-align: center;
+    }
+
+    td#final{
+        width: 8%;
+        text-align: center;
+    }
+
+    th#status{
+        width: 6%;
+        text-align: center;
+    }
+
+    td#status{
+        width: 6%;
+        text-align: center;
+    }
+
+    th#status{
+        width: 6%;
+        text-align: center;
+    }
+
+    th#editar{
+        width: 6%;
+        text-align: center;
+    }
+
+    td#editar{
+        width: 6%;
+        text-align: center;
+    }
+
+    th#detalhes{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    td#detalhes{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    th#comprar{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    td#comprar{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    th#boleto{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    td#boleto{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    th#cartao{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    td#cartao{
+        width: 5.5px;
+        text-align: center;
+    }
+
+    td#status{
+        text-align: center;
+    }
+
+    th#evaluation{
+        width: 9%;
+        text-align: center;
+    }
+
+    td#evaluation{
+        width: 9%;
+        text-align: center;
+    }
+
+    .offers-body {
+        width: 90%;
+        height: 85%;
+        background: #ffffff;
+    }
+
+    .table-offers {
+        margin-left: 1.5%;
+        border-collapse: collapse;
+    }
+
+    #tbody-table{
+        max-height: 100px;
+        overflow: auto;
+        border: 1px solid red;
+    }
+</style>
+
+<div class="offers-body">
+    <div class="offers-title">
+
+        <br> <span class="title-offers">Ofertas</span><br />
+        <div class="subtitle-offers">Gerenciando ofertas cadastradas</div>
+        <?php //echo print_r($inativas);?>
+        <a href="<?php echo $this->Html->url('/company/layout-cad-ofertas'); ?>">
+            <div class="offers-button-plus">
+                <div id="title-offers">Crie uma nova oferta</div>
+                <div id="plus-offers" style="background: #3399cc; line-height: 25px;">+</div>
+            </div>
+        </a>
+    </div>
+    <br />
+    <hr />
+
+    <!-- NAO H� REGISTROS -->
+    <?php if (!is_array($ofertas)) { ?>
+        <div id="offers-vazio" style="display: none;">
+            <div class="offers-lado-esquerdo">
+                <img src="../img/icones/vendas/vendas-imagens.png"
+                     class="offers-image" />
+            </div>
+
+            <div class="offers-lado-direito">
+                <p>
+                    Aqui, voce encontra todas as suas ofertas já feitas,<br /> estejam
+                    elas ativas ou inativas. E pode editá-las quando<br /> achar
+                    necessário.
+                </p>
+                <p>
+                    Voce pode adicionar novas ofertas sempre que quiser. <br />Para
+                    isso, basta clicar em <span
+                        class="offers-lado-direito-texto-destaque" style="color: #3399cc;">Crie uma nova oferta</span>,<br />
+                    e siga o passo-a-passo, rapidamente a sua nova oferta <br />estará
+                    no ar.
+                </p>
+            </div>
+
+            <div class="offers-lado-direito-second">
+                <img src="../img/icones/ofertas/seta.png" class="offers-image" />
+            </div>
+
+            <div class="offers-inferior">
+                <div class="offers-inferior-botoes">
+                    <div class="offers-inferior-botao">TODOS</div>
+                    <div class="offers-inferior-botao">concluido</div>
+                    <div class="offers-inferior-botao">pendente</div>
+                    <div class="offers-inferior-botao" id="filtros">opções de filtro</div>
+                    <hr />
+
+                    <div class="offers-inferior-cabecalho-tabela">
+                        <div class="offers-inferior-titulo-tabela">Lista de Ofertas</div>
+                        <div class="offers-inferior-titulo-qtd">0</div>
+                        <div class="offers-tabela-not-found">Não há registros</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } else { ?>
+
+        <!-- TABELA COM REGISTROS -->
+        <div id="offers-registros" style="display: block; height: 80%;">
+
+            <div class="offers-inferior-botoes">
+                <a href="#"><div class="offers-inferior-botao" id="btn-todas">TODOS</div></a>
+                <a href="#"><div class="offers-inferior-botao" id="btn-ativas">Ativas</div></a>
+                <a href="#"><div class="offers-inferior-botao" id="btn-inativas">Inativas</div></a>
+                <div class="offers-inferior-botao" id="filtros">opções de filtro</div>
+                <hr />
+            </div>
+
+            <div class="offers-inferior-cabecalho-tabela">
+                <div class="offers-inferior-titulo-tabela" style="background: #3399cc;">Lista de Ofertas</div>
+                <div class="offers-inferior-titulo-qtd" style="background: #2F2F4F;">
+                    <div id="total"><?php echo count($ofertas); ?></div>
+                    <div id="ativas" class="qtd-invisible" style="background: #2F2F4F;"><?php echo count($ofertasAtiva); ?></div>
+                    <div id="inativas" class="qtd-invisible" style="background: #2F2F4F;"><?php echo count($ofertasInativa); ?></div>
+                </div>
+            </div>
+
+            <!-- TODAS AS OFERTAS -->
+            <div id="table-todas"  style="  width: 98.3%; max-height: 400px; height: 80%; overflow: auto;">
+                <table class="table-offers" id="table-offers" style="width: 98.5%;" >
+                    <tr id='thead-table' style="">
+                        <th class="th-offers" id="titulo">TITULO</th>
+                        <th class="th-offers" id="valor">VALOR</th>
+                        <th class="th-offers" id="inicio">INICIO</th>
+                        <th class="th-offers" id="final">FINAL</th>
+                        <th class="th-offers" id="status">STATUS</th>
+                        <th class="th-offers" id="detalhes">Cliques em detalhe</th>
+                        <th class="th-offers" id="comprar">Cliques em comprar</th>
+                        <th class="th-offers" id="boleto">Compras com boleto</th>
+                        <th class="th-offers" id="cartao">Compras com cartão</th>
+                        <th class="th-offers">AVALIAÇÃO</th>
+                        <th class="th-offers" id="editar">EDITAR</th>
+                    </tr> 
+                    <tbody id="tbody-table" style="max-height: 200px; overflow: auto;">
+                        <?php
+                        if (is_array($ofertas)) {
+                            foreach ($offersWithStatistics as $oferta) {
+                                ?>
+                                <tr>
+                                    <td id="titulo" class="td-offers"><?php echo $oferta['Offer']['title'] ?></td>
+                                    <td class="td-offers" id="valor">R$<?php echo str_replace(".", ",", $oferta['Offer']['value']); ?></td>
+                                    <td class="td-offers" id="inicio"><?php echo date('d/m/Y', strtotime($oferta['Offer']['begins_at'])); ?></td>
+                                    <td class="td-offers"id="final"><?php echo date('d/m/Y', strtotime($oferta['Offer']['ends_at'])); ?></td>
+                                    <td class="td-offers" id="status">
+                                        <?php if ($oferta['Offer']['status'] == 'ACTIVE') { ?>
+                                            <img class="pause-play" src="../img/icones/ofertas/pause.png" style="float: left; margin-left: 5px;" title="ATIVA - Desativar" onclick="ativaInativa(1, 'ATIVO', this, <?php echo $oferta['Offer']['id']; ?>)">
+                                        <?php } else {
+                                            ?>
+                                            <img class="pause-play" src="../img/icones/ofertas/play.png" style="float: left; margin-left: 5px;" title="INATIVA - Ativar"  onclick="ativaInativa(2, 'INATIVO', this,<?php echo $oferta['Offer']['id']; ?>)">
+                                        <?php } ?>
+                                    </td>
+                                    <td class="td-offers"  style="width: 10.5px;"><?php echo $oferta['Statistics']['offers_statistics']['details_click']; ?></td>
+                                    <td class="td-offers" style="width: 10.5px;"><?php echo $oferta['Statistics']['offers_statistics']['checkouts_click']; ?></td>
+                                    <td class="td-offers" style="width: 10.5px;" ><?php echo $oferta['Statistics']['offers_statistics']['purchased_billet']; ?></td>
+                                    <td class="td-offers" style="width: 10.5px;"><?php echo $oferta['Statistics']['offers_statistics']['purchased_card']; ?></td>
+                                    <td class="td-offers" >
+                                        <?php
+                                        $nota = $oferta['Statistics'][0]['evaluation'] / $oferta['Statistics'][0]['votantes'];
+                                        $nota = explode(".", $nota);
+                                        $resto = 5 - $nota[0];
+                                        for ($i = 1; $i <= $nota[0]; $i++) {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_complete.png"  style="float: left; margin-left: 5px;" >
+                                        <?php }
+                                        ?>
+                                        <?php
+                                        if ($nota[1]) {
+                                            if ($nota[1] <= 5) {
+                                                ?>
+                                                <img src="../img/icones/users-vitrine/star_half.png" style="float: left; margin-left: 5px;" >
+                                            <?php } else {
+                                                ?>
+                                                <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" >
+                                                <?php
+                                            }
+                                            $resto = $resto - 1;
+                                        }
+                                        ?>
+
+                                        <?php
+                                        for ($j = 0; $j < $resto; $j++) {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_empty.png" style="float: left; margin-left: 5px;" >
+                                        <?php } ?> 
+                                        <span style="float: left; font-family: Helvetica; margin-left: 5px; font-size: 13px; color: #FFD700;">+<?php echo $oferta['Statistics'][0]['votantes']; ?></span>
+                                    </td>
+
+                                    <td class="td-offers">
+
+                                        <?php
+                                        if ($this->Session->read('secondUserLogado') == false or
+                                                $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                                $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                            ?>
+
+                                            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutCadOferta', 'edita'), 'type' => 'file')); ?>
+                                            <button type="submit"
+                                                    style="border: 0; background: transparent; padding: 0px;">
+                                                        <?php echo $this->Html->image('icones/ofertas/icon-editar.png'); ?>
+                                            </button>
+                                            <input type="hidden" value="<?php echo $oferta['Offer']['id']; ?>" name="data[offer-edit]" />
+                                            <?php echo $this->Form->end(); ?>
+
+                                            <?php
+                                        } else {
+                                            echo 'Você não tem permissão para isso.';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TODAS AS ATIVAS -->
+            <div id="table-ativas" style="margin-left: 1.5%;  width: 96.7%; max-height: 400px; height: 80%; overflow: auto; display: none;">
+                <table class="table-offers" id="table-ativas" style="width: 100%;margin-left: 0px;">
+                    <tr>
+                        <th class="th-offers" id="titulo">TITULO</th>
+                        <th class="th-offers" id="valor">VALOR</th>
+                        <th class="th-offers" id="inicio">INICIO</th>
+                        <th class="th-offers" id="final">FINAL</th>
+                        <th class="th-offers" id="status">STATUS</th>
+                        <th class="th-offers" id="detalhes">Cliques em detalhe</th>
+                        <th class="th-offers" id="comprar">Cliques em comprar</th>
+                        <th class="th-offers" id="boleto">Compras com boleto</th>
+                        <th class="th-offers" id="cartao">Compras com cartão</th>
+                        <th class="th-offers">AVALIAÇÃO</th>
+                        <th class="th-offers" id="editar">EDITAR</th>
+                    </tr>
+
+                    <?php
+                    if (is_array($ofertasAtiva)) {
+                        foreach ($ativas as $oferta) {
+                            ?>
+
+                            <tr>
+                                <td id="titulo" class="td-offers"><?php echo substr($oferta['Offer']['title'], 0, 23); ?></td>
+                                <td class="td-offers">R$<?php echo str_replace(".", ",", $oferta['Offer']['value']); ?></td>
+                                <td class="td-offers"><?php echo date('d/m/Y', strtotime($oferta['Offer']['begins_at'])); ?></td>
+                                <td class="td-offers"><?php echo date('d/m/Y', strtotime($oferta['Offer']['ends_at'])); ?></td>
+                                <td class="td-offers">
+                                    <?php if ($oferta['Offer']['status'] == 'ACTIVE') { ?>
+                                        <img class="pause-play" src="../img/icones/ofertas/pause.png" style="float: left; margin-left: 5px;" title="ATIVA - Desativar" onclick="ativaInativa(1, 'ATIVO', this, <?php echo $oferta['Offer']['id']; ?>)" >
+                                    <?php } else {
+                                        ?>
+                                        <img class="pause-play" src="../img/icones/ofertas/play.png" style="float: left; margin-left: 5px;" title="INATIVA - Ativar" onclick="ativaInativa(2, 'INATIVO', this, <?php echo $oferta['Offer']['id']; ?>)">
+                                    <?php } ?></td>
+
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['details_click']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['checkouts_click']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['purchased_billet']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['purchased_card']; ?></td>
+                                <td class="td-offers" id="evaluation">
+                                    <?php
+                                    $nota = $oferta['Statistics'][0]['evaluation'] / $oferta['Statistics'][0]['votantes'];
+                                    $nota = explode(".", $nota);
+                                    $resto = 5 - $nota[0];
+                                    for ($i = 1; $i <= $nota[0]; $i++) {
+                                        ?>
+                                        <img src="../img/icones/users-vitrine/star_complete.png"  style="float: left; margin-left: 5px;" >
+                                    <?php }
+                                    ?>
+                                    <?php
+                                    if ($nota[1]) {
+                                        if ($nota[1] <= 5) {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_half.png" style="float: left; margin-left: 5px;" >
+                                        <?php } else {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" >
+                                            <?php
+                                        }
+                                        $resto = $resto - 1;
+                                    }
+                                    ?>
+
+                                    <?php
+                                    for ($j = 0; $j < $resto; $j++) {
+                                        ?>
+                                        <img src="../img/icones/users-vitrine/star_empty.png" style="float: left; margin-left: 5px;" >
+                                    <?php } ?> 
+                                </td>
+
+                                <td id="editar" class="td-offers">
+
+                                    <!-- validação de usuarios secundarios -->
+                                    <?php
+                                    if ($this->Session->read('secondUserLogado') == false or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                        ?>
+
+                                        <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutCadOferta', 'edita'), 'type' => 'file')); ?>
+                                        <input type="hidden" value="<?php echo $oferta['Offer']['id']; ?>" name="data[offer-edit]" />
+                                        <button type="submit"
+                                                style="border: 0; background: transparent; padding: 0px;">
+                                                    <?php echo $this->Html->image('icones/ofertas/icon-editar.png'); ?>
+                                        </button>
+                                        <?php echo $this->Form->end(); ?>
+
+                                        <?php
+                                    } else {
+                                        echo 'Você não tem permissão para isso.';
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+
+            <!-- TODAS AS INATIVAS -->
+            <div id="table-inativas" style="margin-left: 1.5%; width: 96.7%; max-height: 400px; height: 80%; overflow: auto; display: none;">
+                <table class="table-offers" id="table-inativas" style="width: 100%;margin-left: 0px;">
+                    <tr>
+                        <th class="th-offers" id="titulo">TITULO</th>
+                        <th class="th-offers" id="valor">VALOR</th>
+                        <th class="th-offers" id="inicio">INICIO</th>
+                        <th class="th-offers" id="final">FINAL</th>
+                        <th class="th-offers" id="status">STATUS</th>
+                        <th class="th-offers" id="detalhes">Cliques em detalhe</th>
+                        <th class="th-offers" id="comprar">Cliques em comprar</th>
+                        <th class="th-offers" id="boleto">Compras com boleto</th>
+                        <th class="th-offers" id="cartao">Compras com cartão</th>
+                        <th class="th-offers">AVALIAÇÃO</th>
+                        <th class="th-offers" id="editar">EDITAR</th>
+                    </tr>
+
+                    <?php
+                    if (is_array($ofertasInativa)) {
+                        foreach ($inativas as $oferta) {
+                            ?>
+
+                            <tr>
+                                <td id="titulo" class="td-offers"><?php echo $oferta['Offer']['title'] ?></td>
+                                <td class="td-offers">R$<?php echo str_replace(".", ",", $oferta['Offer']['value']); ?></td>
+                                <td class="td-offers"><?php echo date('d/m/Y', strtotime($oferta['Offer']['begins_at'])); ?></td>
+                                <td class="td-offers"><?php echo date('d/m/Y', strtotime($oferta['Offer']['ends_at'])); ?></td>
+                                <td class="td-offers">
+                                    <?php if ($oferta['Offer']['status'] == 'ACTIVE') { ?>
+                                        <img class="pause-play" src="../img/icones/ofertas/pause.png" style="float: left; margin-left: 5px;" title="ATIVA - Desativar" onclick="ativaInativa(1, 'ATIVO', this, <?php echo $oferta['Offer']['id']; ?>)">
+                                    <?php } else {
+                                        ?>
+                                        <img class="pause-play" src="../img/icones/ofertas/play.png" style="float: left; margin-left: 5px;" title="INATIVA - Ativar" onclick="ativaInativa(2, 'ATIVO', this, <?php echo $oferta['Offer']['id']; ?>)">
+                                    <?php } ?></td>
+
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['details_click']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['checkouts_click']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['purchased_billet']; ?></td>
+                                <td class="td-offers" id="statistics"><?php echo $oferta['Statistics']['offers_statistics']['purchased_card']; ?></td>
+                                <td class="td-offers" id="evaluation">
+                                    <?php
+                                    $nota = $oferta['Statistics'][0]['evaluation'] / $oferta['Statistics'][0]['votantes'];
+                                    $nota = explode(".", $nota);
+                                    $resto = 5 - $nota[0];
+                                    for ($i = 1; $i <= $nota[0]; $i++) {
+                                        ?>
+                                        <img src="../img/icones/users-vitrine/star_complete.png"  style="float: left; margin-left: 5px;" >
+                                    <?php }
+                                    ?>
+                                    <?php
+                                    if ($nota[1]) {
+                                        if ($nota[1] <= 5) {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_half.png" style="float: left; margin-left: 5px;" >
+                                        <?php } else {
+                                            ?>
+                                            <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" >
+                                            <?php
+                                        }
+                                        $resto = $resto - 1;
+                                    }
+                                    ?>
+
+                                    <?php
+                                    for ($j = 0; $j < $resto; $j++) {
+                                        ?>
+                                        <img src="../img/icones/users-vitrine/star_empty.png" style="float: left; margin-left: 5px;" >
+                                    <?php } ?> 
+                                </td>
+
+                                <td id="editar" class="td-offers">
+
+                                    <?php
+                                    if ($this->Session->read('secondUserLogado') == false or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                        ?>
+
+                                        <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutCadOferta', 'edita'), 'type' => 'file')); ?>
+                                        <button type="submit"
+                                                style="border: 0; background: transparent; padding: 0px;">
+                                            <?php echo $this->Html->image('icones/ofertas/icon-editar.png'); ?>
+                                        </button>
+                                        <input type="hidden" value="<?php echo $oferta['Offer']['id']; ?>" name="data[offer-edit]" />
+                                        <?php echo $this->Form->end(); ?>
+
+                                        <?php
+                                    } else {
+                                        echo 'Você não tem permissão para isso.';
+                                    }
+                                    ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </table>
+            </div>
+        </div>
+
+    <?php } ?>
+</div>

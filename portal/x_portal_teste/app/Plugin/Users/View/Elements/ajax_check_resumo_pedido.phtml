@@ -1,0 +1,30 @@
+<?php?>
+<!-- 
+* Os dados usados nesse Elemento são para alimentar a tela Resumo do Pedido
+* São carregados via ajax quando o usuário clicar em ver resumos do pedido
+* APÓS confirmação do pedido
+* Usada também em "Minhas Compras" com a mesma função
+-->
+
+<span id="tipo-de-pagamento"><?php echo $compra['PaymentMethod']['type'] . ' - ' . $compra['PaymentMethod']['name']; ?></span>
+<span id="quantidade"><?php echo $compra['Checkout']['amount'];?></span>
+<span id="valor-frete"><?php echo $compra['Checkout']['shipping_value']; ?></span>
+<span id="valor-total"><?php echo $compra['Checkout']['total_value']; ?></span>
+<span id="quantidade-entrega"><?php echo $compra['Checkout']['delivery_time'];?></span>
+<span id="end-endereco"><?php echo $compra['Checkout']['address']; ?></span>
+<span id="end-numero"><?php echo $compra['Checkout']['number']; ?></span>
+<span id="end-cep"><?php echo $compra['Checkout']['zip_code']; ?></span>
+<span id="end-complemento"><?php echo $compra['Checkout']['complement']; ?></span>
+<span id="end-cidade"><?php echo $compra['Checkout']['city']; ?></span>
+<span id="end-estado"><?php echo $compra['Checkout']['state']; ?></span>
+<span id="end-bairro"><?php echo $compra['Checkout']['district']; ?></span>
+<span id="tudo"><?php echo $compra['Checkout']['id'];?></span>
+
+<span id="div-endereco">
+                        <span id="endereco"><?php echo $compra['Checkout']['address'];?>, </span><span id="numero"><?php echo $compra['Checkout']['number'];?></span><br/>
+                        <span id="bairro"><?php echo $compra['Checkout']['district'].' - ';?></span><span id="complemento"><?php echo $compra['Checkout']['complement'];?></span><br/>
+                        <span id="cep">CEP:   <?php echo $compra['Checkout']['zip_code'];?></span><br/>
+                        <span id="cidade"><?php echo $compra['Checkout']['city'];?> - </span><span id="estado"><?php echo $compra['Checkout']['state'];?> </span>
+                    </span> 
+
+<!-- Para os meus amigos programadores, melhorem essa lógica -->

@@ -1,0 +1,1107 @@
+<?php
+echo $this->Html->script('jquery.validate', array(
+    'inline' => false
+));
+echo $this->Html->script('empresas/x-pre-cadastro');
+echo $this->Html->script("bytescoutbarcode128_1.00.07");
+
+$social = $this->Session->read('compSocial.companies_social_networks');
+//$fbk = $social['facebook'];
+$fbk = $social['fbk_new_offers'];
+$twt = $social['twitter_new_offers'];
+$gplus = $social['gplus_new_offers'];
+
+$todayDeliveries = $this->Session->read('Deliveries.today');
+
+$ofertaCadastrada = $_SESSION['viewOffer'];
+$of = $ofertaCadastrada;
+?>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+    $(function() {
+        //window.open('https://google.com', 'tefte', 'toolbar=0, status=0, width=650, height=450');
+        //showBoxes(<?php echo "'{$fbk}', '{$twt}', '{$gplus}'"; ?>);
+
+<?php if (!empty($of)) { ?>
+            showBoxes(<?php echo "'{$fbk}', '{$twt}', '{$gplus}'"; ?>);
+<?php } ?>
+
+        $(".share-offer-btn").click(function() {
+            var id = $(this).attr("id");
+            //alert(id);
+            shareOffer(<?php echo "'{$fbk}', '{$twt}', '{$gplus}'"; ?>, id);
+        });
+
+    });
+
+    function shareOffer(fbk, twt, gplus, id) {
+        var link = 'http://localhost/work/x_portal_teste/user/offerDetail?offer=' + id;
+        if (fbk == 'ACTIVE') {
+            window.open('http://www.facebook.com/sharer.php?u=' + link + '?title=facebook', 'share', 'toolbar=0, status=0, width=650, height=450');
+        }
+        if (twt == 'ACTIVE') {
+            window.open("https://twitter.com/intent/tweet?text= &url=" + link, 'share1', 'toolbar=0, status=0, width=650, height=450');
+        }
+        if (gplus == 'ACTIVE') {
+            window.open('https://plus.google.com/share?url=' + link, 'share2', 'toolbar=0, status=0, width=650, height=450');
+        }
+    }
+
+    function showBoxes(fbk, twt, gplus) {
+
+        var link = 'http://localhost/work/x_portal_teste/user/offerDetail?offer=' + <?php echo $this->Session->read('shareOfferId'); ?>"";
+                if (fbk == 'ACTIVE') {
+            window.open('http://www.facebook.com/sharer.php?u=' + link + '?title=facebook', 'share', 'toolbar=0, status=0, width=650, height=450');
+        }
+        if (twt == 'ACTIVE') {
+            window.open("https://twitter.com/intent/tweet?text=Acabei de cadastrar essa oferta no truOne, dê uma olhada: &url=" + link, 'share1', 'toolbar=0, status=0, width=650, height=450');
+        }
+        if (gplus == 'ACTIVE') {
+            window.open('https://plus.google.com/share?url=' + link, 'share2', 'toolbar=0, status=0, width=650, height=450');
+        }
+
+    }
+
+    function postarProduto(checkId) {
+        $("#loading").fadeIn(300);
+        $.ajax({
+            type: "POST",
+            data: {
+                checkId: checkId},
+            url: location.href,
+            success: function(result) {
+                $("#loadind").fadeOut(200);
+                $("#mask").fadeOut(400);
+                window.location.reload();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                //alert(errorThrown);
+            }
+        });
+    }
+
+    /**
+     * Envia email ao aniversáriante selecionado
+     * 
+     */
+    function sendBirthdayEmail(userEmail) {
+        $("#loading").fadeIn(300);
+        $.ajax({
+            type: "POST",
+            data: {
+                userEmail: userEmail},
+            url: location.href + "/sendBirthdayEmail",
+            success: function(result) {
+                $("#sent-email").toggle(200);
+                $("#sent-email").toggle(3500);
+                $("#loading").fadeOut(300);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+            }
+        });
+    }
+
+    function printPartOfPage(elementId)
+    {
+        var printContent = document.getElementById(elementId);
+        var windowUrl = 'about:blank';
+        var uniqueName = new Date();
+        var windowName = 'Print' + uniqueName.getTime();
+        var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0');
+        printWindow.document.write(printContent.innerHTML);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    }
+
+    function abrefecha(obj) {
+
+        switch (obj.id) {
+            case 'primeiro':
+
+                document.getElementById('principal').style.display = "block";
+                document.getElementById('divum').style.display = "none";
+                document.getElementById('divdois').style.display = "none";
+                break;
+            case 'segundo':
+
+                document.getElementById('principal').style.display = "none";
+                document.getElementById('divum').style.display = "block";
+                document.getElementById('divdois').style.display = "none";
+                break;
+            case 'terceiro':
+
+                document.getElementById('principal').style.display = "none";
+                document.getElementById('divum').style.display = "none";
+                document.getElementById('divdois').style.display = "block";
+                break;
+        }
+    }
+
+    /**
+     * Gera código de barras de acordo com parâmentros
+     * @returns {undefined}
+     */
+    function updateBarcode()
+    {
+        var canvas1 = document.getElementById("barcodeCanvas");
+        var barcode = new bytescoutbarcode128();
+        var value = document.getElementById("barcodeValue").value;
+        barcode.valueSet(value);
+        barcode.setMargins(5, 5, 5, 5);
+        barcode.setBarWidth(2);
+        barcode.setSize(barcode.getMinWidth(), canvas1.height);
+        canvas1.width = barcode.getMinWidth();
+        barcode.exportToCanvas(canvas1);
+        var dtaUrl = canvas1.toDataURL();
+        document.getElementById('imgBarcode').src = dtaUrl;
+    }
+
+
+    /**
+     * Mostra etiqueta de entrega
+     * @returns {undefined}
+     */
+    function mostraNota(nome, end, cep, state, id, barcodeText) {
+
+        $("#nota-nome").html(nome);
+        $("#nota-end").html(end);
+        $("#nota-cep").html(cep);
+        $("#nota-est").html(state);
+        $("#nota-num").html(id);
+        $("#barcodeValue").val(barcodeText);
+        updateBarcode();
+        $("#mask").fadeIn(200);
+        $("#nota-fiscal").fadeIn(500);
+    }
+
+
+    /*
+     * são executadas assim que a página carrega!!!
+     * só por desencargo 
+     */
+    $(document).ready(function() {
+        /*
+         * Se clicar no número de entregas para hoje
+         * mostra a tabela de entregas
+         */
+        $("#qtd-today").click(function() {
+            $("#pop-entregas").fadeIn(500);
+            $("#mask").fadeIn(200);
+        });
+        /*
+         * Se clicar no número de entregas para amanha 
+         * mostra tabela de entregas
+         */
+        $("#qtd-tomorrow").click(function() {
+            $("#pop-entregas").fadeIn(500);
+            $("#mask").fadeIn(200);
+        });
+<?php if ($todayDeliveries) { ?>
+            $("#mask").fadeIn(300);
+            $("#pop-entregas").fadeIn(500);
+<?php } ?>
+
+        $("#xis-entregas").click(function() {
+            $("#pop-entregas").fadeOut(500);
+            $("#mask").fadeOut(500);
+        });
+        $("#xis-nota-fiscal").click(function() {
+            $("#nota-fiscal").fadeOut(200);
+            //$("#mask").fadeOut(500);
+        });
+        $("#show-entregas").click(function() {
+            $("#pop-entregas").fadeIn(500);
+            $("#mask").fadeIn(200);
+        });
+
+        $("#closePop").click(function() {
+            $("#pop").fadeOut(200);
+        });
+
+        //aniversariantes
+        $("#box-aniversariantes").click(function() {
+            $("#birthdays-pop").fadeIn();
+            $("#mask").fadeIn();
+        });
+
+        $("#birth-pop-xis").click(function() {
+            $("#birthdays-pop").fadeOut();
+            $("#mask").fadeOut();
+        });
+
+        $(".box-recorencia").click(function() {
+            $("#recorencia-pop").fadeIn(300);
+            $("#mask").fadeIn(300);
+        });
+
+        $("#recorrencia-pop-xis").click(function() {
+            $("#recorencia-pop").fadeOut(300);
+            $("#mask").fadeOut(300);
+        });
+    });</script>
+<style>
+
+    @font-face {
+        font-family: HelveticaThin;
+        src: url("../fonts/HelveticaNeue-Thin.otf") format("opentype");
+    }
+
+    #qtd-today:hover{
+        color: orange;
+        cursor: pointer;
+    }
+
+    #qtd-tomorrow:hover{
+        color: orange;
+        cursor: pointer;
+    }
+
+    #qtd-today:active{
+        color: #FF8C00;
+    }
+
+    #qtd-tomorrow:active{
+        color: #FF8C00;
+    }
+
+    #nota-fiscal{
+        position: absolute;
+        left: 35%;
+        top: 25%;
+        margin-top: 25px;
+        display: none;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        z-index: 999999;
+        font-family: Helvetica;
+        opacity: 0.99;
+        font-size: 14px;
+        width: 400px;
+        text-align: center;
+    }
+
+    #mask {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9000;
+        background-color: #000;
+        opacity: 0.6;
+        z-index: 9000;
+    }
+
+    #pop {
+        position: absolute;
+        left: 25%;
+        height: 70%;
+        width: 70%;
+        margin-left: -150px;
+        margin-top: 25px;
+        padding: 10px;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        z-index: 99999;
+    }
+
+    #popbody {
+
+    }
+
+    #frame {
+        width: 100%;
+        height: 430px;
+        margin-top: 10px;
+    }
+
+    #popinfo {
+        font-family: Helvetica;
+        font-size: 11px;
+    }
+
+    #closePop {
+        float: right;
+        text-decoration: none;
+        font-family: Helvetica;
+        color: #3399cc;
+        font-size: 16px;
+    }
+
+    .empy-message{
+        font-family: Helvetica;
+        text-align: center;
+        margin-left: 15px;
+    }
+
+    td{
+        border: 2px solid #dcdcdc;
+        height: 44.5px;
+        line-height: 43px;
+        text-align: center;
+        font-family: Helvetica;
+    }
+    td#preco{
+
+        padding: 0;
+    }
+
+    td#metodo{
+
+
+    }
+
+    td#usuario{
+
+
+    }
+    table{width: 100%;
+          color: #8B8B7A;
+          border-collapse: collapse;
+          font-size: 12px;
+    }
+
+    #status{
+        color: #8B8B7A;
+        font-size: 14px;
+        font-family: Helvetica;
+    }
+
+    #loading{
+        position: absolute;
+        left: 47%;
+        top: 40%;
+        width: 80px;
+        height: 80px;
+        z-index: 999999;
+        display: none;
+    }
+
+    .share-offer-btn{
+        cursor: pointer; 
+        opacity: 0.7; 
+        float: right; 
+        width: 15px; 
+        height: 15px; 
+        margin-right: 10px; 
+        margin-top: 5px;
+    }
+
+    div.plus-dash {
+        width: 8%;
+        float: left;
+        height: 40px;
+        background: #c16304;
+        line-height: 35px;
+    }
+
+    span.span-esquerdo {
+        color: #ffffff;
+        font-family: HelveticaThin;
+        font-size: 28px;
+        margin-left: 25%;
+        text-align: center;
+    }
+
+    .quadro-facebook{
+        display: none;
+    }
+
+</style>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div id="mask"></div>
+<div style="min-width: 1150px;">
+    <!-- verifica se a controller enviou alguma url para carregar (esperado url do form de cadastro do moip) -->
+
+    <?php if (!empty($url_moip)) { ?>
+        <div id="mask"></div>
+        <div id="pop">
+            <div id="popheader">
+                <a href="#" id="closePop"><strong>X</strong></a> <span id="popinfo">*
+                    Todos os campos do formulário são necessários.<br />
+                    * Nâo feche o formulário sem realizar o cadastro, isso é de suma importância para sua empresa.</span>
+            </div>
+            <div id="popbody">
+                <iframe frameborder="0" id="frame"
+                        src=<?php echo $url_moip; ?>></iframe>
+            </div>
+        </div>
+    <?php } ?>
+    <!-- BOX COMPRAS FINALIZADAS -->
+    <div class="quadro-compras-realizadas">
+        <a href="<?php echo $this->Html->url('/company/layout-vendas'); ?>">
+            <div class="plus-dash">
+                <span class="span-esquerdo">+</span>
+            </div>
+        </a>
+        <div class="compras-final-titulo">
+            <span class="span-titulo">Compras finalizadas </span>
+        </div>
+        <div class="qtd">
+            <span class="span-qtd"><?php echo count($checkouts); ?></span>
+        </div>
+        <!-- SUBSTITUIR DIV POR TABELAS!!! -->
+        <div style="width: 99.5%; background: #fff; height: 270px; overflow: auto; ">
+            <?php
+            if (is_array($checkouts)) {
+
+                foreach ($checkouts as $compra) {
+                    ?>
+
+                    <div style="width: 100%;"><div style="width: 30%; height: 90px; float: left;"><img style="width: 100%; height: 90px;" src="<?php echo $compra['Offer']['photo']; ?>" /></div><div style="float: left; width: 70%; height: 90px;"><div style="width: 100%; height: 40px; background: #F5F5F5; line-height: 40px; font-size: 14px; font-family: Helvetica; color: #8B8B7A;"><span style="margin-left: 10px;"><?php echo substr($compra['Offer']['title'], 0, 25) . '...'; ?></span></div><div style="width: 100%; height: 50px;"><table><tr><td id="preco">R$ <?php echo $compra['Checkout']['total_value']; ?></td><td id="metodo">
+                                            <?php
+                                            switch ($compra['Checkout']['payment_method_id']) {
+                                                case 3:
+                                                    echo 'Cartão de Crédito';
+                                                    break;
+                                                case 5:
+                                                    echo 'Cartão de Crédito';
+                                                    break;
+                                                case 7:
+                                                    echo 'Cartão de Crédito';
+                                                    break;
+                                                default:
+                                                    echo 'Boleto';
+                                                    break;
+                                            }
+                                            ?>             
+                                        </td><td id="usuario"><?php echo $compra['User']['name']; ?></td></tr></table></div></div></div>
+
+                    <?php
+                }
+            } else {
+                ?>
+                <span class="empy-message"> <?php
+                    echo 'Nenhum registro de compra encontrado.';
+                }
+                ?></span>
+
+
+        </div>
+
+    </div>
+
+    <!-- BOX COMPRAS PENDENTES -->
+    <div class="quadro-compras-pendentes">
+        <a href="<?php echo $this->Html->url('/company/layout-vendas'); ?>">
+            <div class="plus-dash">
+                <span class="span-esquerdo">+</span>
+            </div>
+        </a>
+        <div class="compras-pendentes-titulo">
+            <span class="span-titulo">Compras Pendentes</span>
+        </div>
+        <div class="qtd">
+            <span class="span-qtd"><?php echo count($pedidos); ?></span>
+        </div>
+        <!-- SUBSTITUIR DIV POR TABELAS!!! -->
+        <div style="width: 100%; background: #fff; height: 270px; overflow: auto;">
+            <?php
+            if (is_array($pedidos)) {
+                foreach ($pedidos as $compra) {
+                    ?>
+
+                    <div style="width: 100%;">
+                        <div style="width: 30%; height: 87px; float: left;"> 
+                            <?php
+                            switch ($compra['Checkout']['payment_method_id']) {
+                                case 3:
+                                    echo "<img style=\"width: 100%; height: 87px;\" src=\"../companies/img/icones/dashboard/visa.jpg\"> ";
+                                    break;
+                                case 5:
+                                    echo "<img style=\"width: 100%; height: 87px;\" src=\"../companies/img/icones/dashboard/master.png\"> ";
+                                    break;
+                                case 7:
+                                    echo "<img style=\"width: 100%; height: 87px;\" src=\"../companies/img/icones/dashboard/american.jpg\"> ";
+                                    break;
+                                case 73:
+                                    echo "<img style=\"width: 100%; height: 87px;\" src=\"../companies/img/icones/dashboard/boleto.png\"> ";
+                                    break;
+                                default:
+                                    $img = 'cartao.jpg';
+                                    break;
+                            }
+                            ?>
+
+                        </div>
+                        <div style="height:87px; width: 25%; background: #F5F5F5; float: left; line-height: 90px; text-align: center;">
+                            <span id="status"><?php
+                                $string = explode(" ", $compra['PaymentState']['name']);
+                                echo $string[0];
+                                ?></span>
+                        </div>
+                        <div style="padding-top: 15px; margin-left: 10px; height: 70px; width: 40%; font-family: Helvetica; float: left; line-height: 15px;">
+                            <div>
+                                <span style="font-size: 14px; color: #444444;"><strong><?php echo substr($compra['Offer']['title'], 0, 19) . '...'; ?></strong></span><br/>
+                                <span style="font-size: 11px; color: #666666;">R$ <?php echo $compra['Checkout']['total_value']; ?></span> <br />
+                                <span style="font-size: 11px; color: #666666;">em <?php echo date('d/m/Y', strtotime($compra['Checkout']['date'])); ?></span><br />
+                                <span style="font-size: 11px; color: #666666;"><strong><?php echo $compra['User']['name']; ?></strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-bottom: 0;"/>
+
+                    <?php
+                }
+            } else {
+                ?>  <span class="empy-message"><?php
+                echo 'Nenhum registro de compra encontrado.';
+            }
+            ?></span>
+        </div>
+    </div>
+
+    <!-- BOX ULTIMAS ASSINATURAS -->
+    <div class="quadro-ultimas-assinaturas" style="margin-top: -310px;">
+        <a href="<?php echo $this->Html->url('/company/layout-assinaturas'); ?>">
+            <div class="plus-black" style='line-height: 30px;'>
+                <span class="span-esquerdo">+</span>
+            </div>
+        </a>
+        <div class="ultimas-assin-titulo">
+            <span class="span-titulo">&#218;ltimas assinaturas </span>
+        </div>
+        <div class="qtd-black">
+            <span class="span-qtd"><?php
+                if (is_array($assinaturas)) {
+                    echo count($assinaturas);
+                } else {
+                    echo '0';
+                }
+                ?></span>
+        </div>
+        <!-- SUBSTITUIR DIV POR TABELA -->
+        <div style="background: #fff; width: 100%; height: 270px; margin-top: -10px; overflow: auto;">
+
+            <?php
+            if (is_array($assinaturas)) {
+                foreach ($assinaturas as $assinatura) {
+                    ?>
+                    <div style="min-width: 155px; width: 49.3%; height: 88px; border: 1px solid #dddddd; float: left;">
+                        <div style="width: 70px; height: 70px; margin-left: 10px; margin-top: 10px; float: left;"><img src="<?php echo $assinatura['User']['photo']; ?>" width="60px" height="60px" style="border-radius: 50px 50px 50px 50px; border: 2px solid #dddddd;"/></div>
+                        <div style="float: left; height:50px; width: 45%; padding-top: 7.5px; margin-left: 5px;">
+                            <span style="font-family: Helvetica; color: #000000; font-size: 14px;"><?php
+                                $nome = explode(" ", $assinatura['User']['name']);
+                                echo $nome[0];
+                                ?></span><br />
+                            <span style="font-family: Helvetica; color: #545454; font-size: 12px;">em <?php echo date('d/m/Y', strtotime($assinatura['CompaniesUser']['date_register'])); ?></span><br/>
+                            <span style="font-family: Helvetica; color: #545454; font-size: 12px;">de <?php echo $assinatura['User']['city']; ?> - <?php echo $assinatura['User']['state']; ?></span><br/>
+                            <span style="font-family: Helvetica; color: #545454; font-size: 12px;"><?php
+                                if ($assinatura['User']['idade'] == date('Y')) {
+                                    echo "Idade nao informada";
+                                } else {
+                                    echo "tem " . $assinatura['User']['idade'] . " anos";
+                                }
+                                ?> </span><br/>
+                        </div>
+                    </div>
+
+                    <?php
+                }
+            } else {
+                ?>  <span class="empy-message"><?php
+                echo "Nenhuma assinatura registrada até o momento.";
+            }
+            ?></span>
+
+        </div>
+    </div>
+
+    <!-- BOX ULTIMAS OFERTAS CADASTRADAS -->
+    <div class="quadro-ofertas-cadastradas">
+        <div class="ofertas-cadastradas-titulo">
+            <span class="span-titulo">&#218;ltimas ofertas cadastradas</span>
+        </div>
+        <div class="qtd">
+            <span class="span-qtd"><?php echo count($ofertas); ?></span>
+        </div>
+        <!-- SUBSTITUIR DIV POR TABELA -->
+        <div
+            style="background: #fff; width: 100%; height: 270px; overflow: auto;">
+                <?php
+                if (is_array($ofertas)) {
+                    foreach ($ofertas as $oferta) {
+                        ?>
+
+                    <div style="font-family: Helvetica; float: left; max-height: 130px;" >
+                        <div id="offer-imagem"
+                             style="float: left; width: 40%; height: 131px; border: 1px solid #dddddd;">
+                            <img src="<?php echo $oferta['Offer']['photo']; ?>"
+                                 style="width: 100%; height: 131px;">
+                        </div>
+                        <div id="offer-descricao"
+                             style="float: left; margin-top: 15px; margin-left: 10px; height: 70%;">
+                            <span style="font-size: 14px; color: #444444;"><strong><?php echo substr($oferta['Offer']['title'], 0, 22) . '...'; ?></strong></span>
+                            <br /> <span style="font-size: 11px; color: #666666;">R$ <?php echo str_replace(".", ",", $oferta['Offer']['value']); ?></span><br />
+                            <span style="font-size: 11px; color: #666666;">em <?php echo date('d/m/Y', strtotime($oferta['Offer']['begins_at'])); ?></span><br />
+                            <!-- Status da oferta -->
+
+                        </div>
+                        <img src="../img/icones/dashboard/shareicon.png" class="share-offer-btn" id="<?php echo $oferta['Offer']['id']; ?>" title="Compartilhar"/>
+
+                        <div style="float: left; padding-top: 8%; width: 59%;">
+                            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutCadOferta', 'edita'), 'type' => 'file')); ?>
+                            <button type="submit"
+                                    style="border: 0; background: transparent; padding: 0px;">
+                                <img
+                                    src="../companies/img/icones/dashboard/botao-editar-oferta.png"
+                                    style="width: 100%; cursor: pointer;" />
+                            </button>
+                            <input type="hidden" value="<?php echo $oferta['Offer']['id']; ?>"  name="data[offer-edit]">
+                            <?php echo $this->Form->end(); ?>
+                        </div>
+                    </div>
+                    <hr style="margin-bottom: 0;"/>
+
+                    <?php
+                }
+            } else {
+                ?>  <span class="empy-message"> <?php
+                echo "Cadastre sua oferta agora.";
+            }
+            ?> </span>
+
+        </div>
+    </div>
+
+    <!-- TERCEIRA COLUNA -->
+    <!-- BOTAO CRIAR NOVA OFERTA -->
+    <div class="botao-criar-nova-oferta" style="width: 23.5%;">
+        <a href="http://localhost/work/x_portal_teste/company/layout-cad-ofertas">
+            <div class="div-nova-oferta-titulo">
+                <span class="span-nova-oferta-titulo"> Crie uma nova oferta</span>
+            </div>
+            <div class="div-nova-oferta-titulo-plus" style="line-height: 35px;">
+                <span class="span-nova-oferta-titulo-plus" style="margin-left: -2px;  font-family: HelveticaThin;">+</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- CONVITES DE ASSINATURAS -->
+    <div class="botao-fazer-convite" style="width: 23.5%;">
+        <a href="<?php echo $this->Html->url('/company/convites-facebook'); ?>" >
+            <div class="div-fazer-convite-titulo">
+                <span class="span-fazer-convite-titulo">Faça convites de assinatura</span>
+            </div>
+            <div class="div-fazer-convite-titulo-plus" style="line-height: 35px;">
+                <span class="span-fazer-convite-titulo-plus" style="margin-left: -1px;  font-family: HelveticaThin;">></span>
+            </div>
+        </a>
+    </div>
+
+    <!-- BOX ENTREGAS PENDENTES -->
+    <div style="width: 23.5%; background: #fff; height: 155px; float: left; margin-left: 30px; margin-top: 15px; margin-top: -170px;">
+        <div class="ofertas-cadastradas-titulo">
+            <span class="span-titulo">ENTREGAS PARA:</span>
+        </div>
+        <div class="qtd" style="cursor: pointer;" id="show-entregas">
+            <span class="span-qtd" style='font-size: 30px; font-family: HelveticaThin;'>+</span>
+        </div>
+        <div id="box-entregas-corpo" style="width: 100%; font-family: Helvetica;">
+            <div id="entregas-hoje" style="width: 49%; float: left; text-align: center;">
+                <div style="margin-top: 10px;">HOJE</div>
+                <div style="font-size: 60px;" id="qtd-today"><?php echo count($deliveriesToday); ?></div>
+            </div>
+            <div id="entregas-amanhã" style="width: 49%; float: left; text-align: center;">
+                <div style="margin-top: 10px;">AMANHÃ</div>
+                <div style="font-size: 60px;" id="qtd-tomorrow"><?php echo count($deliveriesToday['Tomorrow']); ?></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOX ANIVERSARIANTES -->
+    <div class="box-aniversariantes" id="box-aniversariantes">
+        <div class="box-aniver-text">
+            Aniversariantes hoje 
+            <div class="box-aniver-qtd">
+                <?php echo count($birthdays); ?>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOX RECORENCIA -->
+    <div class="box-recorencia">
+        <div class="box-recor-text">
+            Recorrências
+            <div class="box-recor-qtd">
+                0
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOX FACEBOOK -->
+    <div class="quadro-facebook" style="width: 23.5%;">
+        <div class="quadro-facebook-titulo">Integre com o Facebook</div>
+        <div class="quadro-facebook-quadro-branco">
+            <span class="span-quadro-facebook-titulo-msg">Instale o aplicativo</span>
+            <div class="quadro-facebook-corpo-msg">Se sua empresa possui uma
+                fanpage no Facebook, voc&#234; pode instalar o XCode Empresas nela e
+                usar a partir de lá!</div>
+
+            <div style="margin-top: -50px; float: left; margin-left: 80%;">
+                <img src="../companies/img/icones/dashboard/avatar-fbk-box.png"
+                     style="bottom: 0; float: right;" />
+            </div>
+            <a href="https://www.facebook.com/dialog/pagetab?app_id=447466838647107&next=http://facebook.com" >
+                <div class="botao-instalar" style="background: -webkit-gradient(linear, left top, left bottom, from(#FFA500), to(#FF8C00)); background: -moz-linear-gradient(top, #FFA500, #FF8C00);">INSTALAR</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- BOX CENTRAL DE AJUDA -->
+    <div class="quadro-central-ajuda" style="width: 23.5%; margin-top: 10px;">
+        <div class="quadro-central-ajuda-titulo">
+            <div style="float: left;">
+                <img src="../companies/img/icones/dashboard/dashboard-interrogacao-circulo.png"
+                     style="margin-top: 5px; margin-left: 10px;" height="30px" />
+            </div>
+            <div style="float: right; margin-right: 10px;">
+                <span class="span-central-ajuda-titulo">Central de ajuda</span>
+            </div>
+        </div>
+        <div class="quadro-central-ajuda-campo-texto" style="font-size: 0.688em; ">
+            <span id="titulo">+ Dúvidas frequentes</span> <br />
+            <div style="margin-top: -10px; width: 90%; margin-left: 10px;">
+                <span id="ajuda-texto">Voc&#234; pode consultar facilmente dúvidas
+                    relacionadas desde de um cadastro até problemas mais técnicos!</span>
+            </div>
+            <div class="botao-consultar" style="background: -webkit-gradient(linear, left top, left bottom, from(#FFA500), to(#FF8C00)); background: -moz-linear-gradient(top, #FFA500, #FF8C00);">
+                <span class="span-botao-consultar">CONSULTAR</span>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .box-recorencia{
+        width: 23.5%;
+        background: #fff; 
+        height: 45px; 
+        float: left;
+        line-height: 45px;
+        margin-left: 30px;
+        margin-top: 10px;
+    }
+
+    .box-recor-text{
+        margin-left: 8px;
+        color: #ff7f00;
+        font-family: Helvetica;
+        font-size: 14px;
+        height: 100%;
+    }
+
+    .box-recor-qtd{
+        width: 14%;
+        height: 100%;
+        background: #ff7f00;
+        float: right;
+        text-align: center;
+        line-height: 45px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .box-aniversariantes{
+        width: 23.5%;
+        background: #fff; 
+        height: 45px; 
+        float: left; 
+        line-height: 45px;
+        margin-left: 30px;
+        margin-top: 20px;
+    }
+
+    .box-aniver-text{
+        margin-left: 8px;
+        color: #ff7f00;
+        font-family: Helvetica;
+        font-size: 14px;
+        height: 100%;
+    }
+
+    .box-aniver-qtd{
+        width: 14%;
+        height: 100%;
+        background: #ff7f00;
+        float: right;
+        text-align: center;
+        line-height: 45px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .birthdays-pop{
+        width: 750px;
+        background: #fff;
+        position: absolute;
+        left: 22%;
+        top: 25%;
+        display: none;
+        z-index: 999999;
+        padding-bottom: 15px;
+    }
+
+    .recorencia-pop{
+        width: 750px;
+        background: #fff;
+        position: absolute;
+        left: 22%;
+        top: 25%;
+        display: none;
+        z-index: 999999;
+        padding-bottom: 15px;
+    }
+
+    .birth-pop-title{
+        font-size: 1.2em;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        float: left;
+        color: #3399cc;
+        margin-left: 270px;
+        font-family: MyriardProLight;
+    }
+
+    #birth-pop-xis{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-family: Helvetica;
+        color: #666;
+        margin-right: 30px;
+        float: right;
+        cursor: pointer;
+
+    }
+
+    #recorrencia-pop-xis{
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-family: Helvetica;
+        color: #666;
+        margin-right: 30px;
+        float: right;
+        cursor: pointer;
+    }
+
+    .birthdays-pop-corpo{
+        margin-top: 30px;
+        padding-top: 5px;
+        border-top: 1px solid #dcdcdc;
+        width: 95%;
+        margin-left: 2.5%;
+        padding-bottom: 15px;
+    }
+
+    .aniversariante{
+        float: left;
+        cursor: pointer;
+    }
+
+    .aniversariante:hover{
+        //opacity: 0.7;
+    }
+
+    @font-face {
+        font-family: MyriardProLight;
+        src: url("../fonts/MyriadProLight.otf") format("opentype");
+    }
+
+    .sent-email{
+        display: none;
+        left: 40%;
+        top: 20%; 
+        z-index: 9999999; 
+        position: absolute;
+        padding: 20px;
+        background: #3399cc;
+        color: #fff;
+        text-align: center; 
+        font-family: MyriardProLight;
+    }
+</style>
+
+<!-- POPUP ENTREGAS-->
+<div id="pop-entregas" style=" position: absolute;
+     left: 22%;
+     top: 25%;
+     width: 750px;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     z-index: 9999;
+     font-family: Helvetica;
+     opacity: 0.99;
+     padding: 10px;
+     text-align: center;
+     display:none;">
+    <div id="pop-header-body">
+        <span style="float: right; font-size: 16px; cursor: pointer;  font-family: Helvetica; color: #666;" id="xis-entregas"><strong>X</strong></span>
+    </div>
+
+    <div id="pop-entregas-body">
+        <div style="color: #3399cc; font-family: MyriardProLight; font-size: 1.2em;">RESUMO DE SUAS ENTREGAS</div><br/><br/>
+        <div>
+            <table>
+                <tr>
+                    <th colspan="7">HOJE</th>
+                </tr>
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>QUANTIDADE</th>
+                    <th>COMPRADOR</th>
+                    <th>STATUS</th>
+                    <th>DATA</th>
+                    <th>Etiqueta de Entrega</th>
+                    <th>Confirme o Envio</th>
+                </tr>
+                <?php foreach ($deliveriesToday as $delivery) { ?>
+                    <tr>
+                        <td><strong><?php echo $delivery['Offer']['title']; ?></strong></td>
+                        <td><?php echo $delivery['Checkout']['amount']; ?></td>
+                        <td><?php echo $delivery['User']['name']; ?></td>
+                        <td><?php echo "APROVADO"; ?></td>
+                        <td><?php echo date('d/m/Y', strtotime($delivery['Checkout']['date'])); ?></td>
+                        <td><img src="../img/icones/vendas/tag.png" style="width: 23px; height: 23px; cursor: pointer;"
+                                 onclick="mostraNota('<?php echo $delivery['User']['name']; ?>',
+                                                     '<?php echo $delivery['Checkout']['address'] . ' ' . $delivery['Checkout']['number'] . ' - ' . $delivery['Checkout']['complement'] . ' - ' . $delivery['Checkout']['city']; ?>',
+                                                     '<?php echo $delivery['Checkout']['zip_code']; ?>',
+                                                     '<?php echo $delivery['Checkout']['state']; ?>',
+                                                     '<?php echo $delivery['Checkout']['id']; ?>',
+                                                     '<?php echo $delivery['Checkout']['id'] . $delivery['Checkout']['company_id'] . $delivery['Checkout']['user_id']; ?>')"/></td>
+                        <td><button type="button" onclick="postarProduto(<?php echo $delivery['Checkout']['id']; ?>)">POSTANDO</button></td>
+                    </tr>
+                <?php } ?>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<!-- POPUP ETIQUETA DA ENTREGA -->
+<div id="nota-fiscal">
+    <div id="nota-header" style="text-align: right; padding: 5px;">
+        <span style="font-size: 18px; color: orange; cursor: pointer;" id="xis-nota-fiscal"><strong>X</strong></span><br/>
+    </div>
+
+    <div id="nota-body" style="text-align: left; background: #eeeeee; padding: 10px; width: 380px;
+         font-family: Helvetica;">
+        <div style='width: 100%; background: #363636; padding: 5px;'>
+            <img src='../img/logo-bg-black.png' />
+            <span style='color: #fff; float: right; margin-right: 10px;' id="nota-num">000</span>
+        </div>
+        <strong>Destinatário:</strong><br/>
+        <span id="nota-nome"></span> - <span id="nota-end"></span><br/>
+        <strong><span id="nota-cep"></span></strong> - <span id="nota-est"></span>
+        <br/><br/>
+
+        <div >
+            <canvas id="barcodeCanvas" width="400" height="100" style="display: none;"></canvas>
+            <img id="imgBarcode" />
+        </div>
+        <br/>
+
+        <strong>Remetente:</strong><br/>
+        <?php
+        echo $this->Session->read('CompanyLoggedIn.Company.fancy_name') . ' - ' . $this->Session->read('CompanyLoggedIn.Company.address') . ' ' . $this->Session->read('CompanyLoggedIn.Company.number') . ' - ' .
+        $this->Session->read('CompanyLoggedIn.Company.complement') . ' - ' . $this->Session->read('CompanyLoggedIn.Company.city');
+        ?><br/>
+        <strong><?php echo $this->Session->read('CompanyLoggedIn.Company.zip_code'); ?></strong> - <?php echo $this->Session->read('CompanyLoggedIn.Company.state'); ?>
+    </div>
+    <div style='width: 100%; text-align: left; padding: 10px;'>
+        <button type="button" onclick="JavaScript:printPartOfPage('nota-body');">Imprimir</button>
+    </div>
+</div>
+
+<!-- recebe o codigo para o codigo de barras -->
+<div onload="updateBarcode()">
+    <form action="">
+        <input id="barcodeValue" type="hidden" name="value" value="abcd123456" />
+    </form>
+</div>
+
+<div class="birthdays-pop" id="birthdays-pop">
+    <div class="birth-pop-title">
+        ANIVERSARIANTES DE HOJE
+    </div>
+    <div id="birth-pop-xis">
+        X
+    </div>
+
+    <style>
+        .birth-btn{
+            width: 95%; 
+            text-align: center; 
+            padding-bottom: 5px; 
+            padding-top: 5px;
+            font-size: 12px;
+            font-family: MyriardProLight;
+            background: #3399cc; 
+            color: #fff;
+        }
+    </style>
+
+    <div class="birthdays-pop-corpo">
+        <!-- aniversariante -->
+        <?php foreach ($birthdays as $birth) { ?>
+            <div class="aniversariante">
+                <img src="<?php echo $birth['users']['photo']; ?>" width="100px" height="100px" />
+                <br/>
+                <div style="width: 100%;">
+                    <div class="birth-btn" onclick="sendBirthdayEmail('<?php echo $birth['users']['email']; ?>')">
+                        Enviar Email
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+    </div>
+
+    <div id="sent-email" class="sent-email">
+        EMAIL <br/>
+        ENVIADO
+    </div>
+    <br/>
+    <br/>
+</div>
+
+<!-- POP UP RECORRENCIA -->
+<div class="recorencia-pop" id="recorencia-pop">
+    <div class="birth-pop-title">
+        RECORRÊNCIAS
+    </div>
+    <div id="recorrencia-pop-xis">
+        X
+    </div>
+
+    <style>
+        .birth-btn{
+            width: 95%; 
+            text-align: center; 
+            padding-bottom: 5px; 
+            padding-top: 5px;
+            font-size: 12px;
+            font-family: MyriardProLight;
+            background: #3399cc; 
+            color: #fff;
+        }
+    </style>
+
+    <div class="birthdays-pop-corpo">
+        <!-- lista de produtos recorrentes -->
+        <div style="font-family: MyriardProLight; color: #333; text-align: center; margin-left: -100px;">Não há nenhum item nesta lista.</div>
+    </div>
+
+    <br/>
+    <br/>
+</div>

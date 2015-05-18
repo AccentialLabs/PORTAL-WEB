@@ -1,0 +1,245 @@
+
+<?php
+if ($this->Session->check ( 'userData.User.convites' )) {
+	$menu_desc = "<strong>Voce tem <span>{$this->Session->read('userData.User.convites')}</span> convite(s) de empresas";
+	$bolinha_amarela = "<span class='contador'><span>{$this->Session->read('userData.User.convites')}</span></span>";
+} else {
+	$menu_desc = "<strong>Voce nao tem novos convites";
+	$bolinha_amarela = "";
+}
+
+if ($this->Session->check ( 'userData.User.wishlist' )) {
+	$bolinha_amarela_wishlist = "<span class='contador'><span>{$this->Session->read('userData.User.wishlist')}</span></span>";
+} else {
+	$bolinha_amarela_wishlist = "";
+}
+
+if ($this->params ['controller'] == 'portal') {
+	$menu ['tipo'] = 'publicas';
+	
+	?>
+<h1>
+	<div class="img"><?php echo $this->Html->image('icones/menu/icone-ofertas.png');?></div>
+	<span><strong>Ofertas Publicas</strong> - Estas sao ofertas de acesso
+		aberto. Faca o login para ter acesso a ofertas personalizadas</span>
+</h1>
+<?php
+} else {
+	$classOferta = $menu ['icone'] == 'icone-ofertas.png' ? "icone-oculto" : "";
+	$classAssinatura = $menu ['icone'] == 'icone-assinaturas.png' ? "icone-oculto" : "";
+	$classCompra = $menu ['icone'] == 'icone-compras.png' ? "icone-oculto" : "";
+	$classConvites = $menu ['icone'] == 'icone-convites.png' ? "icone-oculto" : "";
+	$classDesejos = $menu ['icone'] == 'icone-desejo.png' ? "icone-oculto" : "";
+	
+	?>
+<h1>
+	<div class="img"><?php echo $this->Html->image('icones/menu/'.$menu['icone']);?></div>
+	<span><strong><?php echo $menu['nome'];?></strong><?php echo $menu['desc'];?></span>
+</h1>
+<?php } ?>
+<div class="area-esquerda">
+	<ul>	
+		<?php if($menu['tipo']=='nao-logado'){?>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-dados-ofertas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'cad_perfil',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'CADASTRO DE PERFIL' 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-ofertas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'portal',
+					'action' => 'home',
+					'plugin' => '' 
+			), array (
+					'escape' => false,
+					'title' => 'Ofertas Publicas - HOME PORTAL' 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-pin.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'login',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'LOGIN' 
+			) );
+			?>
+		</li>		
+		<?php }else if($menu['tipo']=='publicas'){?>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-ofertas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'login',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Ofertas' 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-assinaturas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'login',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Assinaturas' 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-compras.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'login',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Compras' 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-convites.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'login',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Convites' 
+			) );
+			?>
+		</li>			
+		<?php }else{?>	
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-ofertas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'home',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Ofertas',
+					'class' => $classOferta 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-assinaturas.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'signatures',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Assinaturas',
+					'class' => $classAssinatura 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-compras.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'minhasCompras',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Compras',
+					'class' => $classCompra 
+			) );
+			?>
+		</li>
+		<li class="icone-tabela">
+			<?php
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-convites.png', array (
+					'border' => '0' 
+			) ) . $bolinha_amarela, array (
+					'controller' => 'users',
+					'action' => 'pedidos_assinaturas',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => $menu_desc,
+					'class' => $classConvites 
+			) );
+			?>
+		</li>
+		<li class="icone-tabela">
+			<?php
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-desejo.png', array (
+					'border' => '0' 
+			) ) . $bolinha_amarela_wishlist, array (
+					'controller' => 'users',
+					'action' => 'wishlist',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'Meus desejos',
+					'class' => $classDesejos 
+			) );
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php
+			
+			echo $this->Html->link ( $this->Html->image ( 'icones/menu/icone-sair.png', array (
+					'border' => '0' 
+			) ), array (
+					'controller' => 'users',
+					'action' => 'logoof',
+					'plugin' => 'users' 
+			), array (
+					'escape' => false,
+					'title' => 'SAIR' 
+			) );
+			?>
+		</li>	
+		<?php } ?>
+	</ul>
+</div>

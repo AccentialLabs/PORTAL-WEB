@@ -1,0 +1,14 @@
+<?php ?>
+
+<div style="">
+    <scan>
+        Frete: R$ <?php echo number_format($frete, 2, ',', '.'); ?>
+    </scan><br />
+    <scan id="test">
+        TOTAL: R$ <strong id="total"><?php
+$total = $frete + $valor;
+echo number_format($total, 2, ',', '.');
+?></strong>
+    </scan>
+
+</div>

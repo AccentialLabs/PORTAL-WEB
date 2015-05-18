@@ -1,0 +1,20 @@
+<?php
+//echo print_r($editEnd);
+?>
+<div style="margin-top: -50px;">
+    <div style="white-space: normal; width: 100%; height: 86%; overflow: auto;">
+            <div>Edite os dados do endereço</div><br/>
+            <input type="hidden" id="address-id" value="<?php echo $editEnd['AditionalAddressesUser']['id']; ?>" />
+            <input type='text' class='input-cadastrais' style='width: 100px;' placeholder="CEP" name='data[AditionalAddressesUser][zip_code]' id='edit-zip_code' value="<?php echo $editEnd['AditionalAddressesUser']['zip_code']; ?>"/><br/>
+            <input type='text' class='input-cadastrais' style='width: 500px;' placeholder="Endereço" name='data[AditionalAddressesUser][address]' id='edit-address' value="<?php echo $editEnd['AditionalAddressesUser']['address']; ?>"/><br/>
+            <input type='text' class='input-cadastrais' style='width: 100px;' placeholder="Número" name='data[AditionalAddressesUser][number]' id='edit-number' value="<?php echo $editEnd['AditionalAddressesUser']['number']; ?>"/> 
+            <input type='text' class='input-cadastrais' style='width: 200px;' placeholder="Complemento" name='data[AditionalAddressesUser][complement]' id='edit-complement' value="<?php echo $editEnd['AditionalAddressesUser']['complement']; ?>"/>
+            <input type='text' class='input-cadastrais' style='width: 175px;' placeholder="Bairro" name='data[AditionalAddressesUser][district]' id='edit-district' value="<?php echo $editEnd['AditionalAddressesUser']['district']; ?>"/><br/>
+            <input type='text' class='input-cadastrais' style='width: 250px;' placeholder="Cidade" name='data[AditionalAddressesUser][city]' id='edit-city' value="<?php echo $editEnd['AditionalAddressesUser']['city']; ?>"/>
+            <input type='text' class='input-cadastrais' style='width: 50px;' placeholder="UF" name='data[AditionalAddressesUser][uf]' id='edit-uf' value="<?php echo $editEnd['AditionalAddressesUser']['state']; ?>"/><br/>
+            <input type='text' class='input-cadastrais' style='width: 313px;' placeholder="Nome para o local" id='edit-label' value="<?php echo $editEnd['AditionalAddressesUser']['label']; ?>"/><br/>
+            <br/>
+            <button onclick='updateAddress()' style='outline: none; cursor: pointer; font-family: Helvetica; border: 0px; background: transparent; color: orange;'> SALVAR </button>
+            <button id='cancelar-edit' onclick="fechar()" style='outline: none; cursor: pointer; font-family: Helvetica; border: 0px; background: transparent; color: orange;'> CANCELAR </button>
+        </div>
+</div>

@@ -1,0 +1,680 @@
+<?php
+echo $this->Html->css('usuarios/x-realizar-compra');
+echo $this->Html->script('usuarios/x-realizar-compra');
+
+echo $this->Html->script('bootstrap.min');
+echo $this->Html->script('bootstrap-tab');
+echo $this->Html->script('bootstrap-modal');
+echo $this->Html->script('google-code-prettify/prettify');
+echo $this->Html->script('transparente');
+echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+echo $this->Html->script('jquery.validate', array('inline' => false));
+
+$offer = $this->Session->read('Carro.Offer');
+$metricas = $this->Session->read('Carro.Opcoes.metricas');
+$fbk = $this->Session->read('userSocial.facebook');
+$twt = $this->Session->read('userSocial.twitter');
+$gplus = $this->Session->read('userSocial.google_plus');
+
+if (empty($valor)) {
+    $valor = $offer['Offer']['value'];
+}
+?>
+<script type='text/javascript' src='https://www.moip.com.br/transparente/MoipWidget-v2.js' charset='ISO-8859-1'></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+
+    $(function() {
+
+    });
+
+    function titleTeste() {
+        alert('tee');
+    }
+
+    function generateTokenToCommunication(tipo) {
+        alert('chamou');
+        var radioFrete = $('input[name="data[Carro][delivery_form]"]:checked').val();
+        var radioEnd = $('input[name="data[Carro][end]"]:checked').val();
+        //Se tiverem selecionado
+        if (radioEnd || radioFrete) {
+
+            var diasEntrega = $("#qtd-dias-entrega").val();
+            var idEnd = $("#id-endereco").val();
+            var frete = $("#frete-hidden").val();
+            var qtd = $("#input-qtd").val();
+            var total = $("#valorAtual").val();
+            $("#confirm-total").val(total);
+            $("#loading").fadeIn(300);
+            $.ajax({
+                type: "POST",
+                data: {
+                    endId: idEnd,
+                    tipo: tipo,
+                    frete: frete,
+                    quantidade: qtd,
+                    total: total,
+                    diasEntrega: diasEntrega},
+                url: location.href + "/geraTokenCompra",
+                success: function(result) {
+                    $("#loading").fadeOut(500);
+                    $("#recebe-pagamentos-boleto").html(result);
+                    $("#pop-confirm").fadeIn(500);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                }
+            });
+            //se não tiverem selecionado
+        } else {
+            $("#cont-notification").fadeIn(500);
+        }
+    }
+
+</script>
+
+
+<style>   
+    #mask{
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        background: #000;
+        opacity: 0.6;
+        top:0;
+        left: 0;
+        z-index: 9999;
+        display: none;
+    }
+
+    #div-total{
+        font-family: Helvetica;
+        font-size: 14px;
+        float: right;
+        margin-top: 5px;
+        margin-right: 15px;
+        text-align: right;
+    }
+
+    #adv-menu{
+        display: none;
+    }
+
+    #adv-menu-back{
+        display: block;
+        border: 0px solid #666;
+        width: 68%;
+        margin-top: 8px;
+        margin-left: 10px;
+    }
+    #adv-menu-back td {
+        border: 0;
+    }
+</style>
+<div id="mask" >
+</div>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div class="fundo-cad-ofer" style="width: 97%; margin-left: 3.5%; margin-top: 3%; height: 700px;">
+    <?php ?>
+    <!-- LADO ESQUERDO -->
+    <div class="lado-esquerdo">
+        <div>
+            <table style=' width: 100%; border: 0px;'>
+                <tr id="title" style="color: #808080; background: #eeeded;" onclick="generateTokenToCommunication('boleto')"><th colspan="4">Carrinho</th></tr>
+                <tr>
+                    <td style='width: 100px;'>
+                        <img src="<?php echo $offer['Offer']['photo']; ?>" class="offer-img"/>
+                    </td>
+                    <td>
+                        <table style="width: 100%; height: 100px; border-collapse: collapse; border: none;">
+                            <tr>
+                                <td id='titulo' colspan="3">
+
+                                    <div style='float: left;'><strong><?php echo $offer['Offer']['title']; ?></strong></div>
+                                    <div id='exclui-offer' onclick="cancelaCompra()" style='cursor: pointer; float: right; padding-right: 5px; margin-top: -5px;'><img src="../img/adv/Wishlist/excluir_3.png" style="width: 35px; height: 35px;" /></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    cod.:<br/>
+                                    <strong> <?php echo $offer['Offer']['id']; ?> </strong>
+
+                                </td>
+                                <td>
+                                    <input type="text" style="padding-bottom: 3px; border: 0px; border-left: 1px solid #000; width: 35px; padding-left: 5px; height: 22px;" id="input-qtd" value="1" readonly="true"/>
+                                    <button id="qtd-plus" class="btn-qtd-plus" style="background: #3399cc;">+</button>
+                                    <button id="qtd-less" class="btn-qtd-less" style="background: #3399cc;">-</button>
+                                </td>
+                                <td>R$ <strong id='valor'><?php echo str_replace(".", ",", $offer['Offer']['value']); ?></strong></td>
+                            <input type="hidden" id="valor-do-produto" value="<?php $offer['Offer']['value']; ?>" /><?php ?>
+                </tr>
+            </table>
+            </td>
+            </tr>
+            <tr>
+
+                <td id='metrics'>
+                    <!-- Caso as especificações sejam vazias não mostra texto -->
+                    <?php
+                    if (!empty($metricas['tamanho'])) {
+                        ?>    
+                        Tamanho: <strong><?php echo $metricas['tamanho']; ?></strong><br/>
+                        <span style=' float: left;'>Cor:</span> <div style='margin-left: 5px; float: left; width: 15px; height: 15px; background: <?php echo $metricas['cor']; ?>;'></div>
+                    <?php } ?>
+                </td>
+
+                <td id='desc'>
+                    <?php echo substr($offer['Offer']['resume'], 0, 50) . '...'; ?>
+                </td>
+            </tr>
+            </table>
+        </div>
+        <div id="div-total">
+            <scan>
+                Frete: R$ <?php echo number_format($frete, 2, ',', '.'); ?>
+            </scan>
+            <br />
+            <scan>
+                TOTAL: R$<strong id="total"> <?php
+                    $total = $frete + $valor;
+                    echo number_format($total, 2, ',', '.');
+                    ?></strong>
+            </scan>
+        </div>
+
+        <div id="recebeteste">
+        </div>
+
+    </div>
+
+    <!-- LADO DIREITO -->
+    <div class="lado-direito">
+        <div>
+            <table style='width: 100%;' id="table-endereco">
+                <tr id="title" style="background: #eeeded;">
+                    <th colspan='4' style="color: #808080;">Endereço</th>
+                </tr>
+                <?php
+                $first = true;
+                $i = 0;
+                foreach ($enderecos as $end) {
+                    ?>
+                    <tr id="linha-<?php echo $end['AditionalAddressesUser']['id']; ?>" class="linha-endereco">
+                        <td class='td-end' id='desc-end'>
+                            <strong><?php echo $end['AditionalAddressesUser']['label']; ?></strong> - <?php echo $end['AditionalAddressesUser']['address'] . ' ' . $end['AditionalAddressesUser']['number'] . ' - ' . $end['AditionalAddressesUser']['complement']; ?><br/>
+                            <strong> <?php echo $end['AditionalAddressesUser']['zip_code'] . '</strong> - ' . $end['AditionalAddressesUser']['city'] . ' - ' . $end['AditionalAddressesUser']['state']; ?>
+                        </td>
+                        <td class='td-end' onclick="excluir(<?php echo $end['AditionalAddressesUser']['id']; ?>)"><img src="../img/adv/Wishlist/excluir_3.png"  style="width: 35px; height: 35px; cursor: pointer;" /></td>
+                        <td class='td-end' style="cursor: pointer;" onclick="editAddress('<?php echo $end['AditionalAddressesUser']['id']; ?>')"> <?php echo $this->Html->image('icones/ofertas/icon-editar.png'); ?></td>
+                        <td class='td-end'>
+                            <input type='radio' id="<?php echo $end['AditionalAddressesUser']['id']; ?>" class="css-checkbox" name='data[Carro][end]' value='<?php echo $end['AditionalAddressesUser']['id']; ?>' onclick="escolheEnd(this.value)" <?php
+                            if ($i == 0) {
+                                echo "checked='true'";
+                                $i++;
+                            }
+                            ?>/>
+                            <label for="<?php echo $end['AditionalAddressesUser']['id']; ?>"
+                                   class="css-label" style="margin-left: -10px;"></label>
+
+                        </td>
+                    </tr>
+                    <?php
+                    $first = false;
+                }
+                ?>
+            </table>
+            <div id='add-endereco' style="background: #f37165;">
+                Adicionar Endereço 
+            </div>
+        </div>
+        <div>
+            <table id="table-frete" style='width: 100%; text-align: center;'>
+                <tr id='title' class="title-entrega" style="background: #eeeded;">
+                    <th colspan='4' style="color: #808080;">Forma de Entrega<input type="text" id="valor-do-frete" readonly="true" style="display: none;"/></th>
+                </tr>
+                <tr class="forma-entrega">
+                    <td id='correios' style="text-align: left;">Pac</td>
+                    <td id='correios'> <?php echo $fretePac[1]; ?> dias</td>
+                    <td id='correios'>  R$ <?php echo $fretePac[0]; ?></td>
+                    <td id='correios'>
+                        <input type="radio" id="pac" class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $fretePac[0]; ?>' onclick="escolheFrete(this.value, <?php echo $fretePac[1] ?>)" checked="true"/>
+                        <label for="pac"
+                               class="css-label" style="margin-left: -10px;"></label>
+                    </td>
+                </tr>
+
+                <tr class="forma-entrega">
+                    <td id='correios' style="text-align: left;">Sedex</td>
+                    <td id='correios'> <?php echo $freteSedex[1]; ?> dias</td>
+                    <td id='correios'>  R$ <?php echo $freteSedex[0]; ?></td>
+                    <td id='correios'>
+                        <input type="radio" id="sedex" class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $freteSedex[0]; ?>' onclick="escolheFrete(this.value, <?php echo $freteSedex[1] ?>)"/>
+                        <label for="sedex"
+                               class="css-label" style="margin-left: -10px;"></label>
+                    </td>
+
+                </tr>
+
+                <tr class="forma-entrega">
+                    <td id='correios' style="text-align: left;">Sedex a Cobrar</td>
+                    <td id='correios'>  <?php echo $freteSedexCobrar[1]; ?> dias</td>
+                    <td id='correios'>  R$ <?php echo $freteSedexCobrar[0]; ?></td>
+                    <td id='correios'>
+                        <input type="radio" id="sedex-cobra"  class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $freteSedexCobrar[0]; ?>' onclick="escolheFrete(this.value, <?php echo $freteSedexCobrar[1] ?>)"/>
+                        <label for="sedex-cobra"
+                               class="css-label" style="margin-left: -10px;"></label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="escolhe-pagamento" style="margin-top: 10px;">
+            <span style="color: #808080; font-size: 16px; font-family: Helvetica;"><strong>Modo de Pagamento:</strong></span>
+            <br/>
+            <button style="background: #3399cc; padding: 10px; margin-top: 3px;" id="paga-boleto" class="btn-card-boleto" onclick="generateTokenToCommunication('boleto')">Boleto Bancário</button>
+            <button style="background: #3399cc; padding: 10px;" id="paga-cartao" class="btn-card-boleto" onclick="generateTokenToCommunicationCard()">Cartão de Crédito</button>
+        </div>
+
+
+        <div id="recebe-pagamentos" >
+        </div>
+
+        <!-- teste cartão -->
+        <!--        <div id="MoipWidget"
+                     data-token="Z2Z0K1U4Z0J8Q2C7I1F1S0X2I06742M0W4B0G0C0O0U1L2N0R9313213B2V3"
+                     callback-method-success="funcaoSucesso"
+                     callback-method-error="funcaoFalha"></div>-->
+        <br/>
+        <div id="area-cartoes" style="display: none; padding-left: 10px; margin-top: -60px;">
+            <div class="cartoes"  id="Visa" onclick="selecFlagCalculateParcels('Visa')" style="cursor: pointer; width: 41px; height: 25px; text-align: center; float: left; margin-right: 3px;"><?php echo $this->Html->image('icones/visa.gif'); ?></div>
+            <div class="cartoes" id="Mastercard" onclick="selecFlagCalculateParcels('Mastercard')" style="cursor: pointer; width: 41px; height: 25px; text-align: center; float: left; margin-right: 3px;"><?php echo $this->Html->image('icones/master.gif'); ?></div>
+            <div class="cartoes" id="AmericanExpress" onclick="selecFlagCalculateParcels('AmericanExpress')" style="cursor: pointer; float:left; width: 41px; height: 25px; text-align: center;"><?php echo $this->Html->image('icones/amex.gif'); ?></div>
+            <div class="cartoes" id="Diners" onclick="selecFlagCalculateParcels('Diners')" style="cursor: pointer; float:left; width: 41px; height: 25px; text-align: center;"><?php echo $this->Html->image('icones/diners.jpg'); ?></div>
+            <div class="cartoes" id="Hipercard" onclick="selecFlagCalculateParcels('Hipercard')" style="cursor: pointer; float:left; width: 41px; height: 25px; text-align: center;"><?php echo $this->Html->image('icones/hipercard.jpg'); ?></div>
+            <br/>
+            <br/>
+            <div id="numParcelsMessage"></div>
+            <select id='parcels' name='parcels' class="input-cadastrais"  ></select>
+            <!-- <ul class="selecione-metrica"></ul> -->
+            <div>
+                <input type="text" class="input-cadastrais" id="NumeroCartao" name="Numero" maxlength="16" placeholder="Número do Cartão" />
+                <input type="text" class="input-cadastrais" id="Expiracao" name="Expiracao" maxlength="5" placeholder="Validade" />
+                <input type="text" class="input-cadastrais" id="CodigoSeguranca" name="CodigoSeguranca" maxlength="3" placeholder="Cód. de Segurança" /><br/>
+                <input type="text"  class="input-cadastrais" id="Portador" name="Portador" placeholder="Nome gravado no cartão" />
+                <input type="text"  class="input-cadastrais" id="CPF" name="CPF" maxlength="14" placeholder="CPF"/><br/>
+                <input type="text" class="input-cadastrais" name="DataNascimento" id="DataNascimento" maxlength="10" placeholder="Data de Nasc." />
+                <input type="text"  class="input-cadastrais" id="Telefone" name="Telefone" placeholder="Telefone" maxlength="14" /> <br/>
+                <button id="comprar" onclick="payforCreditCard()" style="color: #fff; cursor: pointer; background: #3399cc; border: 0px; padding: 10px; margin-top: 10px;">Comprar</button>
+            </div>
+        </div>
+        <!-- fim teste cartão-->
+
+    </div>
+</div>
+<!-- -->
+<div id="cont-info" style="padding: 0px; top: 23%; left: 43%;">
+    <div id="popheader">
+        <div style="white-space: normal; width: 100%; height: 86%; overflow: auto;">
+            <div style="background: #f37165; color: #fff;  padding: 10px; text-align: center;"><strong>Dados do endereço</strong></div><br/>
+            <input type='text' class='input-cadastrais' style='margin-left: 10px; width: 100px;' placeholder="CEP" name='data[AditionalAddressesUser][zip_code]' id='zip_code' onkeypress='return SomenteNumero(event)' maxlength="8"/><br/>
+            <input type='text' class='input-cadastrais' style='margin-left: 10px;width: 500px; margin-right: 10px;' placeholder="Endereço" name='data[AditionalAddressesUser][address]' id='address'/><br/>
+            <input type='text' class='input-cadastrais' style='width: 100px; margin-left: 10px;' placeholder="Número" name='data[AditionalAddressesUser][number]' id='number' onkeypress='return SomenteNumero(event)' maxlength="10"/> 
+            <input type='text' class='input-cadastrais' style='width: 200px;' placeholder="Complemento" name='data[AditionalAddressesUser][complement]' id='complement'/>
+            <input type='text' class='input-cadastrais' style='width: 173px; margin-right: 10px;' placeholder="Bairro" name='data[AditionalAddressesUser][district]' id='district'/><br/>
+            <input type='text' class='input-cadastrais' style='margin-left: 10px;width: 250px;' placeholder="Cidade" name='data[AditionalAddressesUser][city]' id='city'/>
+            <input type='text' class='input-cadastrais' style='width: 50px;' placeholder="UF" name='data[AditionalAddressesUser][uf]' id='uf' maxlength="2"/><br/>
+            <input type='text' class='input-cadastrais' style='margin-left: 10px;width: 313px;' placeholder="Nome para o local" id='label'/><br/>
+            <br/>
+            <button onclick='addAddress()' style='outline: none; cursor: pointer; font-family: Helvetica; border: 0px; background: transparent; color: #3399cc; margin-left: 10px;'> CADASTRAR </button>
+            <button id='cancelar' style='outline: none; cursor: pointer; font-family: Helvetica; border: 0px; background: transparent; color: #3399cc;'> CANCELAR </button>
+        </div>
+    </div>
+    <br/>
+    <div id="popbody">
+    </div>
+</div>
+<!-- -->
+<div id="cont-editar">
+</div>
+<input type="hidden" id="frete-hidden" value="<?php echo $fretePac[0]; ?>" />
+<input type="hidden" id="origem" value="<?php echo $cepOrigem; ?>" />
+<input type="hidden" id="destino" value="<?php echo $cepDestino; ?>" />
+<input type="hidden" id="valorOrig" value="<?php echo $offer['Offer']['value']; ?>" />
+<input type="hidden" id="valorAtual" value="<?php echo $offer['Offer']['value']; ?>" />
+<input type="hidden" id="qtd-dias-entrega" />
+<input type="hidden" id="id-endereco" />
+<input type="hidden" id="instituicao" />
+<!-- Pop de confirmação da Compra -->
+<div class="pop-confirm" id="pop-confirm">
+    <div id="popheader">
+        <strong class="title-pop"> Sua compra foi realizada com sucesso!</strong>
+    </div>
+    <br/>
+    <div id="popbody">
+        <span class="confirm-text"> Uma cópia desse pedido foi enviado para<br/>o seu email (<i><?php echo $this->Session->read('userData.User.email'); ?></i>).</span><br/>
+
+        <br/>
+        <div id="recebe-pagamentos-boleto" style="float: left;width: 113px; height: 35px;">
+        </div>
+        <button class="button-compra" onclick="resumeCheck()">Ver pedido</button>
+        <button class="button-compra" id="fechar-confirm">Fechar</button>
+        <hr/>
+        <span class="confirm-text">Para ver mais detalhes da sua compra clique 
+            <span><?php
+                echo $this->Html->link('aqui', array(
+                    'controller' => 'users',
+                    'action' => 'compras',
+                    'plugin' => 'users'));
+                ?> </span>
+            <br/>ou vá no menu Minhas Compras.</span>
+    </div>
+</div>
+
+<!-- Pop up Resumo do pedido-->
+<form id="Form1" method="post" runat="server"> 
+    <div class="pop-ver-pedido" id="pop-ver-pedido" >
+        <div style="width: 100%; background: #333; height: 60px; ">
+
+            <img src="../img/adv/Adventa Logo/Adventa-1.png" width="104px" height="35px" style="margin-top: 13px;">
+            <div style="font-size: 12px; color: #fff; margin-right: 15px; margin-top: 25px; margin-left: 104px; float: right;"><i><?php echo date('d/m/Y'); ?></i></div>
+        </div> 
+        <div style=" background: url('../img/email/background-titulo.gif') no-repeat; height: 91px;">
+            <img src="../img/email/icone-destaque-titulo.gif" style="float: left;">
+            <div>
+                <div style="width: 350px; margin-top: 20px; position: absolute; margin-left: 115px;"><i>
+                        <span style="font-size: 20px; font-weight: bold;"> Resumo do Pedido</span><br/>
+                        <span style="font-size: 10px;">sua compra foi efetuada</span>
+                    </i>
+                </div>
+            </div>
+        </div>
+
+        <div id="popheader">
+
+        </div>
+
+        <div id="popbody" style="background: url('../img/email/background-conteudo.gif');">
+
+            <div style="padding-left: 20px; padding-top: 15px; font-size: 14px;">
+                <i> Caro Sr(a) <strong><?php echo $this->Session->read('userData.User.name'); ?></strong></i><br/>
+
+                <div>Aqui está o resumo do seu pedido:</div>
+            </div>
+            <!--................. PRODUTOS ............... -->
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 47; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Produtos</strong> </span>
+                <?php
+                for ($i = 0; $i < 47; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/>
+            <!--             TABELA DE PRODUTOS-->
+            <div>
+                <table class="table-confirm" style="border: 0px; margin-left: 105px; margin-top: 20px;">
+                    <tr>
+                        <td><div style="margin-top: 3px; text-align: left;"><?php echo substr($offer['Offer']['title'], 0, 15); ?></div></td>
+                        <td>
+                            <div style="margin-top: 9px; position: absolute; margin-left: 85px;">
+                                <span style="font-size: 10px; text-align: center; width: 100%;"><i><span id="resume-qtd">2</span> unidades</i></span>
+                            </div>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 80 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td><div style="margin-top: 3px;">R$ <?php echo $offer['Offer']['value'] ?></div></td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 41; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Dados do Pedido</strong> </span>
+                <?php
+                for ($i = 0; $i < 41; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/>
+            <div>
+                <!--                 Detalhes do Pedido-->
+                <table class="table-confirm" style="border: 0px; margin-left: 75px; margin-top: 20px;">
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Tipo de Pagamento</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 70 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td><span id="resume-tipo-pag"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Data do Pedido</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 70 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;"><?php echo date('d/m/Y'); ?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Valor do Pedido</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 70 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;">
+                            <span id="resume-valor-pedido" ></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Valor do Frete</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 70 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;"><span id="resume-frete"/></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;"><strong>TOTAL PEDIDO</strong></div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 70 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;"><span id="resume-total"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <!--             DADOS DA ENTREGA-->
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 40; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Dados da Entrega</strong> </span>
+                <?php
+                for ($i = 0; $i < 40; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/><br/>
+            <div>
+                <div style="padding-left: 50px; padding-right: 50px; font-size: 12px;">
+                    Os produtos serão entregues em até <strong><span id="resume-dias-entrega"></span></strong> dia(s) úteis após a confirmação do pagamento, para o endereço:<br/>
+                    <div style="font-size: 12px; margin-top: 5px;" id="endereco">
+                        <span id="label"><strong>Casa 1</strong></span><br/>
+                        <span id="endereco">Rua Fazenda 123, </span><span id="numero">500</span><span id="cep"> - 00000-000</span> <br/>
+                        <span id="complemento">Esse é o complemento do Endereço</span><br/>
+                        <span id="cidade">São Paulo - </span><span id="estado">SP - </span>
+                    </div>  
+                    <br/><br/>
+
+                    Você pode acompanhar o andamento do seu pedido clicando <span style="color: orange; font-weight: bold;"><?php
+                        echo $this->Html->link('aqui', array(
+                            'controller' => 'users',
+                            'action' => 'compras',
+                            'plugin' => 'users'));
+                        ?></span>.<br/>
+                    Ou pelo menu <span style="color: #f37165; font-weight: bold;">Compras</span> em nosso portal!<br/>
+
+                    <br/>
+                    <i>
+                        atenciosamente,<br/>
+                        <strong>Equipe financeiro Adventa</strong><br/>
+                        <span style="color: #f37165;">financeiro@<strong>adventa</strong>.com.br</span><br/>
+                        <span style="color: #f37165;">www.<strong>adventa</strong>.com.br</span><br/>
+                    </i>
+
+                    <br/>
+                    <button type="button" class="button-compra" onclick="JavaScript:printPartOfPage('pop-ver-pedido');">Imprimir Resumo</button> 
+                    <button type="button" class="button-compra" id="fechar-resumo">Fechar</button>
+                </div>
+            </div>
+
+
+        </div> 
+        <script type="text/javascript">
+            function printPartOfPage(elementId)
+            {
+                var printContent = document.getElementById(elementId);
+                var windowUrl = 'about:blank';
+                var uniqueName = new Date();
+                var windowName = 'Print' + uniqueName.getTime();
+                var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0');
+                printWindow.document.write(printContent.innerHTML);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            }
+
+        </script>
+        <br/>
+        <div style="height: 10px;"></div>
+    </div>
+</form>
+
+<div id="cont-notification" style=" position: absolute;
+     left: 38%;
+     top: 29%;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.99;
+     padding: 10px;
+     text-align: center;
+     display: none;">
+    <div id="popheader" style="text-align: right;">
+        <span style="font-size: 16px; color: orange; cursor: pointer;" id="xis"><strong>X</strong></span>
+    </div>
+
+    <div id="popbody">
+        <strong>Ops... antes de continuar,<br/> selecione o Endereço e a Forma de Entrega. </strong><br/>
+
+    </div>
+</div>
+
+<?php
+if (!$metricas['tamanho']) {
+    $metric1 = $this->Session->read('Carro.metric1');
+    $metric2 = $this->Session->read('Carro.metric2')
+    ?>
+    <div id="cont-metrics" style=" position: absolute;
+         left: 40%;
+         top: 29%;
+         margin-top: 25px;
+         padding: 10px;
+         border: 1px solid #d0d0d0;
+         background: #ffffff;
+         z-index: 999999;
+         font-family: Helvetica;
+         opacity: 0.99;
+         padding: 10px;
+         text-align: center;
+         //display: none;">
+        <div id="popheader" style="text-align: right;">
+    <!--<span style="font-size: 16px; color: orange; cursor: pointer;"><strong>X</strong></span>-->
+        </div>
+
+        <div id="popbody">
+            <strong style="color: #666666;">Antes de continuar<br/>selecione as métricas do seu pedido:</strong><br/>
+            <br/>
+            <div style="color: #333333;">
+                <span><?php echo $metric1[0]['offers_attributes']['name']; ?>:</span><br/><br/>
+                <div>
+                    <?php foreach ($metric1 as $m) { ?>
+                        <div class="metrica-tamanho" id="<?php echo $m['offers_domains']['name']; ?>" style="margin-right: 5px; float: left; border: 1px solid #dcdcdc; padding: 5px; width: 20px; height: 20px;"><?php echo $m['offers_domains']['name']; ?></div>
+                    <?php } ?>
+                </div>
+                <br/><br/>
+                <hr/>
+                <span><?php echo $metric2[0]['offers_attributes']['name']; ?>:</span><br/>
+                <?php
+                $name = '';
+                foreach ($metric2 as $m2) {
+                    if ($name != $m2['offers_domains']['name']) {
+                        ?>
+                        <div class="metrica-cor" style="margin-right: 5px; border: 1px solid #dcdcdc; padding: 5px; width: 20px; height: 20px; background:<?php echo $m2['offers_domains']['name']; ?>;" id="<?php echo $m2['offers_domains']['name']; ?>"></div>
+                        <?php
+                        $name = $m2['offers_domains']['name'];
+                    }
+                }
+                ?>
+            </div>
+            <div style="text-align: left; padding-top: 10px;">
+                <button type="button" class="btn-metrics" onclick="saveMetrics()" style="background: #3399cc ;"> Continuar </button>
+                <button type="button" class="btn-metrics" id="cancel-metrics" style="background: #666666;"> Cancelar</button>
+            </div>
+
+        </div>
+        <input type="hidden" id="metrica_tamanho" />
+        <input type="hidden" id="metrica_cor" />
+
+    </div>
+<?php } ?>

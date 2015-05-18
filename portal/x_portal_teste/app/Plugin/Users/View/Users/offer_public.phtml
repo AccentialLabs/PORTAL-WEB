@@ -1,0 +1,47 @@
+
+<span class="lista-de-ofertas">
+
+<?php 
+if($offers[0]['Offer']['percentage_discount'] > 0){
+	$valor = ($offers[0]['Offer']['value'] * (100 - $offers[0]['Offer']['percentage_discount'])) / 100;	
+}
+?>
+<!-- Inicio de conteudo destaque principal -->
+	<div class="oferta-destaque-principal">
+		<div class="descricoes">
+			<h2><?php echo $offers[0]['Offer']['title'];?></h2>
+			<p class="marca">válido até <?php echo date('d/m/Y', strtotime($offers[0]['Offer']['ends_at']));?></p>
+			<p><?php echo $offers[0]['Offer']['description'];?></p>
+			<p class="valor-de">de R$ <?php echo number_format($offers[0]['Offer']['value'], 2, ',', '.'); ?></p>
+			<p class="valor-por">por R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
+		</div>
+		<div class="imagem_destaque">
+			<img src="<?php echo $offers[0]['Offer']['photo'];?>">
+		</div>
+	</div>
+<!-- Fim de conteudo destaque principal -->
+<div id="div-content">
+<?php unset($offers[0]);?>
+	<?php foreach($offers as $offer){
+	if($offer['Offer']['percentage_discount'] > 0){
+		$valor = ($offer['Offer']['value'] * (100 - $offer['Offer']['percentage_discount'])) / 100;	
+	}
+		
+		?>
+	<div class="oferta-destaque">
+		<div class="descricoes">
+			<h2><?php echo $offer['Offer']['title'];?></h2>
+			<p class="marca">válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at']));?></p>
+			<p class="principal"><?php echo $offer['Offer']['description'];?></p>
+			<p class="valor-de">de R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></p>
+			<p class="valor-por">por R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
+		</div>
+		<div class="imagem_destaque">
+			<img src="<?php echo $offer['Offer']['photo'];?>">
+		</div>
+	</div>
+	<?php } ?>
+	<div id="id" data-token="<?php echo $limit; ?>"></div>		
+	<a href="javascript:void(0);" id="linkmais"><img src="users/img/carregar.png" border="0" /></a>
+</div>
+</span>

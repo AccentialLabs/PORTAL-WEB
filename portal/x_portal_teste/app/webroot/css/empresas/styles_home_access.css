@@ -1,0 +1,49 @@
+@charset "utf-8";
+/* CSS Document */
+body{ margin:0; padding:0px; }
+
+/******************************************************************
+. Layout - Guide Company
+******************************************************************/
+@import url(../fonts/myriadprocond/stylesheet.css);
+
+.guideCompany{
+    width:880px;
+    height:auto;
+    margin:0 auto;
+
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    color:#535353;
+}
+
+.guideCompany_title_01{
+    width:100%;
+    height:auto;
+    clear:both;
+    text-align:center;
+}
+
+p.guideCompany_title_01
+{ font-size:30px; font-family: 'MyriadPro-Cond'; color:#C58500; margin:0px; }
+
+.guideCompany_titlePag
+{ font-size:25px; font-family: 'MyriadPro-Cond'; color:#000; margin:50px 0 10px 0;
+  border-top:1px dashed #C0C0C0; }
+
+.guideCompany_descriptionMenu
+{ width:880px; height:99px; clear:both; }
+
+.guideCompany_descriptionBox{
+    width:150px;
+    height:92px;
+    float:left;
+    background:url(../img/bg/description_box.png) no-repeat right;
+    text-align:center;
+}
+
+.guideCompany_titleDescription
+{ font-size:25px; font-family: 'MyriadPro-Cond'; color:#3F3F3F; margin:5px 0; }
+
+
+

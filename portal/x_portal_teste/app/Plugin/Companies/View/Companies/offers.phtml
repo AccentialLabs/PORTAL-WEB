@@ -1,0 +1,106 @@
+<?php 
+	echo $this->Html->script('empresas/lista-de-ofertas');
+	
+if(empty($company)){			
+?>
+
+<div align="center">
+	<?php echo $this->Html->link(
+					$this->Html->image('content_box/ofertas.jpg', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'detalhes', 'nova-oferta'),
+					array('escape' => false)
+				);
+			?>
+</div> 
+
+<?php } ?>
+	
+<div id="div-content">
+<?php 	
+ 	if(is_array($company)){?>
+<div class="opcoes-de-lista-de-compras">
+		<a href="javascript:void(0)" class="opcoes" title="ATIVA">ATIVO</a>
+		<a href="javascript:void(0)" class="opcoes" title="INATIVA">INATIVO</a>		
+		<a href="javascript:void(0)" class="opcoes ativo" title="tudinho">TODAS</a>
+
+<div class="opcoes-de-filtros">
+		<a href="javascript:void(0);" class="link-de-opcoes">Opções de filtro</a>
+		<form method="POST" action="/portal/company/ofertas">
+		<div class="area-dos-filtros">
+			<div class="alinha">
+				<label>Data Inicial</label><input type="text" id="calendario-inicio" name="calendario-inicio" alt="Data Inicial" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Inicial">
+				<label>Data Final</label><input type="text" id="calendario-fim" name="calendario-fim" alt="Data Final" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Final">				
+				<label>Titulo</label><input type="text" name="titulo" alt="Titulo" class="textbox pesquisacomprador" style="width:332px; float:left; margin:0px 5px 5px 0px" value="Titulo">
+				<div class="area-botoes" style="width:432px">
+					<button class="envio">Filtrar</button>
+					<button class="cancelar">cancelar</button>
+				</div>
+			</div>
+		</div>
+		<input type="hidden" name="busca" value="1">
+		</form>
+	</div>
+
+	</div>	
+	
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao" style="margin:0px 0px 40px 0px" align="left">
+		<caption>Lista de ofertas cadastradas</caption>
+		<thead>
+			<tr>
+				<td>Titulo</td>
+				<td>Valor</td>
+				<td>Inicio</td>
+				<td>Final</td>
+				<td>Status</td>
+				<td>Editar</td>
+				<td>Facebook</td>
+			</tr>
+		</thead>
+		<tbody>
+	
+		<?php foreach($company as $offer){
+				$status = 'ATIVA';
+				if($offer['Offer']['status']=='INACTIVE')$status = 'INATIVA';
+				if(date('Y-m-d')>$offer['Offer']['ends_at']) $status = 'INATIVA';
+				if($offer['Offer']['percentage_discount'] > 0){
+					$valor = ($offer['Offer']['value'] * (100 - $offer['Offer']['percentage_discount'])) / 100;					
+				}else{
+					$valor = $offer['Offer']['value'];
+				}
+				
+				$url = "http://secure.trueone.com.br/portal/user/view-offer/{$offer['Offer']['id']}";
+			?>		
+			<tr status="<?php echo $status;?>">
+				<td><?php echo $offer['Offer']['title'];?></td>
+				<td>R$ <?php echo number_format($valor,2,',','.');?></td>
+				<td><?php echo date('d/m/Y', strtotime($offer['Offer']['begins_at']));?></td>
+				<td><?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at']));?></td>
+				<td><?php echo $status;?></td>				
+				<td class="comentario"><?php echo $this->Html->link('Editar Oferta', array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'resume', $offer['Offer']['id'], 'editar'));?></td>
+				<td class="comentario"><a href="javascript:void(0);" onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo $url;?>?title=facebook','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');" class="chama-compartilhar-oferta"><span>compartilhar oferta</span></a></td>				
+			</tr>						
+		<?php  } ?>								
+		</tbody>		
+	</table>
+
+<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>
+</div>
+<?php }else{?>
+<div class="lista-de-ofertas">
+	<div class="alinhamento">
+		<div class="oferta-destaque-principal">
+		<div class="informes">
+			<h2>NAO EXISTE OFERTA CADASTRADA PARA SUA EMPRESA</h2>
+			<!--<br>
+			<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+		</div>
+		</div>
+	</div>
+</div>
+<?php } ?>	
+<div class="refreshzinho">
+	<div class="loading">
+		<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+		<p>Aguarde enquanto o <strong>trueOne</strong> <br> carrega MAIS COMPRAS</p>
+	</div>
+</div>

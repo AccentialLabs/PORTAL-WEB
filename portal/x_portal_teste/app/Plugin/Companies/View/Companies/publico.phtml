@@ -1,0 +1,59 @@
+<?php if($publicoTotal=='')$publicoTotal=0;?>
+	<div class="area-total">
+			<label>Total</label>
+			
+			<div class="total"><strong><?php echo $publicoTotal;?></strong> <span>pessoas cadastradas na sua base</span></div>
+			<button onclick="location.href='<?php echo $this->Html->url('/company/oferta-cadastro/detalhes/nova-oferta'); ?>';">Aproveite e cadastre <br> uma nova oferta</button>
+		</div>
+			
+
+		<div class="area-genero-principal">
+			<label>Genero</label>
+			<?php foreach($genders as $gender){?>
+				<?php if($gender['User']['filter']==''){?><div class="none"><?php echo round($gender['porcentagem'], 2);?>% não informaram</div><?php }?>
+				<?php if($gender['User']['filter']=='female'){?><div class="feminino"><?php echo round($gender['porcentagem'],2 );?>%</div><?php }?>
+				<?php if($gender['User']['filter']=='male'){?><div class="masculino"><?php echo round($gender['porcentagem'], 2);?>%</div><?php }?>
+			<?php } ?>
+		</div>	
+		<div class="area-faixa-etaria">
+			<label>Faixa etária</label>
+			<?php if(is_array($filter['empty'])){?><div class="none"><?php echo round($filter['empty']['porcentagem'],2);?>%<?php echo $filter['empty']['descricao'];?>Nao informaram</div><?php }else{ ?> <div class="none"> %0 Nao informaram</div> <?php } ?>
+			<?php if(is_array($filter['0-19'])){?><div class="valor"><span><?php echo round($filter['0-19']['porcentagem'],2);?>%</span><?php echo $filter['0-19']['descricao'];?></div><?php } ?>
+			<?php if(is_array($filter['20-29'])){?><div class="valor"><strong><span><?php echo round($filter['20-29']['porcentagem'],2);?>%</span><?php echo $filter['20-29']['descricao'];?></strong></div><?php } ?>
+			<?php if(is_array($filter['30-39'])){?><div class="valor"><span><?php echo round($filter['30-39']['porcentagem'],2);?>%</span><?php echo $filter['30-39']['descricao'];?></div><?php } ?>
+			<?php if(is_array($filter['40-49'])){?><div class="valor"><span><?php echo round($filter['40-49']['porcentagem'],2);?>%</span><?php echo $filter['40-49']['descricao'];?></div><?php } ?>
+			<?php if(is_array($filter['50-59'])){?><div class="valor"><span><?php echo round($filter['50-59']['porcentagem'],2);?>%</span><?php echo $filter['50-59']['descricao'];?></div><?php } ?>
+			<?php if(is_array($filter['60-120'])){?><div class="valor"><span><?php echo round($filter['60-120']['porcentagem'],2);?>%</span><?php echo $filter['60-120']['descricao'];?></div><?php } ?>			
+			
+		</div>	
+		<div class="area-religiao">
+			<label>Religião</label>
+			<div class="none"><?php echo round($religiao_usuarios['NaoInformado'],2);?>% não informaram</div>
+			<?php foreach($religiao_usuarios['array'] as $religiao){?>
+				<div class="valor"><?php if($religiao['porcentagem']>=25)echo"<strong>";?><span><?php echo round($religiao['porcentagem'],2);?>%</span> <?php echo $religiao['FacebookProfile']['filter'];?><?php if($religiao['porcentagem']>30)echo"</strong>";?></div>				
+			<?php } ?>
+		</div>	
+
+		<div class="area-relacionamento">
+			<label>Relacionamento</label>
+			<div class="none"><?php echo round($relacionamento_usuarios['NaoInformado'],2);?>% não informaram</div>
+			<?php foreach($relacionamento_usuarios['array'] as $relacionamento){?>
+				<div class="valor"><?php if($relacionamento['porcentagem']>=25)echo"<strong>";?><span><?php echo round($relacionamento['porcentagem'],2);?>%</span> <?php echo $relacionamento['FacebookProfile']['filter'];?><?php if($relacionamento['porcentagem']>30)echo"</strong>";?></div>				
+			<?php } ?>			
+		</div>	
+
+		<div class="area-politica">
+			<label>Política</label>
+			<div class="none"><?php echo round($politica_usuarios['NaoInformado'],2);?>% não informaram</div>
+			<?php foreach($politica_usuarios['array'] as $politica){?>
+				<div class="valor"><?php if($politica['porcentagem']>=25)echo"<strong>";?><span><?php echo round($politica['porcentagem'],2);?>%</span> <?php echo $politica['FacebookProfile']['filter'];?><?php if($politica['porcentagem']>30)echo"</strong>";?></div>				
+			<?php } ?>
+		</div>	
+		<div class="area-localidades">
+			<label>Localidades</label>
+			<div class="none"><?php echo round($local_usuarios['NaoInformado'],2);?>% não informaram</div>
+			<?php foreach($local_usuarios['array'] as $local){?>
+				<div class="valor"><?php if($local['porcentagem']>=25)echo"<strong>";?><span><?php echo round($local['porcentagem'],2);?>%</span> <?php echo $local['FacebookProfile']['filter'];?><?php if($local['porcentagem']>30)echo"</strong>";?></div>				
+			<?php } ?>			
+		</div>	
+	

@@ -1,0 +1,1382 @@
+<?php
+echo $this->Html->script('empresas/pack');
+$social = $this->Session->read('compSocial.companies_social_networks');
+$aparencia = $this->Session->read('compPreferences');
+
+$fbkOffers = 'checked';
+$twtOffers = 'checked';
+$gplusOffers = 'checked';
+
+if ($social['fbk_new_offers'] == 'INACTIVE') {
+    $fbkOffers = '';
+}
+if ($social['twitter_new_offers'] == 'INACTIVE') {
+    $twtOffers = '';
+}
+if ($social['gplus_new_offers'] == 'INACTIVE') {
+    $gplusOffers = '';
+}
+
+$userType = $this->Session->read('userLoggedType');
+?>
+
+<script type="text/javascript">
+
+    $(function() {
+        $('#senha_nova_confirm').attr("disabled", true);
+        $('#senha_nova').attr("disabled", true);
+        //CONFIRMA SENHA
+        $("#senha_nova_confirm").keyup(function() {
+            var novaSenha = $("#senha_nova").val();
+            var novaSenhaConfirm = $("#senha_nova_confirm").val();
+
+            if (novaSenha == novaSenhaConfirm) {
+                $("#senha_nova_confirm").css("border", "1px solid #3CB371");
+                $("#senha_nova_confirm").css("outline-color", "#3CB371");
+                $("#botao").fadeIn();
+            } else {
+                $("#senha_nova_confirm").css("border", "1px solid red");
+                $("#senha_nova_confirm").css("outline-color", "red");
+                $("#botao").fadeOut();
+            }
+        });
+
+        $('#senha_atual').keyup(function() {
+            var senhaAtual = md5($('#senha_atual').val());
+            var senha = $('#hash').val();
+
+            if (senhaAtual == senha) {
+                $("#senha_atual").css("border", "1px solid #3CB371");
+                $("#senha_atual").css("outline-color", "#3CB371");
+                $('#senha_nova_confirm').attr("disabled", false);
+                $('#senha_nova').attr("disabled", false);
+            } else {
+                $("#senha_atual").css("border", "1px solid red");
+                $("#senha_atual").css("outline-color", "red");
+                $('#senha_nova_confirm').attr("disabled", true);
+                $('#senha_nova').attr("disabled", true);
+            }
+        });
+    });
+
+    function mudaBotao(classee) {
+        var classe = "." + classee;
+        if (classe == ".botao-dados-cadastrais-configs") {
+            $(classe).css("color", "#ffffff");
+            $(classe).css("background-color", "orange");
+        }
+        if (classe == ".botao-frete") {
+            $(".botao-frete-configs").css("color", "#ffffff");
+            $(".botao-frete-configs").css("background-color", "orange");
+        }
+
+    }
+
+
+    function submita() {
+        if ($('#senha_nova').val() !== $('#senha_nova_confirm').val()) {
+            alert("Erro na confirmação da senha.");
+            return false;
+        } else if (md5($('#senha_atual').val()) !== $('#hash').val()) {
+            alert("Sua senha atual atual não confere.");
+            return false;
+        } else {
+            document.formPass.submit();
+        }
+
+
+    }
+
+    function layouts(tipo) {
+        if (tipo == 'secondaryUsers') {
+            $('#dadosCadastrais').fadeOut(0);
+            $('#editFrete').fadeOut(0);
+            $('#mudarPass').fadeOut(0);
+            $("#social").fadeOut(0);
+            $('#aparencia').fadeOut(0);
+            $('#cadSecondUser').fadeIn(400);
+        }
+        if (tipo == 'dadosCadastrais') {
+            $('#cadSecondUser').fadeOut(0);
+            $('#editFrete').fadeOut(0);
+            $('#mudarPass').fadeOut(0);
+            $("#social").fadeOut(0);
+            $('#aparencia').fadeOut(0);
+            //$(".body-config").css("height", "80%");
+            $('#dadosCadastrais').fadeIn(400);
+        }
+
+        if (tipo == 'editFrete') {
+            $('#cadSecondUser').fadeOut(0);
+            $('#dadosCadastrais').fadeOut(0);
+            $('#mudarPass').fadeOut(0);
+            $("#social").fadeOut(0);
+            $('#aparencia').fadeOut(0);
+            $('#editFrete').fadeIn(400);
+        }
+
+        if (tipo == 'mudarPass') {
+            $('#cadSecondUser').fadeOut(0);
+            $('#dadosCadastrais').fadeOut(0);
+            $('#editFrete').fadeOut(0);
+            $("#social").fadeOut(0);
+            $('#aparencia').fadeOut(0);
+            $('#mudarPass').fadeIn(400);
+        }
+
+        if (tipo == 'social') {
+            $('#cadSecondUser').fadeOut(0);
+            $('#dadosCadastrais').fadeOut(0);
+            $('#editFrete').fadeOut(0);
+            $('#mudarPass').fadeOut(0);
+            $('#aparencia').fadeOut(0);
+            $("#social").fadeIn(400);
+        }
+
+        if (tipo == 'aparencia') {
+            $('#cadSecondUser').fadeOut(0);
+            $('#dadosCadastrais').fadeOut(0);
+            $('#editFrete').fadeOut(0);
+            $('#mudarPass').fadeOut(0);
+            $("#social").fadeOut(0);
+            $("#aparencia").fadeIn(400);
+        }
+    }
+
+    function mostraInfo() {
+        $('#info').fadeIn(1000);
+    }
+    function escondeInfo() {
+        $('#info').fadeOut();
+    }
+
+    $(function() {
+        $("#radio1").click(function() {
+            $('#frete-opcoes').fadeOut(1000);
+        });
+
+        $("#radio2").click(function() {
+            $('#frete-opcoes').fadeIn(2000);
+        });
+
+        $("#check-empty-back").click(function() {
+
+            if ($(this).is(":checked"))
+            {
+                $("#aparacencia-empty-back").val("true");
+            } else {
+                $("#aparacencia-empty-back").val("false");
+            }
+
+        });
+
+        //VERIFICA QUANDO HÁ CLIQUE NO CHECKBOX
+        $(".social-check").change(function() {
+            var id = $(this).attr("id");
+            var check = $("#" + id).is(":checked");
+            var status = '';
+            if (check == true) {
+                status = 'ACTIVE';
+            } else {
+                status = 'INACTIVE';
+            }
+
+            $("#input-" + id).val(status);
+
+        });
+
+        //SALVAR DADOS SOCIAL NETWORK DA EMPRESA
+        $("#salvar-social").click(function() {
+            $("#loading").fadeIn();
+            var fbkLink = $("#face").val();
+            var twtLink = $("#twitter").val();
+            var gplusLink = $("#gplus").val();
+            var fbkOffers = $("#input-fbkNewsOffer").val();
+            var twtOffers = $("#input-twtNewsOffer").val();
+            var gplusOffers = $("#input-gplusNewsOffer").val();
+
+
+            $.ajax({
+                type: "POST",
+                data: {
+                    fbkLink: fbkLink,
+                    twtLink: twtLink,
+                    gplusLink: gplusLink,
+                    gplusOffers: gplusOffers,
+                    fbkOffers: fbkOffers,
+                    twtOffers: twtOffers
+                },
+                url: location.href + "/save-social-network",
+                success: function(result) {
+                    $("#loading").fadeOut();
+                    window.location.reload();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                }
+            });
+        });
+
+        //excluir usua
+        //quando houver upload de file no input 
+        //atualiza imagem com a atual
+        $("#file-img").change(function() {
+            readURL(this);
+        });
+
+        //executar input file quando imagem for clicada
+        $("#back-comp-img").bind('click', function() {
+            $('#file-img').click( );
+        });
+        /*
+         $("#back-comp-img").mouseover(function() {
+         $("#upload-image-back").fadeIn(200);
+         });
+         
+         $("#back-comp-img").mouseout(function() {
+         $("#upload-image-back").fadeOut(200);
+         });*/
+
+        //clique na imagem para carregar logo
+        $("#comp-logo-preview").bind('click', function() {
+            $("#comp-logo-upper").click();
+        });
+
+        $("#comp-logo-upper").change(function() {
+            readLogoURL(this);
+        });
+
+    });
+
+    //Transporta arquivo upado no file para o img
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#back-comp-img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    //Transporta arquivo upado no file para o img do logo
+    function readLogoURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#comp-logo-preview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function deleteSecondUser(id) {
+        $("#loading").fadeIn();
+
+        $.ajax({
+            type: "POST",
+            data: {
+                secondaryUserId: id
+            },
+            url: location.href + "/deleteSecondaryUser",
+            success: function(result) {
+                $("#loading").fadeOut();
+                $("#linha-" + id).fadeOut();
+                //window.location.reload();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                //alert(errorThrown);
+            }
+        });
+    }
+
+    function mascara(o, f) {
+        v_obj = o
+        v_fun = f
+        setTimeout("execmascara()", 1)
+    }
+    function execmascara() {
+        v_obj.value = v_fun(v_obj.value)
+    }
+    function mvalor(v) {
+        v = v.replace(/\D/g, "");//Remove tudo o que não é dígito
+        v = v.replace(/(\d)(\d{8})$/, "$1.$2");//coloca o ponto dos milhões
+        v = v.replace(/(\d)(\d{5})$/, "$1.$2");//coloca o ponto dos milhares
+
+        v = v.replace(/(\d)(\d{2})$/, "$1,$2");//coloca a virgula antes dos 2 últimos dígitos
+        return v;
+    }
+
+
+    function validar(dom, tipo) {
+        switch (tipo) {
+            case'num':
+                var regex = /[A-Za-z]/g;
+                break;
+            case'text':
+                var regex = /\d/g;
+                break;
+        }
+        dom.value = dom.value.replace(regex, '');
+    }
+
+
+</script>
+<style>
+    #file-img{
+        display: none;
+    }
+
+    #loading{
+        position: absolute;
+        left: 47%;
+        top: 45%;
+        width: 80px;
+        height: 80px;
+        z-index: 999999;
+        display: none;
+    }
+
+    .input {
+        border: 1px solid #DCDCDC;
+        height: 35px;
+        width: 570px;
+        padding-left: 5px;
+        font-family: Helvetica;
+        font-size: 16px;
+        color: #666666;
+
+        border-left: 2px solid red;
+        margin-top: 10px;
+    }
+
+    .input-cadastrais {
+        border: 1px solid #DCDCDC;
+        height: 35px;
+        width: 570px;
+        padding-left: 5px;
+        font-family: Helvetica;
+        font-size: 16px;
+        color: #666666;
+
+        margin-top: 10px;
+    }
+
+    .input-cadastrais-senha{
+        border: 1px solid #DCDCDC;
+        height: 35px;
+        width: 300px;
+        padding-left: 5px;
+        font-family: Helvetica;
+        font-size: 16px;
+        color: #666666;
+
+        margin-top: 10px;
+    }
+
+    #nomefantasia{
+        width: 390px;
+    }
+
+    #cnpj{
+        width: 170px;
+        margin-left: 10px;
+    }
+
+    #tel{
+        width: 192.5px;
+    }
+    #tel2{
+        width: 192.5px;
+        margin-left: 10px;
+    }
+    #email{
+        width: 400px;
+    }
+
+    #cep{
+        width: 192.5px;
+    }
+
+    #numero{
+        width: 70px;
+    }
+
+    #bairro{
+        margin-left: 10px;
+        width: 210px;
+    }
+
+    #uf{
+        margin-left: 10px;
+        width: 50px;
+    }
+
+    #cidade{
+        margin-left: 10px;
+        width: 190px;
+    }
+
+    #nome-responsavel{
+        width: 400px;
+    }
+
+    #cpf-responsavel{
+        width:155px;
+        margin-left: 10px;
+    }
+    .boxSelec{
+        border: 1px solid #DCDCDC;
+        height: 35px;
+        width: 270px;
+        line-height: 35px;
+        margin-top: 10px;
+    }
+
+    .selectbox {
+        background: transparent;
+        width: 270px;
+        padding: 5px;
+        font-size: 16px;
+        line-height: 1;
+        border: 0;
+        border-radius: 0;
+        height: 30px;
+        -webkit-appearance: none;
+        font-family: Helvetica;
+        color: #666666;
+
+    }
+    table{
+        margin-top: 10px;
+        border-collapse: collapse;
+    }
+
+
+    tr{
+        padding: 10px;
+        text-align: center;
+        font-family: Helvetica;
+        font-size: 12px;
+    }
+    td{
+        border: 1px solid #e6e6e6;
+        font-family: Helvetica;
+        padding: 10px;
+    }
+
+    #adv-comp-menu-tab tr{
+        padding: 0px;
+    }
+
+    #adv-comp-menu-tab td{
+        padding: 0px;
+        padding-top: 15px;
+    }
+
+    th{
+        padding: 10px;
+    }
+
+    td#cargo{
+        font-weight: bold; 
+        color: #333333;
+    }
+
+    #valor-frete{
+        width:275px;
+    }
+
+    #dias-entrega{
+        width: 275px;
+        margin-left: 15px;
+    }
+
+    .botao{
+        background: -webkit-gradient(linear, left top, left bottom, from(#FFA500), to(#FF8C00));
+        background: -moz-linear-gradient(top, #FFA500, #FF8C00);
+    }
+
+    .sub-title{
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .div-linha{
+        margin-top: 5px;
+    }
+
+    .config-lado-esquerdo{
+        margin-top: 5px;
+        height: 100%;
+        width: 8%;
+        margin-left: 20px;
+        float: left;
+    }
+
+    .botao-frete-networks {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #3399cc;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-repeat: no-repeat;
+        background-position: center 40px;
+        background-image: url("../img/adv/Meus Dados/adv-social-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-frete-networks:HOVER {
+        color: #fff;
+        background: #3399cc;
+        background-image: url("../img/adv/Meus Dados/adv-social-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-frete-aparencia{
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #3399cc;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-repeat: no-repeat;
+        background-position: center 40px;
+        background-image: url("../img/adv/Meus Dados/adv-aparencia-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-frete-aparencia:hover{
+        color: #fff;
+        background: #3399cc;
+        background-image: url("../img/adv/Meus Dados/adv-aparencia-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-dados-cadastrais-configs {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        margin-top: 18%;
+        float: right;
+        color: #3399cc;
+        padding-top: 10px;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        background-image: url("../img/adv/Meus Dados/adv-cadastrais-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-dados-cadastrais-configs:HOVER {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        margin-top: 18%;
+        float: right;
+        color: #ffffff;
+        padding-top: 10px;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        background-image: url("../img/adv/Meus Dados/adv-cadastrais-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+        background-color: #3399cc;
+    }
+
+    .botao-frete-configs {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #3399cc;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-image: url("../img/adv/Meus Dados/adv-frete-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-frete-configs:HOVER {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #ffffff;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-image: url("../img/adv/Meus Dados/adv-frete-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+        background-color: #3399cc;
+    }
+
+    .botao-alterar-senha-configs {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #3399cc;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-image: url("../img/adv/Meus Dados/adv-senha-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-alterar-senha-configs:HOVER {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        padding-top: 10px;
+        float: right;
+        color: #ffffff;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-image: url("../img/adv/Meus Dados/adv-senha-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+        background-color: #3399cc;
+
+    }
+
+    .botao-home-configs {
+        border: 2px solid #3399cc;
+        width: 100%;
+        height: 12%;
+        float: right;
+        color: #3399cc;
+        padding-top: 10px;
+        font-size: 14px;
+        font-family: Helvetica;
+        text-align: center;
+        margin-top: 8%;
+        background-image: url("../img/adv/Meus Dados/adv-secundario-1.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .botao-home-configs:HOVER {
+        color: #fff;
+        background: #3399cc;
+        background-image: url("../img/adv/Meus Dados/adv-secundario-2.png");
+        background-size: 40px;
+        background-repeat: no-repeat;
+        background-position: center 50px;
+    }
+
+    .header-configs {
+        width: 85%;
+        float: left;
+        padding: 1.5%;
+        padding-left: 0;
+        padding-bottom: 0;
+        height: 10%;
+        border: 0;
+    }
+
+    .company-configs-networks{
+        display:none; 
+        float: left; 
+        height: 80%;
+        width: 88.5%; 
+        margin-left: 20px;
+        padding-top: 10px;
+    }
+
+    .company-configs-aparencia{
+        float: left; 
+        height: 80%;
+        width: 88.5%; 
+        margin-left: 20px;
+        padding-top: 10px;
+        display: none;
+    }
+
+    .label-dados-principais{
+        font-family: Helvetica;
+        margin-left: 5px;
+        color: #363636;
+        cursor: pointer;
+    }
+
+    .social-logo{
+        float:left;
+        width: 31.5px;
+        height: 31.5px;
+        margin-top: 2px;
+        margin-right: -2px;
+    }
+
+    .redes-sociais#face{
+        outline-color: #4169E1;
+        width: 70%;
+        padding: 7.5px;
+        border: 1px solid #dcdcdc;
+
+    }
+
+    .redes-socias#corpo{
+        width: 70%;
+        margin-left: 35px;
+        margin-top: 5px;
+
+    }
+    .redes-sociais#sublabel{
+        float: left;
+        font-family: Helvetica;
+        font-size: 16px;
+    }
+
+    .redes-sociais#onoff{
+        float: right;
+    }
+
+    #table-social{
+        width: 100%;
+        border: 0px;
+    }
+
+    #table-social td{
+        border: 0px;
+        padding: 3px;
+    }
+
+    .redes-sociais#twitter{
+        outline-color: #87CEFA;
+        width: 70%;
+        padding: 7.3px;
+        border: 1px solid #dcdcdc;
+    }
+
+    .redes-sociais#gplus{
+        outline-color: #FF4040;
+        width: 70%;
+        padding: 7.3px;
+        border: 1px solid #dcdcdc;
+    }
+
+    #table-social-twt{
+        width: 100%;
+    }
+
+    #table-social-twt td{
+        border: 0px;
+        padding: 3px;
+    }
+
+    #table-social-gplus{
+        width: 100%;
+
+    }
+
+    #table-social-gplus td{
+        border: 0px;
+        padding: 3px;
+    }
+
+    #div-face{
+        margin-left: 40px;
+    }
+
+    .area-botoes{
+        bottom: 55px;
+        position: absolute;
+        right: 80px;
+    }
+
+    .botao{
+        padding: 10px;
+        font-family: Helvetica;
+        color: #f37165;
+        border: 1px solid #f37165;
+        cursor: pointer;
+        background: #fff;
+    }
+
+    .botao:hover{
+        color: #fff;
+        background: #f37165;
+    }
+
+    .botao#salvar-aparencia{
+        float: left;
+        margin-right: 5px;
+        background:#f37165;
+        color: #fff;
+    }
+
+    .botao#salvar-social{
+        float: left;
+        margin-right: 5px;
+        background:#f37165;
+        color: #fff;
+    }
+
+    .botao#cancelar-social{
+        float: left;
+        background:#f37165;
+        color: #fff;
+    }
+
+    .sub-compartilhar{
+        font-family: Helvetica;
+        font-size: 12px;
+        color: gray;
+        margin-left: 3px;
+        padding-top: 5px;
+    }
+
+    #back-comp-img{
+        width: 135px;
+        height: 135px;
+        cursor: pointer;
+    }
+
+    .label-aparencia{
+        font-size: 14px;
+        font-family: Helvetica;
+    }
+
+    #upload-image-back{
+        width: 35px;
+        height: 35px;
+        opacity: 0.8;
+        position: absolute;
+        top: 270px;
+        left: 255px;
+        cursor: pointer;
+        display: none;
+    }
+
+    #body-conf {
+        background: #ffffff;
+        width: 80%;
+        height: 80%;       
+        position: fixed;
+    }
+
+</style>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div class="body-config" id="body-conf">
+
+    <div class="config-lado-esquerdo">
+
+        <a href="javascript:void(0);" onclick="layouts('dadosCadastrais')"> <div class="botao-dados-cadastrais-configs"
+                                                                                 onclick="mudaBotao('botao-dados-cadastrais')">dados cadastrais</div></a>
+
+        <a href="javascript:void(0);" onclick="layouts('editFrete')">
+            <div class="botao-frete-configs" id="frete"
+                 onclick="mudaBotao('botao-frete-configs')">
+                opções <br />de frete
+            </div>
+        </a>
+
+        <a href="javascript:void(0);" onclick="layouts('mudarPass')">
+            <div class="botao-alterar-senha-configs" id="alterar-senha">
+                usuário<br/>
+                principal
+            </div>
+        </a>
+
+        <?php if ($userType == 1) { ?>
+            <a href="javascript:void(0);" onclick="layouts('secondaryUsers')"/> <div class="botao-home-configs" id="home">
+                usuário secundário 
+            </div></a>
+        <?php } ?>
+
+        <a href="javascript:void(0);" onclick="layouts('social')">
+            <div class="botao-frete-networks" id="redes-sociais">
+                redes<br/>sociais
+            </div>
+        </a>
+
+        <a href="javascript:void(0);" onclick="layouts('aparencia')">
+            <div class="botao-frete-aparencia" id="redes-sociais">
+                Aparência
+            </div>
+        </a>
+    </div>
+
+    <div class="header-configs" style="padding-top: 0;">
+        <div style="float: right;  margin-top:15px; margin-right: -45px; cursor: pointer;">
+            <a href="http://localhost/work/x_portal_teste/company/layout-dash"><img src="../img/adv/xis.png" width="20px"/></a>
+        </div>
+        <div class="offers-title">
+            <br> <span class="title-offers" style="color: #808080;">Dados Cadastrais</span><br />
+            <div class="subtitle-offers">Gerencie todos seus dados e preferências.</div>
+
+        </div>
+        <br />
+        <hr />
+        <!--		<div class="div-title-configs">
+                            
+                                <span class="title-configs">Dados principais</span>
+                                <div class="helpTitle-configs">
+                                        <span> Central de ajuda </span>
+                                </div>
+                        </div>-->
+    </div>
+
+    <div id="cadSecondUser"  style="display:none; float: left; height: 80%; width: 88.5%; margin-left: 10px;">
+        <!--         <div class="offers-title">
+                <br> <span class="title-offers">Cadastro de Usuários Secundários</span><br />
+                <div class="subtitle-offers">Cadastre usuários e controle as permissões devidas de cada um.</div>
+        
+            </div>
+            <br />
+            <hr />-->
+
+        <!-- CADASTRO DE USUARIOS -->
+        <div style="height:80%; width: 96.5%; margin-left: 1.5%; margin-right: 1.5%; margin-top: 15px; ">
+            <span style="margin-left: 15px; font-family: Helvetica; font-size: 16px; color: orange;"> 
+                <?php
+                if (!empty($mensagem)) {
+                    echo $mensagem;
+                }
+                ?><br/></span>
+
+            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'cadSecondaryUsers', 'insert'), 'type' => 'file')); ?>
+            <input type="text" placeholder="Nome Completo" class="input" name="data[SecondaryUser][name]"/><br/>
+            <input type="text" placeholder="Email" class="input" name="data[SecondaryUser][email]" /> <br />
+            <div  class="boxSelec" style=" border-left: 2px solid red;">
+
+                <select id="selectboxY" name="data[SecondaryUser][type]" class="selectbox" >
+                    <option>Cargo do Usuário </option>
+                    <?php foreach ($tiposUsuarios as $usuario) { ?>
+                        <option id="<?php echo $usuario['secondary_users_types']['id']; ?>" value="<?php echo $usuario['secondary_users_types']['id']; ?>"><?php echo $usuario['secondary_users_types']['name']; ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <table>
+                <tr>
+                    <th>Cargos</th>
+                    <th>Ofertas</th>
+                    <th>Assinaturas</th>
+                    <th>Vendas</th>
+                    <th>Wishlist</th>
+                </tr>
+
+                <?php foreach ($tiposUsuarios as $usuario) { ?>
+                    <tr>
+                        <td id="cargo"><?php echo $usuario['secondary_users_types']['name']; ?></td>
+                        <td style="color:#666666;"><?php
+                            switch ($usuario['secondary_users_types']['assignment_offers']) {
+                                case 1:
+                                    echo 'Permissão Geral';
+                                    break;
+                                case 2:
+                                    echo 'Incluir e Consultar dados';
+                                    break;
+                                case 3:
+                                    echo 'Somente Consultar dados';
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ?></td>
+                        <td style="color:#666666;"><?php
+                            switch ($usuario['secondary_users_types']['assignment_signatures']) {
+                                case 1:
+                                    echo 'Permissão Geral';
+                                    break;
+                                case 2:
+                                    echo 'Incluir e Consultar dados';
+                                    break;
+                                case 3:
+                                    echo 'Somente Consultar dados';
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ?></td>
+                        <td style="color:#666666;"><?php
+                            switch ($usuario['secondary_users_types']['assignment_checkouts']) {
+                                case 1:
+                                    echo 'Permissão Geral';
+                                    break;
+                                case 2:
+                                    echo 'Incluir e Consultar dados';
+                                    break;
+                                case 3:
+                                    echo 'Somente Consultar dados';
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ?></td>
+                        <td style="color:#666666;"><?php
+                            switch ($usuario['secondary_users_types']['assignment_wishlist']) {
+                                case 1:
+                                    echo 'Permissão Geral';
+                                    break;
+                                case 2:
+                                    echo 'Incluir e Consultar dados';
+                                    break;
+                                case 3:
+                                    echo 'Somente Consultar dados';
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ?></td>
+
+                    </tr>
+                <?php } ?>
+            </table>
+
+            <div style="max-height: 170px; margin-top: 10px; overflow: auto; width:715px;">
+                <table >
+                    <tr>
+                        <th colspan="4">Usuários Secundarios</th>
+                    </tr>
+                    <tr>
+                        <th>
+                            Nome
+                        </th>
+                        <th>
+                            Email
+                        </th>
+                        <th>
+                            Cargo
+                        </th>
+                        <th>
+                            Excluir
+                        </th>
+                    </tr>
+                    <?php foreach ($secondUsers as $secondary) { ?>
+                        <tr style="color:#666666;" id="linha-<?php echo $secondary['secondary_users']['id']; ?>">
+                            <td><?php echo $secondary['secondary_users']['name']; ?></td>
+                            <td><?php echo $secondary['secondary_users']['email']; ?></td>
+                            <td><?php echo $secondary['secondary_users_types']['name']; ?></td>
+                            <td><img src="../img/adv/Wishlist/excluir_1.png" width="30px" onclick="deleteSecondUser(<?php echo $secondary['secondary_users']['id']; ?>)"/></td>
+                        </tr>
+                        <?php
+                    }
+                    // echo print_r($secondUsers);
+                    ?>
+
+                </table>
+            </div>
+
+            <button type="submit" style="margin-left: -5px; margin-top: 10px; background: transparent; border: 0px; bottom: 0;">
+                <div class="botoes-laranja-cad-ofer" style="background:#f37165; color: #fff; padding: 5px; cursor: pointer;"> Cadastrar</div>
+            </button>
+
+            <?php echo $this->Form->end(); ?>
+        </div>
+    </div>
+
+    <!--  DADOS CADASTRAIS-->
+    <div id="dadosCadastrais" style="margin-top: 15px; float: left; height: 80%; width: 83%; margin-left: 35px; overflow: auto;">
+        <span style="font-family: Helvetica; font-size: 16px; color: #808080;" class="sub-title">Dados principais </span>
+        <br/>
+        <div id="formulario" style="margin-top: 15px; font-family: Helvetica;">
+            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutConfiguracoes', 'updateCompany'), 'type' => 'file')); ?>
+            <span>Logo</span><br/>
+            <img src="<?php echo $company['Company']['logo']; ?>" width="150px" height="50" id="comp-logo-preview" style='cursor: pointer;'/>
+            <br/>
+            <input type="file" id="comp-logo-upper" name="data[Company][logo]" style="display: none;"/>
+            <br/>
+            <br/>
+            <span > Razão Social </span></br>
+            <input class="input-cadastrais" value="<?php echo $company['Company']['corporate_name']; ?>" type="text" name="data[Company][corporate_name]" placeholder="Razão Social" disabled="true"/>
+            <div class="div-linha" >
+                <div style="float: left;">
+                    <span>Nome Fantasia</span><br/>
+                    <input type="text" id="nomefantasia" value="<?php echo $company['Company']['fancy_name']; ?>" class="input-cadastrais" placeholder="Nome Fantasia"  name="data[Company][fancy_name]"/>
+                </div>
+                <div>
+                    <span>CNPJ</span><br/>
+                    <input type="text" id="cnpj" class="input-cadastrais" placeholder="CNPJ" value="<?php echo $company['Company']['cnpj']; ?>"  name="data[Company][cnpj]" disabled="true"/>
+                </div>
+            </div><br />
+            <span style="font-family: Helvetica; font-size: 16px; margin-top:10px; color: #808080;" class="sub-title">Contatos </span>
+            <div class="div-linha">
+                <div style="float: left;">
+                    <span>Telefone</span><br/>
+                    <input type="text" name="data[Company][phone]" value="<?php echo $company['Company']['phone']; ?>" placeholder="Telefone" id="tel" class="input-cadastrais"/>
+                </div>
+                <div>
+                    <span>Telefone 2</span><br/>
+                    <input type="text" name="data[Company][phone_2]" value="<?php echo $company['Company']['phone_2']; ?>" placeholder="Telefone 2"  id="tel2" class="input-cadastrais"/>
+                </div>
+            </div>
+            <br/>
+            <div class="div-linha">
+                <span>Email de Contato</span><br/>
+                <input type="text" name="data[Company][email]" placeholder="Email" value="<?php echo $company['Company']['email']; ?>" id="email" class="input-cadastrais" />
+            </div>
+            <br/>
+            <span style="font-family: Helvetica; font-size: 16px; margin-top:10px; color: #808080;" class="sub-title">Endereço </span>
+            <div class="div-linha">
+                <span>CEP</span><br/>
+                <input type="text" name="data[Company][zip_code]" id="cep" value="<?php echo $company['Company']['zip_code']; ?>" placeholder="CEP"  class="input-cadastrais" />
+                <div class="div-linha">
+                    <span>Endereço</span><br/>
+                    <input type="text" name="data[Company][address]" value="<?php echo $company['Company']['address']; ?>" placeholder="Endereço" class="input-cadastrais" />
+                    <br />
+                    <div style="float: left;" class="div-linha">
+                        <span>Número</span><br/>
+                        <input type="text" name="data[Company][number]" value="<?php echo $company['Company']['number']; ?>" placeholder="Núm." id="numero" class="input-cadastrais" />
+                    </div>
+                    <div style="float: left;" class="div-linha">
+                        <span>Bairro</span><br/>
+                        <input type="text" name="data[Company][district]" value="<?php echo $company['Company']['district']; ?>" placeholder="Bairro"  id="bairro" class="input-cadastrais" />
+                    </div>
+                    <div style="float: left;" class="div-linha">
+                        <span>UF</span><br/>
+                        <input type="text" name="data[Company][state]" value="<?php echo $company['Company']['state']; ?>" placeholder="UF"  id="uf" class="input-cadastrais" />
+                    </div>
+                    <div class="div-linha">
+                        <span>Cidade</span><br/>
+                        <input type="text" name="data[Company][city]" value="<?php echo $company['Company']['city']; ?>"  placeholder="Cidade" id="cidade" class="input-cadastrais" />
+                    </div>
+                </div>
+            </div>
+            <button type="submit" style="margin-top: 5px; margin-left: -5px; background: transparent; border: 0px; bottom: 0;">
+                <div class="botoes-laranja-cad-ofer" style=" background:#f37165; color: #fff; padding: 5px; cursor: pointer;"> Salvar</div>
+            </button>
+            <?php echo $this->Form->end(); ?>
+        </div>
+    </div>
+
+    <!-- FRETE -->
+    <div id="editFrete" style="display: none; float: left; height: 80%; width: 83%; margin-left: 20px;">
+        <div style="margin-top: 20px; margin-left: 15px;">
+            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutConfiguracoes', 'frete'), 'type' => 'file')); ?>
+            <span style="font-family: Helvetica; font-size: 16px;" class="sub-title">Dados do Frete </span>
+            <div style="margin-top: 10px;  font-family: Helvetica; font-size: 12px; ">
+                <span style="margin-left: 25px;">Usar API dos correiros? </span><br/>
+                <div style="margin-top:8px;">
+                    <input
+                        type="radio" name="data[CompanyPreference][use_correios_api]" id="radio1"
+                        class="css-checkbox" value="1"  <?php
+                        if ($companyPreference[0]['company_preferences']['use_correios_api'] == 1) {
+                            echo "checked='true'";
+                        }
+                        ?>/><label for="radio1" class="css-label">Sim</label>
+                    <input type="radio" name="data[CompanyPreference][use_correios_api]" id="radio2"
+                           class="css-checkbox" value="0"  <?php
+                           if ($companyPreference[0]['company_preferences']['use_correios_api'] == 0) {
+                               echo "checked='true'";
+                           }
+                           ?>/><label for="radio2" class="css-label">Não</label>
+                </div>
+            </div>
+            <div style="margin-top: 10px;" id="frete-opcoes">
+                <span style="font-family: Helvetica; font-size: 16px;" class="sub-title">Valores para frete </span>
+                <div>
+                    <div style="float: left;">
+                        <span style="font-family: Helvetica; font-size: 12px;">Valor fixo</span>
+                        <br/>
+                        <input type="text" onkeydown="mascara(this, mvalor);" class="input-cadastrais" placeholder="Valor Fixo" name="data[CompanyPreference][shipping_value]" id="valor-frete" value="<?php echo number_format($companyPreference[0]['company_preferences']['shipping_value'], 2, ',', '.'); ?>"/>
+                    </div>
+                    <div>
+                        <span style="margin-left: 15px; font-family: Helvetica; font-size: 12px;">Dias de Entrega</span>
+                        <br/>
+                        <input type="text" onkeyup="validar(this, 'num');" class="input-cadastrais" placeholder="Data Fixa (em dias)" name="data[CompanyPreference][delivery_time]" id="dias-entrega" value="<?php echo $companyPreference[0]['company_preferences']['delivery_time']; ?>"/>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" style="margin-top: 15px; margin-left: -10px; margin-left: 0px; background: transparent; border: 0px; bottom: 0;">
+                <div class="botoes-laranja-cad-ofer" style=" background:#f37165; color: #fff; padding: 5px; cursor: pointer;"> Salvar</div>
+            </button>
+            <?php echo $this->Form->end(); ?>
+
+        </div>
+    </div>
+
+
+    <!-- Alterar senha -->
+    <div id="mudarPass" style="display:none; float: left; height: 80%; width: 88.5%; margin-left: 20px;">
+        <div style="margin-top: 20px; margin-left: 15px;">
+            <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutConfiguracoes', 'password'), 'type' => 'file', 'name' => 'formPass')); ?>
+            <div id="aviso" style="margin-top: 15px; color: orange; font-family: Helvetica;"><?php
+                if (!empty($mensagem)) {
+                    echo $mensagem;
+                }
+                ?></div>
+            <!-- RESPONSIBLE NAME -->
+            <input type="text" name="responsible_name" id="responsible_name" placeholder="Nome do Responsável" class="input-cadastrais-senha" style="width: 300px;" title="Nome do Responsável" value="<?php echo $company['Company']['responsible_name']; ?>"/>
+            <br/>
+            <!-- RESPONSIBLE EMAIL -->
+            <input type="text" name="responsible_email" id="responsible_email" placeholder="Email do Responsável" class="input-cadastrais-senha" style="width: 300px;" title="Email do Responsável" value="<?php echo $company['Company']['responsible_email']; ?>"/>
+            <br />
+            <input type="password" id="senha_atual" name="senha_atual" class="input-cadastrais-senha" placeholder="Senha Atual" title="Senha Atual" onpaste="return false;"/><br/>
+            <input type="password" id="senha_nova" name="senha_nova" class="input-cadastrais-senha" placeholder="Nova Senha" title="Nova Senha"/><br/>
+            <input type="password" id="senha_nova_confirm" name="senha_nova_confirm" class="input-cadastrais-senha" placeholder="Confirmar Senha" title="Confirmação de Senha" onpaste="return false;"/><br/>
+            <input type="hidden" id="hash" name="hash" value="<?php echo $this->Session->read('CompanyLoggedIn.Company.password'); ?>" />
+            <div class="botoes-laranja-cad-ofer" id="botao" onclick="submita()" 
+                 style="display:none; margin-top: 15px; background:#f37165; color: #fff; padding: 5px; cursor: pointer;"> Salvar</div>
+
+            <?php echo $this->Form->end(); ?>
+        </div>
+    </div>
+
+    <!-- Redes Sociais -->
+    <div class="company-configs-networks" id="social">
+        <span class="label-dados-principais">Redes Sociais</span><br/>
+
+        <br/>
+        <br/>
+        <!-- lado esquerdo -->
+        <div style="float: left; width: 48%;">
+            <div id="div-face">
+                <img src="../img/icones/meus-dados/facebookicon.png" class="social-logo"/>
+                <input type="text" class="redes-sociais" id="face" name="redes-sociais-facebook" placeholder="Facebook"
+                       value="<?php echo $social['fbk_link']; ?>"/><br/>
+
+                <!-- fbk corpo-->
+
+                <br/> 
+                <div  class="redes-socias" id="corpo">
+                    <table id="table-social">
+                        <tr>
+                            <td>
+                                <span class="redes-sociais" id="sublabel">Compartilhar Nova oferta</span>
+                            </td>
+                            <td>
+                                <span class="redes-sociais" id="onoff"><input type="checkbox" id="fbkNewsOffer" class="social-check"  <?php echo $fbkOffers; ?>/></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+
+                <!-- twitter corpo --> 
+                <div id="div-twitter">
+                    <img src="../img/icones/meus-dados/twitterlogo.png" class="social-logo"/>
+                    <input type="text" class="redes-sociais" id="twitter" name="redes-sociais-twitter" placeholder="Twitter" value="<?php echo $social['twitter_link']; ?>"/>
+                    <br/> 
+                    <br/> 
+                    <div  class="redes-socias" id="corpo">
+                        <table id="table-social-twt">
+                            <tr>
+                                <td>
+                                    <span class="redes-sociais" id="sublabel">Compartilhar Nova oferta</span>
+                                </td>
+                                <td>
+                                    <span class="redes-sociais" id="onoff"><input type="checkbox" id="twtNewsOffer" class="social-check"  <?php echo $twtOffers; ?>/></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LADO ESQUERDO -->
+        <div style="width: 48%; float: left;">
+            <!-- Google+ gplus -->
+            <div>
+                <img src="../img/icones/meus-dados/googleplus.png" class="social-logo"/>
+                <input type="text" class="redes-sociais" id="gplus" name="redes-sociais-gplus" placeholder="Google+" value="<?php echo $social['gplus_link']; ?>"/>
+                <br/>
+                <br/> 
+                <div  class="redes-socias" id="corpo">
+
+                    <table id="table-social-gplus">
+                        <tr>
+                            <td>
+                                <span class="redes-sociais" id="sublabel">Compartilhar Nova oferta</span>
+                            </td>
+                            <td>
+                                <span class="redes-sociais" id="onoff"><input type="checkbox" id="gplusNewsOffer" class="social-check"  <?php echo $gplusOffers; ?>/></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar-social">Salvar</div>
+            <div class="botao" id="cancelar-social" onclick="javascript:history.back(1)">Cancelar</div>
+        </div>
+    </div>
+
+    <!-- APARENCIA -->
+    <div class="company-configs-aparencia" id="aparencia">
+        <span class="label-dados-principais" style="color: #808080;">Aparência</span>
+        <br/>
+        <br/>
+        <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutConfiguracoes', 'save-preferences'), 'type' => 'file', 'name' => 'formAparencia')); ?>
+        <label class="label-aparencia" style="color: #666;">Papel de parede</label><br/>
+        <br/>
+        <img src="../img/icones/meus-dados/uploadphoto_1.png" id="upload-image-back"/>
+        <?php if (empty($aparencia)) { ?>
+            <img src="../img/icones/users-vitrine/bg_layout.jpg" id="back-comp-img" /><br/>
+        <?php } else { ?>
+            <img src="<?php echo $aparencia['background']; ?>" id="back-comp-img" /><br/>
+        <?php } ?>
+
+        <br/>
+        <div style="font-family: MyriadProLight; color: #666; font-size: 12px;">
+            ou<br/> 
+            <input type="checkbox" id="check-empty-back" <?php if(strpos($aparencia['background'], "#") == 0){echo "checked='true'";} ?>/> <label style="font-size: 14px; color: #333;">Fundo Branco</label>
+        </div>
+        <input type="text" id="aparacencia-empty-back" name="empty-background" value="false" style=""/>
+        <input type="file" id="file-img" name="data[Photo][file]"/>
+        <div class="area-botoes">
+            <button type="submit" class="botao" id="salvar-aparencia" >Salvar</button>
+            <div class="botao" id="cancelar-social" onclick="javascript:history.back(1)"
+                 style="
+                 padding: 8px;
+                 font-family: Helvetica;
+                 color: #fff;
+                 cursor: pointer;
+                 background: #f37165;">Cancelar</div>
+        </div>
+        <?php echo $this->Form->end(); ?>
+
+    </div>
+
+</div>
+
+<input type="hidden" id="input-fbkNewsOffer" value="<?php echo ($social['fbk_new_offers']) ? $social['fbk_new_offers'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-twtNewsOffer" value="<?php echo ($social['twitter_new_offers']) ? $social['twitter_new_offers'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-gplusNewsOffer" value="<?php echo ($social['gplus_new_offers']) ? $social['gplus_new_offers'] : "INACTIVE"; ?>"/>

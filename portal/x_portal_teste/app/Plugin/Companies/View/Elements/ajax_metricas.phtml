@@ -1,0 +1,15 @@
+<?php foreach($metricas as $metrica){
+		$valores = explode(',', $metrica['categories_metrics']['value']);		
+	?>
+		<div class="area-formulario">
+			<label><?php echo $metrica['categories_metrics']['name'];?></label>
+			<input type="hidden">
+			<div class="multi-select">
+				<?php foreach($valores as $valor){?>									
+					<a href="javascript:void(0);" valor="<?php echo $valor;?>" nome="<?php echo $metrica['categories_metrics']['name'];?>"><?php echo $valor;?></a>					
+				<?php }?>
+			</div>
+		</div>	
+<?php  } ?>
+
+	<p style="position:absolute; bottom:18px; left:300px; font-weight:bold; color:#666;">Clique em Salvar para finalizar</p>	

@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><?php echo $title_for_layout;?></title>
+
+<!-- META TAGS -->
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+
+<?php
+
+	echo $this->Html->css("empresas/Companies");	
+	echo $this->Html->css('empresas/refresh');	
+	echo $this->fetch('css');
+	
+	echo $this->Html->script('jqueryTunado');
+	echo $this->Html->script('jquery.roundabout.min.js');
+	echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+	echo $this->Html->script('jquery.mask.min');	
+	echo $this->Html->script('javascript.lib');
+	echo $this->Html->script('jquery.stringify');
+	echo $this->Html->script('complete');
+	echo $this->Html->script('jquery.cycle.all');
+	echo $this->Html->script('jquery.jcarousel.min');
+	echo $this->Html->script("empresas/Companies");
+	echo $this->Html->script('refresh');
+	echo $this->fetch('script');
+
+?>
+
+</head>
+
+<body>
+<div class="bg_popup">
+	<div class="popup">
+	
+	</div>
+</div>
+
+<div class="bg_refresh">
+	<div class="area-refresh">
+		<div class="loading">
+			<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+			<p>Aguarde enquanto o <strong>trueOne</strong> <br> esta processando</p>
+		</div>
+	</div>
+</div>
+
+
+	<?php echo $this->element("Companies.top_menu");?>
+	<?php echo $this->element("Companies.menuleft");?>
+	
+	<div class="area-conteudo">
+		<?php echo $this->fetch('content');?>	
+	</div>
+	
+</body>
+
+</html>
+

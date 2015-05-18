@@ -1,0 +1,619 @@
+<?php
+//Os arquivos foram nomeados da mesma forma para facilitar uma futura manutenção
+echo $this->Html->css('usuarios/x-meus-dados');
+echo $this->Html->script('usuarios/x-meus-dados');
+
+if ($this->Session->read('userData.User.gender') == 'male') {
+    $sexo = "Masculino";
+} elseif ($this->Session->read('userData.User.gender') == 'female') {
+    $sexo = "Feminino";
+} else {
+    $sexo = "Sexo";
+}
+$fbk = $this->Session->read('userData.Fbk');
+$social = $this->Session->read('userSocial');
+
+//facebook
+$fbkCheckoutsCheck = 'checked';
+$fbkCommCheck = 'checked';
+$fbkWishCheck = 'checked';
+//twitter
+$twtCheckoutsCheck = 'checked';
+$twtCommCheck = 'checked';
+$twtWishCheck = 'checked';
+//G+
+$gCheck = 'checked';
+$gComment = 'checked';
+$gWish = 'checked';
+
+//facebook
+if ($social['fbk_checkouts'] == 'INACTIVE') {
+    $fbkCheckoutsCheck = '';
+}
+if ($social['fbk_comments'] == 'INACTIVE') {
+    $fbkCommCheck = '';
+}
+if ($social['fbk_wishes'] == 'INACTIVE') {
+    $fbkWishCheck = '';
+}
+//twitter
+if ($social['twitter_checkouts'] == 'INACTIVE') {
+    $twtCheckoutsCheck = '';
+}
+if ($social['twitter_comments'] == 'INACTIVE') {
+    $twtCommCheck = '';
+}
+if ($social['twitter_wishes'] == 'INACTIVE') {
+    $twtWishCheck = '';
+}
+//G+
+if ($social['gplus_checkouts'] == 'INACTIVE') {
+    $gCheck = '';
+}
+if ($social['gplus_comments'] == 'INACTIVE') {
+    $gComment = '';
+}
+if ($social['gplus_wishes'] == 'INACTIVE') {
+    $gWish = '';
+}
+
+$relation = $fbk['FacebookProfile']['relationship_status'];
+$status = '';
+if ($relation == 'Single') {
+    $status = 'Solteiro';
+} else if ($relation == "It's Complicated") {
+    $status = 'Enrolado';
+} else if ($relation == "In a relationship") {
+    $status = 'Namorando';
+} else if ($relation == "Engaged") {
+    $status = 'Noivo';
+} else if ($relation == "Married") {
+    $status = 'Casado';
+} else {
+    $status = 'Status';
+}
+?>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script>
+    $(function() {
+        $("#user-photo").mouseover(function() {
+            $("#upload-image").fadeOut(0);
+        });
+
+        //mouse fora da foto do usuario
+        //esconde foto de upload
+        $("#user-photo").mouseout(function() {
+            $("#upload-image").fadeOut(00);
+        });
+
+        $("#notification-periodicity").change(function() {
+            var span = $("#notification-periodicity").val();
+            $(".period-explan").fadeOut(0);
+            $("#span-" + span).fadeIn(200);
+        });
+
+
+        //salvar notificações
+        $("#salvar-notification").click(function() {
+            var periodicity = $("#notification-periodicity").val();
+            $("#loading").fadeIn();
+            $.ajax({
+                type: "POST",
+                data: {
+                    periodicity: periodicity
+                },
+                url: location.href + "/save-notification",
+                success: function(result) {
+                    $("#loading").fadeOut();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                }
+            });
+        });
+    });
+</script>
+<style>
+    .linha-end-adicional{
+        background: #3399cc;
+    }
+
+    .meus-dados-form#user-photo{
+        border-left: 3px solid #3399cc;
+    }
+
+    .meus-dados-end{
+        margin-top: 5px;
+    }
+
+    .troca-senha-body{
+        margin-top: 5px;
+    }
+    .meus-dados-form{
+    }
+
+    .botao-menu{
+        max-width: 100px;
+        min-width: 80px;
+
+    }
+
+
+
+    @font-face {
+        font-family: MyriardProLight;
+        src: url("../fonts/MyriadProLight.otf") format("opentype");
+    }
+</style>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div id="mask"></div>
+
+<div class="meus-dados-body">
+
+    <div class="offers-title">
+
+    </div>
+    <br/>
+
+    <!-- botoes laterais  -->
+    <div class="botoes-laterais">
+        <div id="btn-dados-principais" class="botao-menu-default">
+            <span>Dados <br/>Principais</span>
+        </div>
+        <div id="btn-dados-adicionais" class="botao-menu">
+            <span>Dados<br/>Adicionais</span>
+        </div>
+
+        <div id="btn-troca-senha" class="botao-menu">
+            Trocar Senha
+        </div>
+
+        <div id="btn-redes-socias" class="botao-menu">
+            Redes Sociais
+        </div>
+        <div id="btn-notifications" class="botao-menu">
+            Notificações e Emails
+        </div>
+        <div id="btn-aparencia" class="botao-menu">
+            Aparência
+        </div>
+    </div>
+
+    <!-- DADOS PRINCIPAIS-->
+    <div class="meus-dados-form" id="meus-dados-form">
+        <!-- LINHA 1 -->
+        <div>
+            <div class="meus-dados-form" id="div-photo">
+                <img src="<?php echo $this->Session->read('userData.User.photo'); ?>" class="meus-dados-form" id="user-photo"/>
+                <img src="../img/icones/meus-dados/uploadphoto_1.png" id="upload-image"/>
+                <form name="up-user-photo" id="up-user-photo" action="meus-dados/save-user-photo" method="post">
+                    <input type="file" id="user-photo-select" name="data[Photo][user]"/>
+                </form>
+            </div>
+
+            <div class="meus-dados-form" id="div-campos" >
+                <span class="label-dados-principais">Dados Principais</span><br/>
+                <input type="text" id="nome" name='data[User][name]' value='<?php echo $this->Session->read('userData.User.name'); ?>' placeholder="Nome" />
+                <br/><br/>
+                <input type="text" id="dtNascimento" name="data[User][birthday]" value="<?php echo date("d/m/Y", strtotime($this->Session->read('userData.User.birthday'))); ?>" placeholder="Data de Nascimento"/>
+                <select name="data[User][gender]" id="sexo">
+                    <option value="<?php echo $this->Session->read('userData.User.gender'); ?>"><?php echo $sexo; ?></option>
+                    <option value="female">Feminino</option>
+                    <option value="male">Masculino</option>
+                </select>
+
+                <div id="div-gender">
+                    <img src="../img/icones/meus-dados/symbol-male.png" id="genderSymbol" />
+                </div>
+                <br/>
+                <input type="text" id="email" name="data[User][email]" value="<?php echo $this->Session->read('userData.User.email'); ?>" placeholder="Email"/>
+            </div>
+        </div>
+
+        <div class="meus-dados-ends">
+            <span class="label-dados-principais" id="title-end-principal">Endereço Principal</span><br/>
+            <div id="meus-dados-item-end">
+                <input type="text" id="cep" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.zip_code'); ?>" placeholder="CEP"/>
+                <br/>
+                <input type="text" id="endereco" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.address'); ?>" placeholder="Endereço" />
+                <input type="text" id="numero" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.number'); ?>" placeholder="Número" />
+                <br/>
+                <input type="text" id="bairro" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.district'); ?>" placeholder="Bairro" />
+                <input type="text" id="comple" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.complement'); ?>" placeholder="Complemento" />
+                <br/>
+                <input type="text" id="cidade" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.city'); ?>" placeholder="Cidade" />
+                <input type="text" id="estado" class="meus-dados-end" value="<?php echo $this->Session->read('userData.User.state'); ?>" placeholder="UF" maxlength="2"/>
+            </div>
+        </div>
+        <div class="meus-dados-ends">
+            <span class="label-dados-principais">Endereços Adicionais <div style="float: right; font-size: 16px; margin-right: 13px;" id="mostra-pop-cad-end">+</div></span><br/>
+
+            <?php foreach ($endsAdicionais as $end) { ?>
+                <div class="linha-end-adicional" id="<?php echo $end['AditionalAddressesUser']['id']; ?>">
+                    <?php echo $end['AditionalAddressesUser']['label']; ?>
+                    <div class="exclui-end-adicional" id="<?php echo $end['AditionalAddressesUser']['id']; ?>">X</div>
+                </div>
+
+                <div class="meus-dados-end-adicional" id="meus-dados-end-adicional-<?php echo $end['AditionalAddressesUser']['id']; ?>">
+                    <input type="text" id="cep" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['zip_code']; ?>" placeholder="CEP" name="cep-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <br/>
+                    <input type="text" id="endereco" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['address']; ?>" placeholder="Endereço" name="endereco-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <input type="text" id="numero" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['number']; ?>" placeholder="Número" name="numero-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <br/>
+                    <input type="text" id="bairro" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['district']; ?>" placeholder="Bairro" name="bairro-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <input type="text" id="comple" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['complement']; ?>" placeholder="Complemento" name="comple-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <br/>
+                    <input type="text" id="cidade" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['city']; ?>" placeholder="Cidade" name="cidade-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <input type="text" id="estado" class="meus-dados-end" value="<?php echo $end['AditionalAddressesUser']['state']; ?>" placeholder="UF" maxlength="2" name="estado-<?php echo $end['AditionalAddressesUser']['id']; ?>"/>
+                    <div class="botao-salvar-ends" value="<?php echo $end['AditionalAddressesUser']['id']; ?>">
+                        Salvar endereço
+                    </div>
+                </div>
+            <?php } ?>
+
+        </div>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar">SALVAR</div>
+            <div class="botao" id="cancelar">CANCELAR</div>
+        </div>
+    </div>
+
+    <!-- DADOS ADICIONAIS -->
+    <div id="meus-dados-add" class="meus-dados-add">
+        <span class="label-dados-principais">Dados Adicionais</span><br/>
+        <div class="meus-dados-add" id="corpo-add">
+
+            <br/>
+            <div>
+                <span id="label" class="meus-dados-add">Status de Relacionamento:</span><br/>
+                <select  id="relationship" name="relationship_status" class="meus-dados-add">
+                    <option value=" "><?php echo $status; ?></option>
+                    <option value="Single">Solteiro</option>
+                    <option value="It's Complicated">Enrolado</option>
+                    <option value="In a relationship">Namorando</option>
+                    <option value="Engaged">Noivo</option>
+                    <option value="Married">Casado</option>
+                </select>
+            </div>
+            <br/>
+            <div id="div-religion" class="meus-dados-add">
+                <span id="label" class="meus-dados-add">Religião:</span><br/>
+                <input type="text" class="meus-dados-add" id="religion" name="religion" placeholder="Religião" value='<?php echo $fbk['FacebookProfile']['religion']; ?>'/>
+            </div>
+
+
+            <span id="label" class="meus-dados-add">Politica:</span><br/>
+            <input type="text" class="meus-dados-add" id="political" name="political" placeholder="Política" value="<?php echo $fbk['FacebookProfile']['political']; ?>" />
+
+            <br/>
+            <div id="div-facebook" class="meus-dados-add">
+                <span id="label" class="meus-dados-add">Facebook:</span><br/>
+                <input type="text" class="meus-dados-add" id="facebook" name="facebook" placeholder="Link para o perfil" value="<?php echo $fbk['FacebookProfile']['profile_link']; ?>"/>
+            </div>
+
+        </div>
+        <div class="area-botoes">
+            <div class="botao" id="salvar-adicional">SALVAR</div>
+            <div class="botao" id="cancelar-adicional">CANCELAR</div>
+        </div>
+    </div>
+
+    <!-- TROCA DE SENHA -->
+    <div id="troca-senha-body" class="troca-senha-body">
+        <span class="label-dados-principais">Trocar senha</span><br/><br/>
+        <input type="password" id="input-velha-senha" class="troca-senha-body" placeholder="Senha Atual"/>
+        <img src="http://media.ticketmaster.com/tm/en-us/img/sys/1000/gray75_polling.gif" class="img-loading-pass"/>
+        <br/>
+        <input type="password" id="input-nova-senha" class="troca-senha-body" placeholder="Nova Senha"/><br/>
+        <input type="password" id="input-confirma-senha" class="troca-senha-body" placeholder="Confirma senha"/>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar-nova-senha">SALVAR</div>
+            <div class="botao" id="cancelar-nova-senha">CANCELAR</div>
+        </div>
+    </div>
+
+    <!-- REDES SOCIAIS -->
+    <div id="redes-sociais" class="redes-sociais">
+        <span class="label-dados-principais">Redes Sociais</span><br/><br/>
+
+        <!-- facebook -->
+        <div>
+            <img src="../img/icones/meus-dados/facebookicon.png" class="social-logo"/>
+            <input type="text" class="redes-sociais" id="face" name="redes-sociais-facebook" placeholder="Facebook"
+                   value="<?php echo $fbk['FacebookProfile']['profile_link']; ?>"/><br/>
+
+            <div  class="redes-socias" id="corpo">
+                <table id="table-social">
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel">Compras</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox" id="fbkChecks" class="social-check" <?php echo $fbkCheckoutsCheck; ?>/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <span class="redes-sociais" id="sublabel">Comentários</span></td>
+                        <td><span class="redes-sociais" id="onoff"><input type="checkbox" id="fbkComments" class="social-check" <?php echo $fbkCommCheck; ?>/></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel" >Wishlist</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox"  id="fbkWishes" class="social-check" <?php echo $fbkWishCheck; ?>/></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <br/>
+
+        <!-- twitter -->
+        <div>
+            <img src="../img/icones/meus-dados/twitterlogo.png" class="social-logo"/>
+            <input type="text" class="redes-sociais" id="twitter" name="redes-sociais-twitter" placeholder="Twitter" value="<?php echo $social['twitter_link']; ?>"/>
+            <div  class="redes-socias" id="corpo">
+                <table id="table-social-twt">
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel">Compras</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox" id="twtChecks" class="social-check"  <?php echo $twtCheckoutsCheck; ?>/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <span class="redes-sociais" id="sublabel">Comentários</span></td>
+                        <td><span class="redes-sociais" id="onoff"><input type="checkbox" id="twtComments" class="social-check" <?php echo $twtCommCheck; ?> /></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel">Wishlist</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox" id="twtWishes" class="social-check" <?php echo $twtWishCheck; ?>/></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+        <br/>
+        <!-- Google+ gplus -->
+        <div>
+            <img src="../img/icones/meus-dados/googleplus.png" class="social-logo"/>
+            <input type="text" class="redes-sociais" id="gplus" name="redes-sociais-gplus" placeholder="Google+" value="<?php echo $social['gplus_link']; ?>"/>
+            <div  class="redes-socias" id="corpo">
+                <table id="table-social-gplus">
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel">Compras</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox" id="gplusChecks" class="social-check"  <?php echo $gCheck; ?>/></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <span class="redes-sociais" id="sublabel">Comentários</span></td>
+                        <td><span class="redes-sociais" id="onoff"><input type="checkbox" id="gplusComments" class="social-check" <?php echo $gComment; ?> /></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="redes-sociais" id="sublabel">Wishlist</span>
+                        </td>
+                        <td>
+                            <span class="redes-sociais" id="onoff"><input type="checkbox" id="gplusWishes" class="social-check" <?php echo $gWish; ?>/></span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar-social">SALVAR</div>
+            <div class="botao" id="cancelar-social">CANCELAR</div>
+        </div>
+    </div>
+
+    <!-- APARENCIA -->
+    <div class="aparencia-corpo" id="aparencia-corpo">
+        <span class="label-dados-principais">Aparência</span><br/><br/>
+        <span  id="subtitle">Papel de Parede</span>
+        <br/>
+        <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'meusDados', 'save-preferences'), 'type' => 'file', 'id' => 'myForm')); ?>
+        <img src="<?php
+        if (!empty($this->Session->read('userPreferences.background'))) {
+            echo $this->Session->read('userPreferences.background');
+        } else {
+            echo "../img/icones/users-vitrine/bg_layout.jpg";
+        }
+        ?>" id="background" />
+        <br/>
+        <img src="../img/icones/meus-dados/uploadphoto_1.png" id="upload-image-back"/>
+        <input type="file" id="imgInp" name="data[Photo][file]" style="display: none;"/>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar-aparencia"><button type="button" style="border: 0px; background: transparent;" onclick="verificaExtencao()">SALVAR</button></div>
+            <div class="botao" id="cancelar-aparencia">CANCELAR</div>
+        </div>
+        <?php echo $this->Form->end(); ?>
+    </div>
+
+    <!-- Notificaçções -->
+    <div class="notifications-corpo" id="notifications-corpo" >
+        <span class="label-dados-principais">Notificaçãoes e Emails</span><br/>
+
+        <span style="font-size: 11px; color: #333; font-family: MyriardProLight;">
+            Para receber somente as notificações você precisar ter o app do Adventa em seu Smartphone.
+            Baixe em: 
+        </span>
+        <br/>
+        <br/>
+        <div>
+            <div>
+                <span style="font-family: MyriardProLight; font-size: 18px;"><strong>Ofertas</strong></span>
+                <div style="font-family: MyriardProLight; font-size: 14px;">
+                    <input type="checkbox" checked="true"/> Email<br/>
+                    <input type="checkbox" <?php
+                    if ($using['users_using']['mobile'] == 'INACTIVE') {
+                        echo "disabled='true'";
+                    }
+                    ?>/> Notificações 
+                </div>
+            </div>
+            <br/>
+            <div>
+                <span style="font-family: MyriardProLight; font-size: 18px;"><strong>Compras</strong></span>
+                <div style="font-family: MyriardProLight; font-size: 14px;">
+                    <input type="checkbox" checked="true"/> Email<br/>
+                    <input type="checkbox" <?php
+                    if ($using['users_using']['mobile'] == 'INACTIVE') {
+                        echo "disabled='true'";
+                    }
+                    ?>/> Notificações 
+                </div>
+            </div>
+            <br/>
+            <div>
+                <span style="font-family: MyriardProLight; font-size: 18px;"><strong>Wishlist</strong></span>
+                <div style="font-family: MyriardProLight; font-size: 14px;">
+                    <input type="checkbox" checked="true"/> Email<br/>
+                    <input type="checkbox" <?php
+                    if ($using['users_using']['mobile'] == 'INACTIVE') {
+                        echo "disabled='true'";
+                    }
+                    ?>/> Notificações 
+                </div>
+            </div>
+            <br/>
+            <div>
+                <span style="font-family: MyriardProLight; font-size: 18px;"><strong>Comunicados</strong></span>
+                <br/>
+                <span style="font-size: 11px; color: #333; font-family: MyriardProLight;">
+                    * Aniversário, datas comemoratiovas, etc. 
+                </span>
+                <div style="font-family: MyriardProLight; font-size: 14px;">
+                    <input type="checkbox" checked="true"/> Email<br/>
+                    <input type="checkbox" <?php
+                    if ($using['users_using']['mobile'] == 'INACTIVE') {
+                        echo "disabled='true'";
+                    }
+                    ?>/> Notificações 
+                </div>
+            </div>  
+
+            <br/>
+            <!-- PERIODICIDADE DAS NOTIFICAÇÕES -->
+            <div>
+                <span style="font-family: MyriardProLight; font-size: 18px;"><strong>Periodicidade</strong></span>
+                <br/>
+                <span class="period-explan" style="font-size: 11px; color: #333; font-family: MyriardProLight; display: none;" id="span-UNITARY">
+                    UNITÁRIO: Emails são enviados assim que há a necessidade de notifica-lo de algo a qualquer hora.
+                </span>
+
+                <span class="period-explan" style="font-size: 11px; color: #333; font-family: MyriardProLight; display: none;" id="span-DAILY">
+                    DIÁRIO: Todas as notificações e emails são enviados somente uma vez ao dia em um horario padrão.
+                </span>
+
+                <span class="period-explan" style="font-size: 11px; color: #333; font-family: MyriardProLight; display: none;" id="span-WEEKLY">
+                    SEMANAL: Todas as notificações e emails são enviados somente uma vez na semana em um dia padrão.
+                </span>
+
+                <span class="period-explan" style="font-size: 11px; color: #333; font-family: MyriardProLight; display: none;" id="span-MONTHLY">
+                    MENSAL: Todas as notificações e emails são enviados somente uma vez no mês em um dia e horário padrão.
+                </span>
+
+                <br/>
+                <select style="font-family: MyriardProLight; padding: 5px; padding-right: 30px;" id="notification-periodicity">
+                    <?php if ($period) { ?>
+                        <option value="<?php echo $period[0]['users_preferences']['notifications_periodicity']; ?>"><?php
+                            switch ($period[0]['users_preferences']['notifications_periodicity']) {
+                                case "UNITARY":
+                                    echo "Unitário";
+                                    break;
+                                case "DAILY":
+                                    echo "Diário";
+                                    break;
+                                case "WEEKLY":
+                                    echo "Semanal";
+                                    break;
+                                case "MONTHLY":
+                                    echo "Mensal";
+                                    break;
+                            }
+                            ?></option>
+                    <?php }
+                    ?>
+                    <option value="">Selecione</option>
+                    <option value="UNITARY">Unitário</option>
+                    <option value="DAILY">Diário</option>
+                    <option value="WEEKLY">Semanal</option>
+                    <option value="MONTHLY">Mensal</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="area-botoes">
+            <div class="botao" id="salvar-notification" style="float: left; margin-right: 5px;">SALVAR</div>
+            <div class="botao" id="cancelar-notification" style="float: left;">CANCELAR</div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="pop-cad-end" >
+    <div id="popheader">
+        <span id="pop-cad-title">Novo Endereço<div style="float: right; color: orange; font-weight: bold; cursor: pointer;" id="xis-pop-cad-end">X</div></span>
+    </div>
+    <br/>
+    <div id="pop-login-body">
+        <input type="text" id="ceppop" class="meus-dados-end" placeholder="CEP"/>
+        <input type="text" id="labelpop" class="meus-dados-end" placeholder="Nome do Local" />
+        <br/>
+        <input type="text" id="enderecopop" class="meus-dados-end"  placeholder="Endereço" />
+        <input type="text" id="numeropop" class="meus-dados-end"  placeholder="Número" />
+        <br/>
+        <input type="text" id="bairropop" class="meus-dados-end" placeholder="Bairro" />
+        <input type="text" id="complepop" class="meus-dados-end" placeholder="Complemento" />
+        <br/>
+        <input type="text" id="cidadepop" class="meus-dados-end" placeholder="Cidade" />
+        <input type="text" id="estadopop" class="meus-dados-end" placeholder="UF" maxlength="2"/>
+        <br/>
+
+        <div class="area-botoes-pop">
+            <div class="botao" id="salvar-pop">SALVAR</div>
+            <div class="botao" id="cancelar-pop">CANCELAR</div>
+        </div>
+    </div>
+</div>
+
+
+<input type="hidden" id="input-fbkChecks" value="<?php echo ($social['fbk_checkouts']) ? $social['fbk_checkouts'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-fbkComments" value="<?php echo ($social['fbk_comments']) ? $social['fbk_comments'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-fbkWishes" value="<?php echo ($social['fbk_wishes']) ? $social['fbk_wishes'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-twtChecks" value="<?php echo ($social['twitter_checkouts']) ? $social['twitter_checkouts'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-twtComments" value="<?php echo ($social['twitter_comments']) ? $social['twitter_comments'] : "INACTIVE"; ?>"/>
+<input type="hidden" id="input-twtWishes" value="<?php echo ($social['twitter_wishes']) ? $social['twitter_wishes'] : "INACTIVE"; ?>"/>
+
+<input type="hidden" id="input-gplusChecks" value="<?php echo ($social['gplus_checkouts']) ? $social['gplus_checkouts'] : "INACTIVE"; ?>" />
+<input type="hidden" id="input-gplusComments" value="<?php echo ($social['gplus_comments']) ? $social['gplus_comments'] : "INACTIVE"; ?>" />
+<input type="hidden" id="input-gplusWishes" value="<?php echo ($social['gplus_wishes']) ? $social['gplus_wishes'] : "INACTIVE"; ?>" />
+
+<div class="valida-error">
+    <span id="valida-img-error">
+        Imagem muito pesada.
+    </span>
+    <br/>
+    <div id="button-ok-valida-img">
+        OK
+    </div>
+
+</div>

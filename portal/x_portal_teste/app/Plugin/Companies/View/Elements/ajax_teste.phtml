@@ -1,0 +1,224 @@
+<?php
+/* ESSA TELA É USADA PARA CARREGAR DINAMICAMENTE VIA AJAX A GRADE DE EIXOS PARA O USUARIO
+ * MEDIDA PALIATIVA - aos programadores que virão após mim: Gastei muito tempo pra chegar nisso --' 
+ * Melhorem!!!
+ */
+
+//echo 'A coluna é: ' . $categoria . '; E a linha é: ' . $eixoLinha;
+//echo '<br /> as linhas vão ser: ' . print_r($linhas);
+$totalColunas = count($colunas);
+$collunscolumns = array_filter($colunas);
+
+//tabela dinamica - QUANDO USUARIO ESTÁ EDITANDO A OFERTA
+$editClunas = $this->Session->read('editDTColunas');
+$editLinhas = $this->Session->read('editDTLinhas');
+
+$totalLinhaDados = count($editLinhas);
+?>
+
+<script>
+
+    function mascara(o, f) {
+        v_obj = o
+        v_fun = f
+        setTimeout("execmascara()", 1)
+    }
+    function execmascara() {
+        v_obj.value = v_fun(v_obj.value)
+    }
+    function mvalor(v) {
+        v = v.replace(/\D/g, "");//Remove tudo o que não é dígito
+        v = v.replace(/(\d)(\d{8})$/, "$1.$2");//coloca o ponto dos milhões
+        v = v.replace(/(\d)(\d{5})$/, "$1.$2");//coloca o ponto dos milhares
+
+        v = v.replace(/(\d)(\d{2})$/, "$1,$2");//coloca a virgula antes dos 2 últimos dígitos
+        return v;
+    }
+
+
+    function validar(dom, tipo) {
+        switch (tipo) {
+            case'num':
+                var regex = /[A-Za-z]/g;
+                break;
+            case'text':
+                var regex = /\d/g;
+                break;
+        }
+        dom.value = dom.value.replace(regex, '');
+    }
+
+
+</script>
+<style>
+    .dinamica{
+        border-collapse: collapse;
+        background: #ffffff;
+        border: 2px solid #e6e6e6;
+    }
+
+    th{
+        border: 1px solid #e6e6e6;
+        font-size: 14px;
+        padding: 5px;
+        font-family: Helvetica;
+        background: #FFFAFA;
+        text-decoration: none;
+        text-align: center;
+    }
+
+    .firstTD{
+        border: 1px solid #e6e6e6;
+        font-size: 14px;
+        padding: 5px;
+        font-family: Helvetica;
+        background: #FFFAFA;
+    }
+    input[type="text"]{
+        font-family: Helvetica;
+        font-size: 12px;
+        border: 0px;
+        height: 10px;
+        outline:none;
+        text-align: center;
+    }
+    .td-cont{
+        background: #ffffff;
+        width: 50px;
+        text-align: center;
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #e6e6e6;
+    }
+
+    .td-cont#preco{
+        width: 50px;
+    }
+
+    th#preco{
+        font-size: 11px;
+    }
+</style>
+
+
+<table class="dinamica">
+    <!-- populamos as colunas com os dominios escolhidos como eixoY -->
+    <tr>
+        <th></th>
+
+        <?php for ($i = 0; $i < $totalColunas; $i++) { ?>
+
+            <th id="<?php echo $colunas[$i]['offers_domains']['id']; ?>">
+                <?php if ($colunas[$i]['offers_domains']['offer_attribute_id'] == 3) { ?>
+            <div style=" width:15px; height: 15px; background: <?php echo $colunas[$i]['offers_domains']['name']; ?>"></div>
+            <?php
+        } else {
+            echo $colunas[$i]['offers_domains']['name'];
+        }
+        ?>
+    </th>
+
+<?php } ?>
+
+</tr>
+<tr>
+    <th>Preço</th>
+    <?php for ($i = 0; $i < $totalColunas; $i++) { ?>
+        <td>
+            <?php
+            for ($y = 0; $y < $totalColunas; $y++) {
+                if ($editClunas[$y]['offers_domains']['id'] == $colunas[$i]['offers_domains']['id']) {
+                    ?>
+                    <input type="text" name="preco-column-<?php echo $colunas[$i]['offers_domains']['id']; ?>" onkeydown="mascara(this, mvalor);" class="td-cont" id="preco" placeholder="R$ 0" value="<?php echo $editClunas[$y]['offers_metrics']['value']; ?>">
+                    <?php
+                    $controle = "par";
+                    break;
+                } else {
+                    $controle = "impar";
+                }
+            }
+            if ($controle == "impar") {
+                ?>
+                <input type="text" name="preco-column-<?php echo $colunas[$i]['offers_domains']['id']; ?>" onkeydown="mascara(this, mvalor);" class="td-cont" id="preco" placeholder="R$ 0" >
+            <?php }
+            ?>
+
+            <?php ?>
+        </td>
+
+    <?php } ?>
+</tr>
+
+<!-- populamos as linhas com os dominios escolhidos como eixoX -->
+<?php
+if (!empty($linhas)) {
+    foreach ($linhas as $linha) {
+        ?>
+        <tr>
+            <td class="firstTD" id="<?php echo $linha['offers_domains']['id']; ?>">
+                <?php if ($linha['offers_domains']['offer_attribute_id'] == 3) { ?>
+
+                    <div style=" width:10px; height:10px; background: <?php echo $linha['offers_domains']['name']; ?>"></div>
+
+                    <?php
+                } else {
+                    echo $linha['offers_domains']['name'];
+                }
+                ?>
+            </td>
+
+            <!-- LOGICA DA TABELA DE EDICAO --> 
+
+            <?php
+            //Variavel responsavel por conferir se já populamos a linha
+            //se SIM nós não entramos no loop de impressão das colunas vazias da tabela 
+            //se NÃO nós entramos no loop de impressão das colunas vazias da tabela
+            $valida = false;
+
+            //contador usado na verificação das linhas  
+            //roda o array que contem os dados a serem editados
+            for ($i = 0; $i < $totalLinhaDados; $i++) {
+                ?>
+                <?php
+                //verifica registro por registro do array com dados para saber se pertence à respectiva linha
+                if ($editLinhas[$i]['offers_domains']['id'] == $linha['offers_domains']['id']) {
+                    $valida = true;
+                    for ($m = 0; $m < $totalColunas; $m++) {
+                        if ($editLinhas[$i]['offers_metrics']['offer_metrics_y_id'] == $colunas[$m]['offers_domains']['id']) {
+                            echo '<td>' . $editLinhas[$i]['offers_metrics']['amount'] . '</td>';
+                            $i++;
+                            ?>
+
+                            <?php
+                        } else {
+                            ?>
+                            <td><input onkeyup="validar(this
+                                                                    , 'num');" name="cont-<?php echo $linha['offers_domains']['id'] . "-" . $colunas[$i]['offers_domains']['id']; ?>" id="td-cont" class="td-cont"  type="text" maxlength="3" placeholder="0"/></td>
+                                       <?php
+                                   }
+                               }
+                           }
+                       }
+                       ?>
+
+            <?php
+            if (!$valida) {
+                for ($i = 0; $i < $totalColunas; $i++) {
+                    ?>
+                    <td><input onkeyup="validar(this
+                                                    , 'num');" name="cont-<?php echo $linha['offers_domains']['id'] . "-" . $colunas[$i]['offers_domains']['id']; ?>" id="td-cont" class="td-cont"  type="text" maxlength="3" placeholder="0" /></td>
+                        <?php
+                    }
+                }
+                ?>
+        </tr>
+        <?php
+    }
+}
+?>
+</table>
+
+
+
+
+

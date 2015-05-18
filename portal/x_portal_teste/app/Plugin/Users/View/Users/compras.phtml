@@ -1,0 +1,664 @@
+<?php
+//echo print_r($checkouts);
+//Os arquivos foram nomeados da mesma forma para facilitar futuras manutenções
+echo $this->Html->css('usuarios/x-compras');
+echo $this->Html->script('usuarios/x-compras');
+
+$fbk = $this->Session->read('userSocial.facebook');
+$twt = $this->Session->read('userSocial.twitter');
+$gplus = $this->Session->read('userSocial.google_plus');
+?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script type='text/javascript' src='https://www.moip.com.br/transparente/MoipWidget-v2.js' charset=ISO-8859-1"></script>
+<script>
+    function comentarOferta() {
+        var titulo = $("#titulo").val();
+        var comentario = $("#comentario").val();
+        var id = $("#comment-offer-id").val();
+        var nota = $("#rating").val();
+
+        if (nota != '') {
+            $("#loading").fadeIn(500);
+            $.ajax({
+                type: "POST",
+                data: {
+                    titulo: titulo,
+                    comentario: comentario,
+                    nota: nota,
+                    oferta_id: id},
+                url: location.href + "/comenta-oferta",
+                success: function(result) {
+                    $("#loading").fadeOut(500);
+                    $("#pop-comment").fadeOut(500);
+                    $("#mask").fadeOut();
+                    $("#pop-comment-comment").fadeIn(1000);
+                    $("#pop-comment-comment").fadeOut(3500);
+                    showBoxes(<?php echo "'{$fbk}', '{$twt}', '{$gplus}'"; ?>, titulo, id);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //alert(errorThrown);
+                }
+            });
+        } else {
+            alert('Dê sua nota para o produto!!!');
+        }
+    }
+</script>
+
+<style>
+    #adv-compras-cod{
+        width: 1%;
+    }
+
+    #adv-compras-prod{
+        width: 11%;
+    }
+
+    #adv-compras-val{
+        width: 1%;
+    }
+
+    #adv-compras-dat{
+        width: 1%;
+    }
+
+    #adv-compras-sta{
+        width: 2%;
+    }
+
+    #adv-compras-com{
+        width: 2%;
+    }
+
+    #adv-compras-bol{
+        width: 2%;
+    }
+
+    #adv-compras-res{
+        width: 2%;
+    }
+
+
+    #list-style{
+        padding: 0;
+        border: 0px solid;
+        border-collapse: collapse;
+        top: 0;
+        left: 8;
+    }
+
+    tr#adv-compras-head{
+        background: #f37165;
+        font-family: Tahoma;
+        color: #fff;
+        padding: 0;
+        border: 0px solid;
+    }
+
+    tr#adv-compras-values{
+        color: #808080;
+        text-align: center;
+        font-family: Helvetica;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+    }
+
+    tr#adv-compras-values td{
+        padding: 15px;
+    }
+
+    th{
+        padding: 10px;
+        padding-top: 20px;
+        font-weight: normal;
+        border: 0px solid;
+        background: #f37165;
+    }
+
+    #list-style td{
+        border: 0px solid;
+        font-size: 12px;
+    }
+
+    strong{
+        color: #808080;
+
+    }
+</style>
+
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div id="mask"></div>
+
+<div style="overflow: auto; width: 96%; height: 87%;left: 4%; top:11%; background: #f2f2f2; position: absolute;">
+    <span id="teste-recebe"></span>
+
+    <table id="list-style">
+        <tr id="adv-compras-head">
+            <th id="adv-compras-cod">Codigo</th>
+            <th id="adv-compras-prod">Produto</th>
+            <th id="adv-compras-val">Valor total</th>
+            <th id="adv-compras-dat">Data</th>
+            <th id="adv-compras-sta">Status</th>
+            <th id="adv-compras-com">Comentário</th>
+            <th id="adv-compras-bol">Boleto</th>
+            <th id="adv-compras-res">Resumo</th>
+        </tr>
+
+        <!-- VALORES -->
+        <?php foreach ($checks as $check) { ?> 
+            <tr id="adv-compras-values" onclick="mostraLinha(<?php echo $check['Checkout']['id']; ?>);">
+                <td><?php echo $check['Checkout']['id']; ?></td>
+                <td><strong><?php echo $check['Offer']['title']; ?> </strong></td>
+                <td>R$<?php echo number_format($check['Checkout']['total_value'], 2, ',', '.'); ?></td>
+                <td><?php echo date("d/m/Y", strtotime($check['Checkout']['date'])); ?></td>
+                <td><?php echo $check['PaymentState']['name']; ?></td>
+                <td><img src="../img/icones/compras/comentado.png" title="Comente essa oferta" class="img-comenta" onclick="validaComentario(<?php echo $check['Offer']['id']; ?>, '<?php echo $check['Offer']['title']; ?>')" /></td>
+                <td>
+                    <?php if ($check['Checkout']['payment_method_id'] == 73) { ?>
+                        <img src="../img/icones/compras/printer.png" title="Regerar boleto" class="img-comenta" onclick="regerarBoleto(<?php echo $check['Checkout']['id']; ?>)"/>
+                    <?php } else { ?> 
+                        <img src="../img/icones/compras/printer.png" class="img-comenta-block" title="Compra realizada com cartão de Crédito."/>
+                    <?php } ?>
+                </td>
+                <td><img src="../img/icones/compras/document-resume.png" title="Resumo do Pedido" class="img-resumo" onclick="mostraResumoPedido(<?php echo $check['Checkout']['unit_value'] ?>, <?php echo $check['Checkout']['amount'] ?>, '<?php echo $check['PaymentMethod']['type'] ?> - <?php echo $check['PaymentMethod']['name'] ?>', <?php echo $check['Checkout']['shipping_value'] ?>,
+                    <?php echo $check['Checkout']['total_value'] ?>, '<?php echo $check['Checkout']['address'] ?>', '<?php echo $check['Checkout']['number'] ?>', '<?php echo $check['Checkout']['district'] ?>', '<?php echo $check['Checkout']['zip_code'] ?>', '<?php echo $check['Checkout']['complement'] ?>',
+                                '<?php echo $check['Checkout']['city'] ?>', '<?php echo $check['Checkout']['state'] ?>', '<?php echo date("d/m/Y", strtotime($check['Checkout']['date'])); ?>', '<?php echo $check['Offer']['title']; ?>')"/></td>
+            </tr>
+            <!-- D E T A L H E S - D A - C O M P R A -->
+            <tr id="" class="tr-detalhe">
+                <td class="td-detalhe" colspan="8" id="details<?php echo $check['Checkout']['id']; ?>">
+                    <div class="div-detalhes">
+
+                        <div class="cont-detalhes">
+                            <div id="detalhes-empresa">
+                                <div class="div-header">
+                                    <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosempresa.png" />
+                                    <img class="detalhe-logo-empresa" src="<?php echo $check['Company']['logo']; ?>" />
+                                </div>
+                                <span style="margin-left: 5px;">
+                                    <?php echo $check['Company']['fancy_name']; ?><br/>
+                                    <?php echo $check['Company']['phone']; ?><br/>
+                                    <div id="ver-email"><a href="mailto:<?php echo $check['Company']['email']; ?>"><?php echo $check['Company']['email']; ?></a></div>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="cont-detalhes">
+                            <div id="detalhes-prazo">
+                                <div class="div-header">
+                                    <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosentrega.png" />
+                                    <div class="titulo-detalhe">Prazo de </br>entrega</div>
+                                </div>
+                                <span style="margin-left: 5px;">
+                                    Previsão de até <br/>
+                                    <?php echo $check['Checkout']['delivery_time']; ?> dias úteis
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="cont-detalhes">
+                            <div id="detalhes-pagamento">
+                                <div class="div-header">
+                                    <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosvalores.png" />
+                                    <div class="titulo-detalhe">Forma de </br>pagamento</div><br/><br/>
+                                </div>
+                                <span style="margin-left: 5px;">
+                                    <?php echo $check['PaymentMethod']['type'] ?> - <?php echo $check['PaymentMethod']['name'] ?><br/>
+                                    <?php if ($check['PaymentMethod']['type'] != 'Boleto') { ?>
+                                        em <?php echo $check['Checkout']['installment']; ?>x
+                                    <?php } ?>
+                                </span>
+
+                            </div>
+                        </div>
+
+                        <div class="cont-detalhes" id="pagamento">
+                            <div id="detalhes-moip">
+                                <div class="div-header">
+                                    <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosmoip.png" />
+                                    <div class="titulo-detalhe">Sistema de </br>pagamento</div>
+                                </div>
+                                <span style="margin-left: 5px;">
+                                    Código <br/>
+                                    <div style="white-space: normal; width: 170px; word-break:break-all;"><?php echo $check['Checkout']['transaction_moip_code']; ?> </div>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div><br/>
+
+                </td>
+            <tr/>
+        <?php } ?>
+    </table>
+
+<!--    <table id="signatures-table" class="signatures-table">
+    <tr>
+        <th>Pedido nº</th>
+        <th>Produto(s)</th>
+        <th>Data</th>
+        <th>Valor</th>
+        <th>Status</th>
+        <th>Comentário</th>
+        <th>Boleto</th>
+        <th>Resumo</th>
+    </tr>
+
+    <?php foreach ($checks as $check) { ?> 
+                                                                                        <tr id="<?php echo $check['Checkout']['id']; ?>" onclick="mostraLinha(this.id);">
+                                                                                            <td><?php echo $check['Checkout']['id']; ?></td>
+                                                                                            <td id="td-offer" style="cursor: pointer;">
+                                                                                                <div class="td-offer-esquerdo">
+                                                                                                    <img src="<?php echo $check['Offer']['photo']; ?>" class="offer-photo"/>
+                                                                                                </div>
+                                                                                                <div class="td-offer-direito">
+                                                                                                    <strong> <?php echo substr($check['Offer']['title'], 0, 38); ?></strong><br/>
+        <?php echo substr($check['Offer']['resume'], 0, 70) . '...'; ?>
+                                                                                                </div>
+                                                                                            </td>
+                                                                                            <td><?php echo date("d/m/Y", strtotime($check['Checkout']['date'])); ?></td>
+                                                                                            <td><?php echo 'R$ ' . str_replace(".", ",", $check['Checkout']['total_value']); ?></td>
+                                                                                            <td><?php echo $check['PaymentState']['name']; ?></td>
+                                                                                            <td><img src="../img/icones/compras/comentado.png" title="Comente essa oferta" class="img-comenta" onclick="validaComentario(<?php echo $check['Offer']['id']; ?>, '<?php echo $check['Offer']['title']; ?>')" /></td>
+
+                                                                                             não mostra impressão caso não seja boleto 
+                                                                                            <td>
+        <?php if ($check['Checkout']['payment_method_id'] == 73) { ?>
+                                                                                                                                                                                    <img src="../img/icones/compras/printer.png" title="Regerar boleto" class="img-comenta" onclick="regerarBoleto(<?php echo $check['Checkout']['id']; ?>)"/>
+        <?php } else { ?> 
+                                                                                                                                                                                    <img src="../img/icones/compras/printer.png" class="img-comenta-block" title="Compra realizada com cartão de Crédito."/>
+        <?php } ?>
+                                                                                            </td>
+
+
+                                                                                            <td><img src="../img/icones/compras/document-resume.png" title="Resumo do Pedido" class="img-resumo" onclick="mostraResumoPedido(<?php echo $check['Checkout']['unit_value'] ?>, <?php echo $check['Checkout']['amount'] ?>, '<?php echo $check['PaymentMethod']['type'] ?> - <?php echo $check['PaymentMethod']['name'] ?>', <?php echo $check['Checkout']['shipping_value'] ?>,
+        <?php echo $check['Checkout']['total_value'] ?>, '<?php echo $check['Checkout']['address'] ?>', '<?php echo $check['Checkout']['number'] ?>', '<?php echo $check['Checkout']['district'] ?>', '<?php echo $check['Checkout']['zip_code'] ?>', '<?php echo $check['Checkout']['complement'] ?>',
+                                                                                                                '<?php echo $check['Checkout']['city'] ?>', '<?php echo $check['Checkout']['state'] ?>', '<?php echo date("d/m/Y", strtotime($check['Checkout']['date'])); ?>', '<?php echo $check['Offer']['title']; ?>')"/></td>
+                                                                                        </tr>
+                                                                                         DETALHES DA COMPRA 
+                                                                                        <tr id="" class="tr-detalhe">
+                                                                                            <td class="td-detalhe" colspan="5" id="details<?php echo $check['Checkout']['id']; ?>">
+                                                                                                <div class="div-detalhes">
+
+                                                                                                    <div class="cont-detalhes">
+                                                                                                        <div id="detalhes-empresa">
+                                                                                                            <div class="div-header">
+                                                                                                                <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosempresa.png" />
+                                                                                                                <img class="detalhe-logo-empresa" src="<?php echo $check['Company']['logo']; ?>" />
+                                                                                                            </div>
+                                                                                                            <span style="margin-left: 5px;">
+        <?php echo $check['Company']['fancy_name']; ?><br/>
+        <?php echo $check['Company']['phone']; ?><br/>
+                                                                                                                <div id="ver-email"><a href="mailto:<?php echo $check['Company']['email']; ?>"><?php echo $check['Company']['email']; ?></a></div>
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="cont-detalhes">
+                                                                                                        <div id="detalhes-prazo">
+                                                                                                            <div class="div-header">
+                                                                                                                <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosentrega.png" />
+                                                                                                                <div class="titulo-detalhe">Prazo de </br>entrega</div>
+                                                                                                            </div>
+                                                                                                            <span style="margin-left: 5px;">
+                                                                                                                Previsão de até <br/>
+        <?php echo $check['Checkout']['delivery_time']; ?> dias úteis
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="cont-detalhes">
+                                                                                                        <div id="detalhes-pagamento">
+                                                                                                            <div class="div-header">
+                                                                                                                <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosvalores.png" />
+                                                                                                                <div class="titulo-detalhe">Forma de </br>pagamento</div><br/><br/>
+                                                                                                            </div>
+                                                                                                            <span style="margin-left: 5px;">
+        <?php echo $check['PaymentMethod']['type'] ?> - <?php echo $check['PaymentMethod']['name'] ?><br/>
+        <?php if ($check['PaymentMethod']['type'] != 'Boleto') { ?>
+                                                                                                                                                                                                    em <?php echo $check['Checkout']['installment']; ?>x
+        <?php } ?>
+                                                                                                            </span>
+
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="cont-detalhes" id="pagamento">
+                                                                                                        <div id="detalhes-moip">
+                                                                                                            <div class="div-header">
+                                                                                                                <img class="icon-detalhe" src="../img/icones/users-vitrine/bg_dadosmoip.png" />
+                                                                                                                <div class="titulo-detalhe">Sistema de </br>pagamento</div>
+                                                                                                            </div>
+                                                                                                            <span style="margin-left: 5px;">
+                                                                                                                Código <br/>
+                                                                                                                <div style="white-space: normal; width: 170px; word-break:break-all;"><?php echo $check['Checkout']['transaction_moip_code']; ?> </div>
+                                                                                                            </span>
+                                                                                                        </div>
+
+                                                                                                    </div>
+                                                                                                </div><br/>
+
+                                                                                            </td>
+                                                                                        <tr/>
+    <?php } ?>
+</table>-->
+    <?php //echo print_r($checkouts);   ?>
+</div>
+</div>
+
+<!-- Resumo da compra -->
+<form id="Form1" method="post" runat="server"> 
+    <div class="pop-ver-pedido" id="pop-ver-pedido">
+        <div style="width: 100%; background: #333;">
+
+            <img src="../img/adv/Adventa Logo/Adventa-2.png" width="20%">
+            <div style="font-size: 12px; color:#fff; margin-right: 15px; margin-top: 25px; margin-left: 104px; float: right;"><i><?php echo date('d/m/Y'); ?></i></div>
+        </div> 
+        <div style=" background: url('../img/email/background-titulo.gif') no-repeat; height: 91px;">
+            <img src="../img/email/icone-destaque-titulo.gif" style="float: left;">
+            <div>
+                <div style="width: 350px; margin-top: 20px; position: absolute; margin-left: 115px;"><i>
+                        <span style="font-size: 20px; font-weight: bold;"> Resumo do Pedido</span><br/>
+                        <span style="font-size: 10px;">sua compra foi efetuada</span>
+                    </i>
+                </div>
+            </div>
+        </div>
+
+        <div id="popheader">
+
+        </div>
+
+        <div id="popbody" style="background: url('../img/email/background-conteudo.gif');">
+
+            <div style="padding-left: 20px; padding-top: 15px; font-size: 14px;">
+                <i> Caro Sr(a) <strong><?php echo $this->Session->read('userData.User.name'); ?></strong></i><br/>
+
+                <div>Aqui está o resumo do seu pedido:</div>
+            </div>
+            <!--................. PRODUTOS ............... -->
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 47; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Produtos</strong> </span>
+                <?php
+                for ($i = 0; $i < 47; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/>
+            <!-- TABELA DE PRODUTOS -->
+            <div>
+                <table class="table-confirm" style="border: 0px; margin-left: 75px; margin-top: 20px;">
+                    <tr>
+                        <td><div style="margin-top: 3px; text-align: left;"><span id="resume-offer-name"></span></div></td>
+                        <td style="text-align: center;">
+                            <div style="margin-top: 9px; position: absolute; margin-left: 95px;">
+                                <span style="font-size: 10px; text-align: center; width: 100%;"><i><span id="resume-qtd">2</span> unidade(s)</i></span>
+                            </div>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 30 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td><div style="margin-top: 3px;" id="resume-unit-val">R$ 00,0</div></td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 41; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Dados do Pedido</strong> </span>
+                <?php
+                for ($i = 0; $i < 41; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/>
+            <div>
+                <!--                 Detalhes do Pedido-->
+                <table class="table-confirm2" style="border: 0px; margin-left: 45px; margin-top: 20px;">
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Tipo de Pagamento</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; text-align: center; ">
+                                <?php
+                                $conta = 60 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td><span id="resume-tipo-pag"></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Data do Pedido</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 60 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;" id="resume-data"><?php echo date('d/m/Y'); ?></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Valor do Pedido</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 60 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;">
+                            R$ <span id="resume-valor-pedido" ></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;">Valor do Frete</div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 60 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;">R$ <span id="resume-frete"/></span></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><div style="margin-top: 3px;"><strong>TOTAL PEDIDO</strong></div></td>
+                        <td>
+                            <div style="margin-top: 8px; padding-left: 3px; padding-right: 3px; ">
+                                <?php
+                                $conta = 60 - strlen($offer['Offer']['title']);
+                                for ($i = 0; $i <= $conta; $i++) {
+                                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px;'/>";
+                                }
+                                ?>
+                            </div>
+                        </td>
+                        <td style="text-align: left;">R$ <span id="resume-total"></span></td>
+                    </tr>
+                </table>
+            </div>
+            <!--             DADOS DA ENTREGA-->
+            <br/><div style="padding-left: 8px; padding-right: 8px; background: url('../img/email/background-conteudo.gif'); text-align: center;">
+                <?php
+                for ($i = 0; $i < 40; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?> <span style='float: left; margin-left: 8px; margin-right: 8px;'><strong>Dados da Entrega</strong> </span>
+                <?php
+                for ($i = 0; $i < 40; $i++) {
+                    echo "<img src='../img/email/background-pontos-titulos.png' style='float:left; margin-left:2px; margin-top: -10px;'/>";
+                }
+                ?>
+            </div><br/><br/>
+            <div>
+                <div style="padding-left: 50px; padding-right: 50px; font-size: 12px;">
+                    Os produtos serão entregues em até <strong><span id="resume-dias-entrega"></span></strong> dia(s) úteis após a confirmação do pagamento, para o endereço:<br/>
+                    <div style="font-size: 12px; margin-top: 5px;" id="endereco-div">
+                        <span id="endereco">Rua noonno</span>, <span id="numero">123</span><br/>
+                        <span id="bairro">Bairro nonononono</span>, <span id="complemento">complemento noonnononon</span><br/>
+                        <span id="cep">CEP:   00000-000</span><br/>
+                        <span id="cidade">cidade nonono</span> - <span id="estado">NO </span>
+                    </div>  
+                    <br/><br/>
+
+                    Você pode acompanhar o andamento do seu pedido clicando <span style="color: orange; font-weight: bold;"><?php
+                        echo $this->Html->link('aqui', array(
+                            'controller' => 'users',
+                            'action' => 'compras',
+                            'plugin' => 'users'));
+                        ?></span>.<br/>
+                    Ou pelo menu <span style="color: #3399cc; font-weight: bold;">Compras</span> em nosso portal!<br/>
+
+                    <br/>
+                    <i>
+                        atenciosamente,<br/>
+                        <strong>Equipe financeiro trueOne</strong><br/>
+                        <span style="color: #3399cc;">financeiro@<strong style="color: #3399cc;">trueone</strong>.com.br</span><br/>
+                        <span style="color: #3399cc;">www.<strong style="color: #3399cc;">trueone</strong>.com.br</span><br/>
+                    </i>
+                    <br />
+
+                    <button type="button" class="button-compra" onclick="JavaScript:printPartOfPage('pop-ver-pedido');" style="background: #3399cc;">Imprimir Resumo</button> 
+                    <button type="button" class="button-compra" id="fechar-resumo" onclick="fechaResumo()" style="background: #3399cc;">Fechar</button>
+                    <br />
+                </div>
+            </div>
+
+
+        </div> 
+        <script type="text/javascript">
+
+            function printPartOfPage(elementId)
+            {
+                var printContent = document.getElementById(elementId);
+                var windowUrl = 'about:blank';
+                var uniqueName = new Date();
+                var windowName = 'Print' + uniqueName.getTime();
+                var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0');
+
+                printWindow.document.write(printContent.innerHTML);
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+                printWindow.close();
+            }
+
+        </script>
+
+    </div>
+</form>
+
+<!-- Pop para regerar boleto-->
+<div class="pop-confirm" id="pop-confirm">
+    <div id="popheader">
+        <strong class="title-pop"> Reemitir boleto.</strong>
+    </div>
+    <br/>
+    <span style="font-family: Helvetica; font-size: 12px;">Reimprima o boleto caso tenha perdido<br/> ou inválidado a primeira via. <br/> 
+        Para sua segurança verifique<strong><i> todos <br/>os dados</strong></i> antes
+        de realizar a impressão.
+        <br/>
+        <br/>
+        <i>
+            atenciosamente,<br/>
+            <strong>Equipe financeiro Adventa</strong><br/>
+            <span style="color: #f37165;"><a href="mailto:financeiro@adventa.com.br" style="color: #f37165;">financeiro@<strong style="color: #f37165;">adventa</strong>.com.br</a></span><br/>
+            <span style="color: #f37165;">www.<strong style="color: #f37165;">adventa</strong>.com.br</span><br/>
+        </i>
+
+    </span>
+</span>
+<hr/>
+<div id="popbody-confirm" style="width: 113px;
+     height: 40px; float: left;">
+</div>
+<button type="button" class="button-compra" id="fechar-boleto" style="float: left;  background: #3399cc;">Fechar</button>
+</div>
+
+
+<!-- http://www.inexistentman.net/2013/05/emoticons-secretos-do-facebook/ -->
+
+<div class="pop-confirm2" id="pop-comment">
+    <div id="popheader">
+        <strong class="title-pop"> <input type='text' maxlength="22" id='offer-title-comment' value='Aqui vem o titulo' readonly="true"/></strong>
+    </div>
+    <br/>
+    <div id="popbody">
+        <span>Dê uma nota para esse produto:</span><br/>
+        <div style="padding-top: 5px; padding-bottom: 5px;">
+            <img class="img-rating" src="../img/icones/users-vitrine/star_empty.png" id="1"/>
+            <img class="img-rating" src="../img/icones/users-vitrine/star_empty.png" id="2"/>
+            <img class="img-rating" src="../img/icones/users-vitrine/star_empty.png" id="3"/>
+            <img class="img-rating" src="../img/icones/users-vitrine/star_empty.png" id="4"/>
+            <img class="img-rating" src="../img/icones/users-vitrine/star_empty.png" id="5"/>
+            <br/>
+            <input type="hidden" id="rating" />
+        </div>
+        <br/>
+        <span>Compartilhe sua opinão com os outros usuários:</span><br/>
+        <input type="text" placeholder="Título do Comentário" class='input-title' id="titulo" name='data[OffersComment][title]'/><br />
+        <textarea placeholder="Comentário" id='comentario' class='input-comentario'></textarea>
+        <br/>
+        <br/>
+
+        <div></div>
+
+        <button type="button" onclick="comentarOferta()" class="button-compra" id="fechar-resumo" style="background: #3399cc;">Comentar</button>
+        <button type='button' class='button-compra' id='cancela-comment' style="background: #f37165;">Cancelar</button>
+    </div>
+</div>
+<input type='hidden' id='comment-offer-id' />
+
+<!-- Mostra OK após comentario ser registrado-->
+<div class="pop-confirm-comment" id="pop-comment-comment">
+    <div id="popheader">
+        <strong class="title-pop"> Comentário salvo!!!</strong>
+    </div>
+    <br/>
+    <div id="popbody">
+
+    </div>
+</div>
+
+<div  id="ja-comentei">
+    <div id="popheader">
+        <div id="fecha-comentado" style="float: right; color: #3399cc; font-family: Helvetica; font-size: 16px; cursor: pointer;">X</div><br/><br/>
+        <strong class="title-pop"> Você já comentou essa oferta:</strong>
+    </div>
+    <br/>
+    <div id="popbody">
+        <div id="ja-comentei-body">
+            <input type="text" id="commented-title" />
+            <br/>
+            <input type="text" id="commented-desc" />
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,152 @@
+<style>
+
+     @font-face {
+        font-family: MyriadProRegular;
+        src: url("../fonts/MyriadPro-Regular.otf") format("opentype");
+    }
+
+    @font-face {
+        font-family: MyriadProLight;
+        src: url("../fonts/MyriadProLight.otf") format("opentype");
+    }
+
+    @font-face {
+        font-family: MyriadProSemibold;
+        src: url("../fonts/MyriadPro-Semibold.otf") format("opentype");
+    }
+    
+    .pop-header{
+        color: #fff;
+        background: #f37165;
+        width: 93.5%;
+        padding: 10px;
+        padding-bottom: 3px;
+        font-family: AliquamREG;
+        font-size: 1.2em;
+    }
+
+    
+    #adv-mosaic-style-item-offer{
+        width: 200px;
+        height: 200px;
+        float: left;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-left: 0px;
+       
+    }
+
+    #adv-div-mosaic-photo{
+        width: 200px;
+        height: 200px;   
+        -webkit-transition: all 1s ease; /* Safari and Chrome */
+        -moz-transition: all 1s ease; /* Firefox */
+        -ms-transition: all 1s ease; /* IE 9 */
+        -o-transition: all 1s ease; /* Opera */
+        transition: all 1s ease;
+    }
+
+    #adv-div-mosaic-photo:hover{
+        -webkit-transform:scale(1.25); /* Safari and Chrome */
+        -moz-transform:scale(1.05); /* Firefox */
+        -ms-transform:scale(1.05); /* IE 9 */
+        -o-transform:scale(1.05); /* Opera */
+        transform:scale(1.05);
+
+    }
+
+    #adv-mosaic-style-precos{
+        width: 100%;
+        opacity: 0.9;
+        background: #fff;
+        position: relative;
+        bottom: -5px;
+        height: 55px;
+        color: #6E6E64;
+    }
+
+    #adv-mosaic-style-precos-sub{
+        opacity: 1;
+        float: left;
+        font-family: Tahoma;	
+        margin-bottom: 5px;
+        margin-top: 7px;
+        margin-left: 8px;
+    }
+
+    #adv-mosaic-style-imgs-sub{
+        float: right;
+        height: 20px;
+        margin-top: 15px;
+
+    }
+
+    #adv-mosaic-style-imgs-sub img{
+        height: 45px;
+    }
+
+    #adv-mosaic-style-precos-not-disc{
+        font-size: 11px;
+    }
+</style>
+
+<!--<div id="cont">
+    
+<?php foreach ($offers2 as $offer) { ?>
+                                                                    <div style='width: 100%; '>
+    <?php echo $offer['Offer']['title']; ?><br/>
+                                                                        <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 50px; height: 50px;" />
+                                                                    </div>
+<?php } ?>
+    
+</div>
+
+<input type='text' value='<?php echo $limite; ?>' id='limite' />-->
+
+<div id="cont" style="width: 96.5%; height: 638px; padding-top: 2px; padding-left: 4%; overflow-y: scroll;">
+
+    <?php
+    foreach ($offers2 as $offer) {
+        //$imagemProp = getimagesize($offer['Offer']['photo']);
+        ?>
+        <!-- form redireciona para tela de detalhe da determinada oferta -->
+        <form name="form-<?php echo $offer['Offer']['id']; ?>" action="offerDetail?offer=<?php echo $offer['Offer']['id']; ?>" method="post">
+        </form>
+         <div id="adv-mosaic-style-item-offer" class="adv-mosaic-style-item-offer"> 
+                <div id="adv-div-mosaic-photo" style=" background: url('<?php echo $offer['Offer']['photo']; ?>') no-repeat center; -webkit-background-size: cover;
+                     -o-background-size: cover;
+                     -moz-background-size: cover;
+                     background-size: cover;">
+                    <div style="width: 100%; height: 140px;" onClick="document.forms['form-<?php echo $offer['Offer']['id']; ?>'].submit();">
+
+                    </div>
+
+                    <div id="adv-mosaic-style-precos">
+                        <div id="adv-mosaic-style-precos-sub">
+                            <div id="adv-mosaic-style-precos-not-disc" style="text-decoration:line-through; color: #999; font-family: MyriadProLight;">DE R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></div>
+                            <div><span style='color: #999; font-size: 10px; font-family: MyriadProLight;'>POR:</span> <span style='font-family: MyriadProSemibold;'>R$ <?php
+                                $porcentagemDeDesconto = $offer['Offer']['percentage_discount'] / 100;
+                                $quantidadeDescontada = $porcentagemDeDesconto * $offer['Offer']['value'];
+                                $valorComDesconto = $offer['Offer']['value'] - $quantidadeDescontada;
+                                echo number_format($valorComDesconto, 2, ',', '.');
+                                ?></span></div>
+								<div style='color: #999; font-family: MyriadProLight; font-size: 10px;'>12x de R$8,40 </div>
+                        </div>
+                        <div id="adv-mosaic-style-imgs-sub">
+                            <img src="../img/adv/Compartilhar Android/Adventa icones-Compartilhar Android-3.png" style="float: left; margin-right: -18px;" />
+                            <div style="float: left;">
+                                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'))); ?>
+
+                                <button type="submit" style="float:left; padding: 0; background: transparent; cursor: pointer; border: 0px solid;" >
+                                    <img src="../img/adv/Carrinho Compras/Adventa icones-Carrinho Compras-2.png" style="cursor: pointer;"/>
+                                </button>
+
+                                <?php echo $this->Form->end(); ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <?php } ?>
+
+</div>

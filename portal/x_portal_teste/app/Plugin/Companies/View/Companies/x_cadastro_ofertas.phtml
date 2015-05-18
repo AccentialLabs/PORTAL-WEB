@@ -1,0 +1,2111 @@
+<?php
+echo $this->Html->script('jquery.validate', array(
+    'inline' => false
+));
+echo $this->Html->script('ckEditor/ckeditor');
+echo $this->Html->script('empresas/ofertas');
+
+echo "<link rel=\"stylesheet\"href=\"http://code.jquery.com/ui/1.9.0/themes/base/jquery-ui.css\"/>";
+echo "<script src=\"http://code.jquery.com/jquery-1.8.2.js\"></script>";
+echo "<script src=\"http://code.jquery.com/ui/1.9.0/jquery-ui.js\"></script>";
+?>
+<script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
+<?php
+$extraOffer = $this->Session->read('extraInfosss');
+$offersPhotos = $this->Session->read('offersPhoto');
+$companyPreference = $this->Session->read('CompanyLoggedIn.CompanyPreference');
+$oferta = $this->Session->read('addOffer.Offer');
+
+//tabela dinamica
+$colunas = $this->Session->read('editDTColunas');
+$linhas = $this->Session->read('editDTLinhas');
+
+if ($pagina == 'visualiza') {
+    $displayInsere = 'none';
+    $displayVisualiza = 'block';
+    $displayPublico = 'none';
+} else if ($pagina == 'incluir') {
+    $displayInsere = 'block';
+    $displayVisualiza = 'none';
+    $displayPublico = 'none';
+} else if ($pagina == 'publico') {
+    $displayInsere = 'none';
+    $displayVisualiza = 'none';
+    $displayPublico = 'block';
+}
+?>
+<script>
+
+    /*
+     * Verifica peso da imagem principal da oferta  
+     */
+    function verificaTamanho() {
+        tamanhoArqMax = 1000;
+        var arq = document.getElementById('uper').files[0].size / 1024;
+
+        if (arq < 0) {
+            alert("Essa arquivo é muito leve.");
+            return false;
+        } else if (arq > tamanhoArqMax) {
+            //alert("Essa imagem é muito pesada. ");
+            var htm = "<span>Essa imagem é <br/>muito pesada.</span>";
+            $("#valida-img-error").html(htm);
+
+            $(".valida-error").fadeIn(600);
+            //$(".valida-error").fadeOut(4000);
+            return false;
+        } else {
+            //$("#myForm").submit();
+            var htm = "<span>Imagem OK!</span>";
+            $("#valida-img-error").html(htm);
+            $("#btn-img-error").fadeOut();
+            $(".valida-error").fadeIn(600);
+            $(".valida-error").fadeOut(1000);
+            $("#edita").toggle(300);
+        }
+    }
+
+    /*
+     * Verifica peso das imagens extras da oferta 
+     * id do [input=file], recebido na function anterior
+     * 
+     */
+    function extraVerificaTamanho(id) {
+        tamanhoArqMax = 1000;
+        var arq = document.getElementById(id).files[0].size / 1024;
+
+        if (arq <= 0) {
+            var htm = "<span>Essa imagem é <br/>muito leve.</span>";
+            $("#valida-img-error").html(htm);
+            $(".valida-error").fadeIn(600);
+            $("#edita").fadeOut(300);
+            return false;
+        } else if (arq > tamanhoArqMax) {
+            //alert("Essa imagem é muito pesada. ");
+            var htm = "<span>Essa imagem é <br/>muito pesada.</span>";
+            $("#valida-img-error").html(htm);
+            $(".valida-error").fadeIn(600);
+            $("#edita").fadeOut(300);
+            //$(".valida-error").fadeOut(4000);
+            return false;
+        } else {
+            //$("#myForm").submit();
+            var htm = "<span>Imagem OK!</span>";
+            $("#valida-img-error").html(htm);
+            $("#btn-img-error").fadeOut();
+            $(".valida-error").fadeIn(600);
+            $(".valida-error").fadeOut(1000);
+
+        }
+    }
+
+    $(function() {
+        //$("#calendarioInicio").datepicker();
+        $("#calendarioInicio").datepicker({dateFormat: 'dd/mm/yy'}).val();
+        $("#calendarioFinal").datepicker({dateFormat: 'dd/mm/yy'}).val();
+        //mostra ou esconde area infos da entrega
+        //caso o usuario escolha correios então escondemos
+        //caso o usuario escolha transportadora entao mostramos
+        $("#radio1").click(function() {
+            $("#delivery-infos").fadeOut(300);
+            $("#prazo").val(0);
+            $("#valor").val(0.0);
+        });
+
+        $("#radio2").click(function() {
+            $("#delivery-infos").fadeIn(300);
+            $("#prazo").val('');
+            $("#valor").val('');
+        });
+
+        $(".meu-publico-rodape-botao").click(function() {
+            $(".meu-publico-rodape-botao").css("opacity", "");
+            $(this).css("opacity", "0.5");
+        });
+
+    });
+
+    $(function() {
+        /*
+         * Verifica formato da imagem principal da oferta assim que a imagem é selecionada
+         */
+        $("#uper").change(function() {
+            var extensoes = "gif, png, jpg, jpeg";
+            var extensao = $('#uper').val().split(".")[1].toLowerCase();
+
+            if (extensoes.indexOf(extensao) == -1) {
+                var htm = "<span>Formato inválido da imagem. Verifique se o formato está dentro de nosso padrão de uso.<br/> (GIF, PNG e JPG)</span>";
+                $("#valida-img-error").html(htm);
+                $(".valida-error").fadeIn(600);
+                $("#edita").fadeOut(300);
+
+                return false;
+            } else {
+                // alert("FORMATO VÁLIDO. VERIFICA PESO...");
+                verificaTamanho();
+            }
+        });
+
+        /*
+         * Verifica formato das demais imagens inseridas
+         */
+        $(".eighthline-box2").change(function() {
+            var id = $(this).attr("id");
+            var extensoes = "gif, png, jpg, jpeg";
+            var extensao = $('#' + id).val().split(".")[1].toLowerCase();
+
+            if (extensoes.indexOf(extensao) == -1) {
+                var htm = "<span>Formato inválido da imagem. Verifique se o formato está dentro de nosso padrão de uso.<br/> (GIF, PNG e JPG)</span>";
+                $("#valida-img-error").html(htm);
+                $(".valida-error").fadeIn(600);
+                //$(".valida-error").fadeOut(4000);
+                //alert("Formato inválido da imagem. Verifique se o formato está dentro de nosso padrão de uso.");
+                $("#edita").fadeOut(300);
+                return false;
+            } else {
+                //alert("FORMATO VÁLIDO. VERIFICA PESO...");
+                extraVerificaTamanho(id);
+            }
+        });
+
+        //$("#calendarioFinal").datepicker();
+
+        $("#firstline-body").fadeIn();
+    });
+
+    var featherEditor = new Aviary.Feather({
+        apiKey: '6d23908a9ca644e3',
+        apiVersion: 3,
+        tools: ['draw', 'stickers', 'enhance', 'crop', 'resize', 'frames', 'effects', 'rotate', 'adjustments', 'focus', 'splash', 'meme', 'text', 'cosmetic'],
+        onSave: function(imageID, newURL) {
+            var img = document.getElementById(imageID);
+            img.src = newURL;
+        },
+        postUrl: ''
+    });
+
+    function launchEditor(id, src) {
+        featherEditor.launch({
+            image: id,
+            url: src
+        });
+        return true;
+    }
+
+</script>
+
+<style>
+    .direcOrPublicINACTIVE{
+        color: #acacac;
+        background-color: #ffffff;
+        background-position: 50% 35px;
+    }
+
+    .direcOrPublicACTIVE{
+        color: #ffffff;
+        background-color: #edc145;
+        background-position: 50% -123px;
+    }
+    a{
+        text-decoration: none;
+        color: #666666;
+    }
+
+    div.fundo-cad-ofer {
+        background: #fff;
+        width: 90%;
+        height: 600px;
+    }
+
+    #adv-fundo-cad-offers{
+        top: 3%;
+        left: 1.5%;
+    }
+
+    .linha-numero-laranja{
+        background: #3399cc;
+    }
+</style>
+
+<!-- SCRIPT PARA MUDAR SIMBOLO DO MENU HORIZONTAL -->
+<script type="text/javascript">
+
+    $(function() {
+
+        $(".botao-lateral-esquerdo-cad-ofertas").css("color", "#ffffff");
+        $(".botao-lateral-esquerdo-cad-ofertas").css("background-color", "#3399cc");
+        $(".botao-lateral-esquerdo-cad-ofertas").css("background-position", "center -105px");
+        $(".botao-lateral-esquerdo-cad-ofertas").css("border", "1px solid");
+    });
+
+    function SomenteNumero(e) {
+        var tecla = (window.event) ? event.keyCode : e.which;
+        if ((tecla > 47 && tecla < 58))
+            return true;
+        else {
+            if (tecla == 8 || tecla == 0)
+                return true;
+            else
+                return false;
+        }
+    }
+
+    //mascaras para numeros e valores
+    function mascara(o, f) {
+        v_obj = o
+        v_fun = f
+        setTimeout("execmascara()", 1)
+    }
+    function execmascara() {
+        v_obj.value = v_fun(v_obj.value)
+    }
+    function mvalor(v) {
+        v = v.replace(/\D/g, "");//Remove tudo o que não é dígito
+        v = v.replace(/(\d)(\d{8})$/, "$1.$2");//coloca o ponto dos milhões
+        v = v.replace(/(\d)(\d{5})$/, "$1.$2");//coloca o ponto dos milhares
+
+        v = v.replace(/(\d)(\d{2})$/, "$1,$2");//coloca a virgula antes dos 2 últimos dígitos
+        return v;
+    }
+
+
+    function validar(dom, tipo) {
+        switch (tipo) {
+            case'num':
+                var regex = /[A-Za-z]/g;
+                break;
+            case'text':
+                var regex = /\d/g;
+                break;
+        }
+        dom.value = dom.value.replace(regex, '');
+    }
+
+    function mostraLinhaNove(pubOrDir) {
+        if (pubOrDir == 'public') {
+            document.getElementById('ninthline').style.display = "none";
+        } else if (pubOrDir == 'direct') {
+            document.getElementById('ninthline').style.display = "block";
+        }
+    }
+
+    function directOrPublic(number)
+    {
+        if (number == '1') {
+
+            $('.first-line-quadro-direito-publica').css("color", "#acacac");
+            $('.first-line-quadro-direito-publica').css("background-color", "#ffffff");
+            $('.first-line-quadro-direito-publica').css("background-position", "50% 35px");
+
+            $('.first-line-quadro-esquerdo-direcionada').css("color", "#ffffff");
+            $('.first-line-quadro-esquerdo-direcionada').css("background-color", "#f37165");
+            $('.first-line-quadro-esquerdo-direcionada').css("background-position", "50% -123px");
+
+            document.getElementById('ninthline').style.display = "block";
+            document.getElementById("publicDirect").value = 'INACTIVE';
+        }
+
+        if (number == '2') {
+
+            $('.first-line-quadro-esquerdo-direcionada').css("color", "#acacac");
+            $('.first-line-quadro-esquerdo-direcionada').css("background-color", "#ffffff");
+            $('.first-line-quadro-esquerdo-direcionada').css("background-position", "50% 35px");
+
+            $('.first-line-quadro-direito-publica').css("color", "#ffffff");
+            $('.first-line-quadro-direito-publica').css("background-color", "#f37165");
+            $('.first-line-quadro-direito-publica').css("background-position", "50% -126px");
+
+            document.getElementById('ninthline').style.display = "none";
+            document.getElementById("publicDirect").value = 'ACTIVE';
+
+        }
+
+    }
+
+    function productOrService(number) {
+
+        if (number == '1') {
+
+            $('.first-line-quadro-direito-servico').css("color", "#acacac");
+            $('.first-line-quadro-direito-servico').css("background-color", "#ffffff");
+            $('.first-line-quadro-direito-servico').css("background-position", "50% 35px");
+
+            $('.first-line-quadro-esquerdo-produto').css("color", "#ffffff");
+            $('.first-line-quadro-esquerdo-produto').css("background-color", "#f37165");
+            $('.first-line-quadro-esquerdo-produto').css("background-position", "50% -123px");
+
+            document.getElementById("typeOffer").value = 'PRODUCT';
+        }
+
+        if (number == '2') {
+
+            $('.first-line-quadro-direito-servico').css("color", "#ffffff");
+            $('.first-line-quadro-direito-servico').css("background-color", "#f37165");
+            $('.first-line-quadro-direito-servico').css("background-position", "50% -126px");
+
+            $('.first-line-quadro-esquerdo-produto').css("color", "#acacac");
+            $('.first-line-quadro-esquerdo-produto').css("background-color", "#ffffff");
+            $('.first-line-quadro-esquerdo-produto').css("background-position", "50% 35px");
+
+            document.getElementById("typeOffer").value = 'SERVICE';
+        }
+
+    }
+
+    function unblockStatics(staticsNumber) {
+
+        document.getElementById('staticsGenero').style.display = "none";
+        document.getElementById('staticsLocalidade').style.display = "none";
+        document.getElementById('staticsFaixaEtaria').style.display = "none";
+        document.getElementById('staticsPolitica').style.display = "none";
+        document.getElementById('staticsRelacionamento').style.display = "none";
+        document.getElementById('staticsReligiao').style.display = "none";
+
+        $('.genero').css("color", "#666666");
+        $('.localidade').css("color", "#666666");
+        $('.faixa').css("color", "#666666");
+        $('.politica').css("color", "#666666");
+        $('.relacionamento').css("color", "#666666");
+        $('.religiao').css("color", "#666666");
+
+        if (staticsNumber == '1') {
+            document.getElementById('staticsGenero').style.display = "block";
+            $('.genero').css("color", "#f27a02");
+        }
+
+        if (staticsNumber == '2') {
+            document.getElementById('staticsLocalidade').style.display = "block";
+            $('.localidade').css("color", "#f27a02");
+        }
+
+        if (staticsNumber == '3') {
+            document.getElementById('staticsFaixaEtaria').style.display = "block";
+            $('.faixa').css("color", "#f27a02");
+        }
+
+        if (staticsNumber == '4') {
+            document.getElementById('staticsPolitica').style.display = "block";
+            $('.politica').css("color", "#f27a02");
+        }
+
+        if (staticsNumber == '5') {
+            document.getElementById('staticsRelacionamento').style.display = "block";
+            $('.relacionamento').css("color", "#f27a02");
+        }
+
+        if (staticsNumber == '6') {
+
+            document.getElementById('staticsReligiao').style.display = "block";
+            $('.religiao').css("color", "#f27a02");
+        }
+    }
+
+    function unblockUperImage(uperNumber) {
+
+        if (uperNumber == '1') {
+            $('.eighthline-botao-1').css("background-position", "0 0px");
+            $('.eighthline-botao-2').css("background-position", "0 -60px");
+            document.getElementById('box1').style.display = "block";
+            document.getElementById('box2').style.display = "none";
+        }
+        if (uperNumber == '2') {
+            $('.eighthline-botao-2').css("background-position", "0 0px");
+            $('.eighthline-botao-1').css("background-position", "0 -60px");
+            document.getElementById('box2').style.display = "block";
+            document.getElementById('box1').style.display = "none";
+        }
+
+    }
+
+    function unblockLine(lineNumber) {
+
+        document.getElementById('firstline-body').style.display = "none";
+        document.getElementById('secondline-body').style.display = "none";
+        document.getElementById('thirdline-body').style.display = "none";
+        document.getElementById('fourthline-body').style.display = "none";
+        document.getElementById('fifthline-body').style.display = "none";
+        document.getElementById('sixthline-body').style.display = "none";
+        document.getElementById('seventhline-body').style.display = "none";
+        document.getElementById('eighthline-body').style.display = "none";
+        document.getElementById('ninthline-body').style.display = "none";
+
+        if (lineNumber == "1") {
+            document.getElementById('firstline-body').style.display = "block";
+        }
+        if (lineNumber == "2") {
+            document.getElementById('secondline-body').style.display = "block";
+        }
+        if (lineNumber == "3") {
+            document.getElementById('thirdline-body').style.display = "block";
+        }
+        if (lineNumber == "4") {
+            document.getElementById('fourthline-body').style.display = "block";
+        }
+        if (lineNumber == "5") {
+            document.getElementById('fifthline-body').style.display = "block";
+        }
+
+        if (lineNumber == "6") {
+            document.getElementById('sixthline-body').style.display = "block";
+        }
+
+        if (lineNumber == "7") {
+            document.getElementById('seventhline-body').style.display = "block";
+        }
+
+        if (lineNumber == "8") {
+            document.getElementById('eighthline-body').style.display = "block";
+        }
+
+        if (lineNumber == "9") {
+            document.getElementById('ninthline-body').style.display = "block";
+        }
+
+    }
+
+    function testeTeste(num) {
+        document.getElementById('cont-ver-ofertas').style.display = "none";
+
+        if (num == '1') {
+            document.getElementById('cont-ver-ofertas').style.display = "none";
+        }
+        if (num == '2') {
+            document.getElementById('cont-ver-ofertas').style.display = "block";
+        }
+
+
+    }
+
+    function AlteraClasse1(texto) {
+        var classe = "." + texto;
+
+        if (classe == ".botao-lateral-esquerdo-cad-ofertas") {
+            $(classe).css("color", "#ffffff");
+            $(classe).css("background-color", "#3399cc");
+            $(classe).css("background-position", "center -105px");
+            $(classe).css("border", "1px solid");
+
+            $(".botao-lateral-esquerdo-meu-publico").css("color", "#999999");
+            $(".botao-lateral-esquerdo-meu-publico").css("background-color", "#ffffff");
+            $(".botao-lateral-esquerdo-meu-publico").css("background-position", "center 43px");
+        }
+
+        if (classe == ".botao-lateral-esquerdo-meu-publico") {
+            $(classe).css("color", "#ffffff");
+            $(classe).css("background-color", "#3399cc");
+            $(classe).css("background-position", "center -105px");
+            $(classe).css("border", "1px solid");
+
+            $(".botao-lateral-esquerdo-cad-ofertas").css("color", "#999999");
+            $(".botao-lateral-esquerdo-cad-ofertas").css("background-color", "#ffffff");
+            $(".botao-lateral-esquerdo-cad-ofertas").css("background-position", "center 43px");
+        }
+    }
+
+    function savePublico(classe, publico) {
+        switch (classe) {
+            case 'gender':
+                var valorDoCampo = $('#gender').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#gender").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#gender").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+
+            case 'location':
+                var valorDoCampo = $('#location').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#location").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#location").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+
+            case 'religion':
+                var valorDoCampo = $('#religion').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#religion").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#religion").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+
+            case 'political':
+                var valorDoCampo = $('#political').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#political").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#political").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+
+            case 'age_group':
+                var valorDoCampo = $('#age_group').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#age_group").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#age_group").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+
+            case 'relationship_status':
+                var valorDoCampo = $('#relationship_status').val();
+                if (valorDoCampo.search(publico) == -1) {
+                    $("#relationship_status").val(valorDoCampo + "," + publico);
+                } else {
+                    $("#relationship_status").val(valorDoCampo.replace("," + publico, ''));
+                }
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    function verificaCheckbox() {
+
+    }
+    $(function() {
+        $('.first-line-quadro-esquerdo-direcionada').click(function() {
+            document.getElementById("direcionada").checked = true;
+        });
+
+    });
+
+    function calcDesconto() {
+
+    }
+
+    /**
+     $('#novo-preco').live('keyup', function(e) {
+     
+     var valorOriginal = document.getElementById("original-preco").value;
+     var valorNovo = document.getElementById("novo-preco").value;
+     var original = parseFloat(valorOriginal);
+     var novo = parseFloat(valorNovo);
+     porcentagemDoValor = novo / original;
+     porcentagemDesconto = (porcentagemDoValor * 100);
+     desconto = 100 - porcentagemDesconto;
+     document.getElementById("desconto").value = desconto;
+     }); **/
+
+    $('#botao-transfer').live('click', function(e) {
+
+        $("#conteudo").appendTo("#div-recebe");
+
+    });
+
+    $(function() {
+
+        carregaList();
+        //A ordem das functions não altera o funcionamento
+        //mudança de valor no segundo select
+        $("#selectboxX").change(function() {
+            eixoY = $("#selectboxY").val();
+            eixoX = $("#selectboxX").val();
+            $.ajax({
+                type: "POST",
+                data: {
+                    coluna: eixoY,
+                    linha: eixoX},
+                url: 'http://localhost/work/x_portal_teste/company/layout-cad-ofertas' + '/requisicao',
+                success: function(result) {
+                    $('#recebe').html(result);
+                    alert(data['url']);
+                    alert(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
+
+        //mudança de valor no primeiro select
+        $("#selectboxY").change(function() {
+            eixoY = $("#selectboxY").val();
+            eixoX = $("#selectboxX").val();
+            $.ajax({
+                type: "POST",
+                data: {
+                    coluna: eixoY,
+                    linha: eixoX},
+                url: 'http://localhost/work/x_portal_teste/company/layout-cad-ofertas' + '/requisicao',
+                success: function(result) {
+                    $('#recebe').html(result);
+                    alert(data['url']);
+                    alert(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            });
+        });
+
+        $("#mostra").click(function() {
+
+            var maskHeight = $(document).height();
+            var maskWidth = $(window).width();
+
+            $('#mask').css({'width': maskWidth, 'height': maskHeight});
+            $("#mask").fadeIn();
+            $("#pop").fadeIn();
+
+        });
+
+        $("#closePop").click(function() {
+            $("#mask").fadeOut();
+            $("#pop").fadeOut();
+        });
+
+    });
+
+    function carregaList() {
+        eixoY = $("#selectboxY").val();
+        eixoX = $("#selectboxX").val();
+        $.ajax({
+            type: "POST",
+            data: {
+                coluna: eixoY,
+                linha: eixoX},
+            url: 'http://localhost/work/x_portal_teste/company/layout-cad-ofertas' + '/requisicao',
+            success: function(result) {
+                $('#recebe').html(result);
+                alert(data['url']);
+                alert(result);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+
+</script>
+
+<!-- PRÉ-VIZUALIZAÇÃO da imagem -->
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#blah').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(function() {
+        $("#uper").change(function() {
+            readURL(this);
+        });
+
+        $("#teste").click(function() {
+            $("#cont-meu-publico").fadeOut(0);
+            $("#cont-cad-oferta").fadeIn(1500);
+        });
+
+        $("#btn-my-public").click(function() {
+            $("#cont-cad-oferta").fadeOut(0);
+            $("#cont-meu-publico").fadeIn(1500);
+        });
+
+        $("#btn-img-error").click(function() {
+            $(".valida-error").toggle(400);
+        });
+
+        /**
+         * Calcula desconto
+         * @returns {undefined}
+         */
+        $("#novo-preco").keyup(function() {
+            var original = $("#original-preco").val().replace(".", "").replace(",", ".");
+            var newValue = $("#novo-preco").val().replace(".", "").replace(",", ".");
+            var first = (newValue / original) * 100;
+            var dicount = 100 - first;
+            $("#desconto").value(dicount);
+            $("#span-desconto").html(Math.floor(dicount) + "%");
+        });
+    });
+
+    function publicsShow(public) {
+        $(".public-box").fadeOut(0);
+        var id = "#" + public + "-cont";
+        $(id).fadeIn(1000);
+    }
+
+</script>
+
+<style>
+
+    .valida-error{
+        padding: 10px;
+        background: #fff;
+        color: orange;
+        font-size: 16px;
+        font-weight: bold;
+        max-width: 300px;
+        position: absolute;
+        top:200px;
+        font-family: Helvetica;
+        left: 40%;
+        border: 1px solid orange;
+        display: none;
+        text-align: center;
+    }
+
+    .public-box{
+
+    }
+
+    .publicos{
+        border: 3px solid red;
+    }
+
+    #mask {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 9000;
+        background-color: #000;
+        display: none;
+        opacity: 0.6;
+    }
+
+    #pop {
+        display: none;
+        position: absolute;
+        left: 40%;
+        margin-left: -150px;
+        margin-top: -25%;
+        padding: 10px;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        z-index: 99999;
+    }
+
+    input[type="checkbox"]{
+        display: none;
+    }
+    input[type="checkbox"] + label span{
+        display: inline-block;
+        width: 19px;
+        height: 19px;
+        vertical-align: middle;
+        cursor:pointer;
+        margin-right: 0px;
+        float: left;
+    }
+
+    input[type="checkbox"]:checked + label span{
+        border: 1px solid #000000;
+        width: 17px;
+        height: 17px;
+        opacity:0.65;
+    }
+
+    .selectbox {
+        background: transparent;
+        width: 90%;
+        padding: 5px;
+        font-size: 16px;
+        line-height: 1;
+        border: 0;
+        border-radius: 0;
+        height: 30px;
+        -webkit-appearance: none;
+        font-family: Helvetica;
+        color: #666666;
+    }
+
+    .dynamic-table{
+        margin-right: 35px;
+        overflow: auto; 
+        float: right;
+        width: 66%; 
+        height: 88%;
+        margin-top: -7.5%;
+    }
+
+    .dynamic-preview-table{
+        margin-right: 35px;
+        overflow: auto; 
+        float: right;
+        width: 66%; 
+        height: 88%;
+        margin-top: -22.5%;
+    }
+
+    .dynamic-preview-table table{
+        background: #fff;
+        border-collapse: collapse;
+    }
+
+    .dynamic-preview-table table td{
+        border: #ccc;
+        padding: 5px;
+        font-size: 16px;
+        color: #666;
+        text-align: center;
+        font-size: 12px;
+        font-family: Helvetica;
+    }
+
+    .dynamic-preview-table table th{
+        font-size: 16px;
+    }
+
+    #btn-img-error{
+        padding: 8px; 
+        color: #fff;
+        background: orange;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .linha-impar-nome{
+        cursor: pointer;
+    }
+
+    .linha-par-nome{
+        cursor: pointer;
+    }
+
+</style>
+
+<?php
+if ($this->Session->check('addOffer.Offer.public') == 'ACTIVE') {
+    $check = 'ACTIVE';
+} else {
+    $check = 'INACTIVE';
+}
+?>
+
+<div id="mask"></div>
+<!-- CORPO -->
+<div class="fundo-cad-ofer" style=" height: 80%;" id="adv-fundo-cad-offers">
+
+    <!-- LADO ESQUERDO -->
+    <div class="lado-esquerdo-cad-ofer" style="height: 100%;">
+        <!--  <div class="botao-lateral-esquerdo-ver-ofertas" style="cursor: pointer;"
+               onclick="AlteraClasse1('botao-lateral-esquerdo-ver-ofertas')">
+              <br />ver<br /> ofertas <br />
+          </div> -->
+        <div class="botao-lateral-esquerdo-cad-ofertas"
+             onclick="AlteraClasse1('botao-lateral-esquerdo-cad-ofertas')"
+             id="teste" style="cursor: pointer;">
+            <br />cadastrar oferta <br />
+        </div>
+        <div class="botao-lateral-esquerdo-meu-publico" id="btn-my-public"
+             onclick="AlteraClasse1('botao-lateral-esquerdo-meu-publico')" style="cursor: pointer;">
+            <br />meu <br />publico <br />
+        </div>
+
+
+        <div class="botoes-esquerdo-inferior-cad-ofer">
+            <!--            <div class="botoes-laranja-cad-ofer">Vizualizar</div>
+                        <div class="botoes-laranja-cad-ofer">Publicar</div>-->
+        </div>
+    </div>
+
+    <!-- MEIO - CORPO - RENDERIZA TODO CONTEUDO AQUI-->
+    <div class="meio-cad-ofer">
+
+        <!-- VER OFERTAS CONTEUDO -->
+        <div id="cont-ver-ofertas">
+            <div class="menu-cabecalho-cad-ofer">
+                <div class="ver-ofertas-botao" onclick="testeTeste('1')">Todas</div>
+                <div class="ver-ofertas-botao">ativas</div>
+                <div class="ver-ofertas-botao">inativas</div>
+                <div class="ver-ofertas-botao-filtro">opcoes de filtro</div>
+            </div>
+            <hr id="cad-ofer-ver"
+                style=" margin-top: -5px; border-top: 1px solid #eeeeee;" />
+        </div>
+
+        <!-- MEU PUBLICO -->
+        <div id="cont-meu-publico" style="display: <?php echo $displayPublico; ?>;">
+            <div class="meu-publico-cabecalho-cad-ofer">
+                <div class="cabecalho-titulo-cad-ofer">
+                    <div class="cabecalho-titulo-texto-cad-ofer">
+                        Quantidade de usuarios <br /> cadastrados na sua base
+                    </div>
+                </div>
+
+                <div class="cabecalho-qtd-cad-ofer">
+                    <?php //echo print_r($compUsers); ?>
+                    <?php echo count($compUsers); ?></div>
+            </div>
+
+           
+
+
+            <div class="cont-botoes-rodape" id="meu-publico" style="line-height: 20px; text-align: center;">
+                <!-- GENDER - MEU PUBLICO-->
+                <div id="gender-cont" style="text-align: center; display: none;" class="public-box">
+                    <span>
+
+                        <?php
+                        $uninformedGender = 100;
+                        foreach ($offerFiltersData['gender'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            ?>
+                            <div style="float: left; width: 45%;">
+                                <div style="line-height: 80px; margin-left: 57%; margin-top: 20px; text-align: center;">
+                                    <span style="float:left; margin-right: 15px;"> <?php
+                                        switch ($filter['name']) {
+                                            case 'male':
+                                                echo 'Masculino';
+                                                break;
+                                            case 'female':
+                                                echo 'Feminino';
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        ?></span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; $uninformedGender = $uninformedGender-$filter['percent']; ?></div></div>
+                            </div>
+                        <?php } if ($percentTotal < 100) { ?>
+                            <div style="float: left; width: 40%;">
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center;">
+                                    <span style="float:left; margin-right: 35px;"> Não Informado</span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $uninformedGender . '%'; ?></div></div>
+                            </div>
+
+                        <?php } ?>
+                    </span>
+                </div>
+
+                <!-- AGE - MEU PUBLICO -->
+                <div id="age-cont" style="text-align: center; width: 100%; height: 100%; overflow: auto; display: none;" class="public-box">
+                    <div style="width: 99%; height: 100%; ">
+
+                        <?php
+                        foreach ($offerFiltersData['age_group'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            if ($filter['percent'] > 0) {
+                                ?>
+                                <div style="float: left; width: 45%;">
+
+                                    <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center;">
+                                        <span style="float:left; margin-right: 15px;"> <?php echo $filter['label']; ?></span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; ?></div></div>
+                                </div>
+                                <?php
+                            }
+                        } if ($percentTotal < 100) {
+                            ?>
+                            <span><?php echo $percentTotal; ?> Não Informado</span>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+                <!-- LOCALIDADE - MEU PUBLICO -->
+                <div id="location-cont" style="text-align: center; width: 100%; height: 100%; overflow: auto; display:none;" class="public-box">
+                    <div style="width: 99%; height: 100%;">
+
+                        <?php
+                        $percentTotal = 0;
+                        foreach ($offerFiltersData['location'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            $i++;
+                            ?>
+                            <div style="float: left; width: 40%;">
+
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center; ">
+                                    <span style="float:left; margin-right: 15px;"> <?php echo $filter['name']; ?></span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; ?></div></div>
+                            </div>
+                        <?php } if ($percentTotal < 100) { ?>
+                            <div style="float: left; width: 40%;">
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center;">
+                                    <span style="float:left; margin-right: 15px;"> Não Informado</span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $percentTotal . '%'; ?></div></div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+                <!-- RELIGIÃO - MEU PUBLICO -->
+                <div id="religion-cont" style="text-align: center; width: 100%; height: 100%; overflow: auto; display:none;" class="public-box">
+                    <div style="width: 99%; height: 100%;">
+
+                        <?php
+                        $percentTotal = 0;
+                        foreach ($offerFiltersData['religion'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            $i++;
+                            ?>
+                            <div style="float: left; width: 40%;">
+
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center; ">
+                                    <span style="float:left; margin-right: 15px;"> <?php echo $filter['name']; ?></span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; ?></div></div>
+                            </div>
+                        <?php } if ($percentTotal < 100) { ?>
+                            <div style="float: left; width: 40%;">
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center;">
+                                    <span style="float:left; margin-right: 15px;"> Não Informado</span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $percentTotal . '%'; ?></div></div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+                <!-- ESTADO CIVIL - MEU PUBLICO -->
+                <div id="relation-cont" style="text-align: center; width: 100%; height: 100%; overflow: auto;  " class="public-box">
+                    <div style="width: 99%; height: 100%;">
+
+                        <?php
+                        $percentTotal = 0;
+                        foreach ($offerFiltersData['relationship_status'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            $i++;
+                            ?>
+                            <div style="float: left; width: 40%;">
+
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center; ">
+                                    <span style="float:left; margin-right: 15px;"> 
+
+                                        <?php
+                                        if ($filter['name'] == 'Single') {
+                                            echo "Solteiro";
+                                        } else if ($filter['name'] == "It's Complicated") {
+                                            echo "Enrolado";
+                                        } else if ($filter['name'] == "In a relationship") {
+                                            echo "Namorando";
+                                        } else if ($filter['name'] == "Engaged") {
+                                            echo "Noivo";
+                                        } else if ($filter['name'] == "Married") {
+                                            echo "Casado";
+                                        }
+                                        ?>
+
+                                    </span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; ?></div></div>
+                            </div>
+                        <?php } if ($percentTotal < 100) { ?>
+                            <div style="float: left; width: 40%;">
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center;">
+                                    <span style="float:left; margin-right: 15px;"> Não Informado</span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php
+                                        if ($percentTotal == 0) {
+                                            echo '100';
+                                        } else {
+                                            echo $percentTotal;
+                                        }
+                                        ?>%</div></div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+                <!-- POLITICA - MEU PUBLICO -->
+                <div id="political-cont" style="text-align: center; width: 100%; height: 100%; overflow: auto; display:none; " class="public-box">
+                    <div style="width: 99%; height: 100%;">
+
+                        <?php
+                        $percentTotal = 0;
+                        foreach ($offerFiltersData['political'] as $filter) {
+                            $percentTotal = $filter['percent'] + $percentTotal;
+                            $i++;
+                            ?>
+                            <div style="float: left; width: 40%;">
+
+                                <div style="line-height: 80px; float: right; margin-top: 20px; text-align: center; ">
+                                    <span style="float:left; margin-right: 15px;"> <?php echo $filter['name']; ?></span><div style="font-size: 22px; line-height: 80px; width: 80px; height: 80px; float: left; color: #fff; background: #000; -webkit-border-radius: 50% 50% 50% 50%; -moz-border-radius: 50% 50% 50% 50%;"><?php echo $filter['percent'] . '%'; ?></div></div>
+                            </div>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+                <!--  FIM DE 'MEU PUBLICO' -->
+                <div class="meu-publico-rodape-cad-ofer">
+                    <div class="meu-publico-rodape-botao" name="meuCheck1" onclick="publicsShow('relation')" style=" background-image:
+                         url('../img/adv/Meu Publico/Estado_civil.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Status de Relacionamento"></div>
+
+                    <div class="meu-publico-rodape-botao" id="btn-religion" onclick="publicsShow('religion')" style="background-image:
+                         url('../img/adv/Meu Publico/Religiao.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Religião"></div>
+
+                    <div class="meu-publico-rodape-botao" id="btn-political" onclick="publicsShow('political')" style="background-image:
+                         url('../img/adv/Meu Publico/Politica.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Política"></div>
+
+                    <div class="meu-publico-rodape-botao" id="btn-location" onclick="publicsShow('location')" style="background-image:
+                         url('../img/adv/Meu Publico/Regiao.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Local"></div>
+
+                    <div class="meu-publico-rodape-botao" id="btn-age" onclick="publicsShow('age')" style="background-image:
+                         url('../img/adv/Meu Publico/Idade.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Idade"></div>
+
+                    <div class="meu-publico-rodape-botao" id="btn-gender" onclick="publicsShow('gender')" style="background-image:
+                         url('../img/adv/Meu Publico/Genero.png'); background-repeat: no-repeat; background-position: center; background-size: 90% 95%; cursor: pointer;" title="Sexo"></div>
+                </div>
+            </div>
+        </div>
+        <!-- CADASTRAR OFERTA -->
+
+        <div class="cont-cad-oferta" id="cont-cad-oferta" style="display: <?php echo $displayInsere; ?>; ">
+            <div class="cad-oferta-corpo">
+                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'layoutCadOferta', 'incluir'), 'type' => 'file')); ?>
+                <!-- FIRST LINE -->
+
+                <div id="firstLine" onclick="unblockLine('1')">
+                    <div class="linha-numero-laranja" style="background: #3399cc;">1</div>
+                    <div class="linha-impar-nome">
+                        <span class="texto-linha">Qual tipo de oferta voce vai cadastrar</span>
+                    </div>
+                    <div class="firstline-body" id="firstline-body" style="height: 235px;">
+                        <div class="first-line-cabecalho">
+                            <div class="first-line-titulo" onselectstart="return false">Essa
+                                é uma oferta...</div>
+                            <div class="first-line-titulo">Voce vai vender um...</div>
+                        </div>
+                        <div class="first-line-quadro-pai-um">
+                            <a href="javascript:void(0);"><div class="first-line-quadro-esquerdo-direcionada"
+                                                               id="direcionada" onclick="directOrPublic('1')" style="<?php
+                                                               if ($check == 'ACTIVE') {
+                                                                   
+                                                               } else {
+                                                                   echo 'color: #acacac; background-color: #ffffff; background-position: 50% 35px;';
+                                                               }
+                                                               ?>">Direcionada</div></a>
+
+                            <a href="javascript:void(0);"><div class="first-line-quadro-direito-publica" id="publica"
+                                                               onclick="directOrPublic('2')" style="<?php
+                                                               if ($check == 'ACTIVE') {
+                                                                   echo 'color: #ffffff; background-color: #f37165; background-position: 50% -123px;';
+                                                               }
+                                                               ?>">Pública</div></a>
+
+                        </div>
+
+
+                        <input type="hidden" name="data[Offer][public]" id="publicDirect" value="<?php if ($this->Session->check('addOffer.Offer.public')) echo $this->Session->read('addOffer.Offer.public'); ?>"/>
+
+                        <div class="first-line-quadro-pai-dois">
+                            <a href="javascript:void(0);"><div class="first-line-quadro-esquerdo-produto" id="produto"
+                                                               onclick="productOrService('1')" style="<?php
+                                                               if ($extraOffer['offers_extra_infos']['offer_type'] == 'PRODUCT') {
+                                                                   echo 'color: #FFF; background-color: #f37165; background-position: 50% -123px;';
+                                                               }
+                                                               ?>">Produto</div></a>
+                            <a href="javascript:void(0);"><div class="first-line-quadro-direito-servico" id="servico"
+                                                               onclick="productOrService('2')" style="<?php
+                                                               if ($extraOffer['offers_extra_infos']['offer_type'] == 'SERVICE') {
+                                                                   echo 'color: #FFF; background-color: #f37165; background-position: 50% -123px;';
+                                                               }
+                                                               ?>">Serviço</div></a>
+                        </div>
+                        <input type="hidden" name="data[Offer][extra_infos][offer_type]" id="typeOffer"/>
+                    </div>
+                </div>
+
+                <!-- SECOND LINE -->
+                <div id="secondLine" onclick="unblockLine('2')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">2</div>
+                    <div class="linha-par-nome">
+                        <span class="texto-linha">Titulo e Resumo</span>
+                    </div>
+                    <div class="secondline-body" id="secondline-body" style="height: 235px;">
+                        <input type="text" id="offerTitulo" placeholder="Título da Oferta" name="data[Offer][title]" value="<?php if ($this->Session->check('addOffer.Offer.title')) echo $this->Session->read('addOffer.Offer.title'); ?>" style="border-left: 2px solid red; padding-top: 20px; height: 30px;" />
+                        <!-- RESUMO DA OFERTA: 800 CARACTERES -->
+                        <!-- TITULO DA OFERTA: 100 CARACTERES -->
+                        <textarea placeholder="Resumo da Oferta" name="data[Offer][resume]"><?php if ($this->Session->check('addOffer.Offer.resume')) echo $this->Session->read('addOffer.Offer.resume'); ?></textarea>
+                    </div>
+                </div>
+
+                <!-- THIRD LINE -->
+                <?php
+                $valor = $this->Session->check('addOffer.Offer.value');
+                $desconto = $this->Session->check('addOffer.Offer.percentage_discount');
+                $desc = $desconto / 100;
+                $valorRetirado = $valor * $desc;
+                $valorComDesconto = $valor - $valorRetirado;
+                ?>
+                <div id="thirdLine" onclick="unblockLine('3')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">3</div>
+                    <div class="linha-impar-nome">
+                        <span class="texto-linha">Valores e parcelamento</span>
+                    </div>
+                    <div class="thirdline-body" id="thirdline-body" style="height: 235px;">
+                        <div class="thirdline-diviser-left">
+                            <div class="thirdline-diviser-left-line1">
+                                <input type="text" placeholder="Preço original" id="original-preco" name="data[Offer][value]" value="<?php if ($this->Session->check('addOffer.Offer.value')) echo $this->Session->read('addOffer.Offer.value'); ?>" onkeydown="mascara(this, mvalor);" maxlength="10"/>
+                                <input type="text"
+                                       placeholder="Preço da oferta" id="novo-preco" name="data[Offer][discounted_value]" value="<?php
+                                       if ($valorComDesconto) {
+                                           echo $valorComDesconto;
+                                       };
+                                       ?>" onkeydown="mascara(this, mvalor);" maxlength="10"/>
+                                <div id="textUP">
+                                    <div>
+                                        <span id="span-desconto" > <?php
+                                            if ($this->Session->check('addOffer.Offer.percentage_discount')) {
+                                                echo $this->Session->read('addOffer.Offer.percentage_discount');
+                                            } else {
+                                                echo '10';
+                                            }
+                                            ?>% <input type="hidden" id="desconto" name="data[Offer][percentage_discount]"/> </span>
+                                    </div>
+                                    <div id="textDOWN">de desconto</div> 
+                                </div>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <!-- 0 = usa api dos correios 
+                                     1 = não usa api dos correios-->
+                                <input type="text" placeholder="Peso KG" name="data[Offer][weight]" value="<?php if ($this->Session->check('addOffer.Offer.weight')) echo $this->Session->read('addOffer.Offer.weight'); ?>" onkeypress='return SomenteNumero(event)' maxlength="5"/> 
+                                <input
+                                    type="radio" name="data[CompanyPreference][use_correios_api]" id="radio1"
+                                    class="css-checkbox" value="CORREIO" <?php
+                                    if ($companyPreference['use_correios_api'] == 0) {
+                                        echo "checked='true'";
+                                    }
+                                    ?>/><label for="radio1" class="css-label">Correios</label>
+                                <input type="radio" name="data[CompanyPreference][use_correios_api]" id="radio2"
+                                       class="css-checkbox" value="OTHER" <?php
+                                       if ($companyPreference['use_correios_api'] == 1) {
+                                           echo "checked='true'";
+                                       }
+                                       ?>/><label for="radio2" class="css-label">Transportadora</label>
+                            </div>
+                            <div style="text-align: right; <?php
+                            if ($companyPreference['use_correios_api'] == 0) {
+                                echo "display: none;";
+                            }
+                            ?>" id="delivery-infos">
+                                <input type="text" placeholder="Prazo em dias" id="prazo" name="data[Offer][extra_infos][delivery_dealine]" onkeypress='return SomenteNumero(event)' maxlength="5" value="<?php
+                                if ($extraOffer) {
+                                    echo $extraOffer['offers_extra_infos']['delivery_deadline'];
+                                }
+                                ?>"> <input type="text" placeholder="Valor"
+                                       id="valor" name="data[Offer][extra_infos][delivery_value]" onkeydown="mascara(this, mvalor);" value="<?php
+                                       if ($extraOffer) {
+                                           echo $extraOffer['offers_extra_infos']['delivery_value'];
+                                       }
+                                       ?>">
+                            </div>
+                        </div>
+
+                        <div class="thirdline-diviser-right"
+                             style="margin-left: 5px; float: left; width: 30%; font-family: Helvetica; font-size: 12px; text-align: center; margin-top: 40px;">
+                            <span>Essa oferta pode ser parcelada?</span>
+
+                            <div style="margin-top: 8px;">
+                                <input type="radio" name="data[Offer][parcels]" id="parcelsYes"
+                                       class="css-checkbox" value="ACTIVE" <?php
+                                       if ($oferta['parcels'] == 'ACTIVE') {
+                                           echo "checked='true'";
+                                       }
+                                       ?>/><label for="parcelsYes"
+                                       class="css-label" style="margin-left: -10px;">Sim</label> <input
+                                       type="radio" name="data[Offer][parcels]" id="parcelsNo" class="css-checkbox" <?php
+                                       if ($oferta['parcels'] == 'INACTIVE') {
+                                           echo "checked='true'";
+                                       }
+                                       ?>/><label
+                                       for="parcelsNo" value="INACTIVE" class="css-label" style="margin-left: 10px;">Não</label>
+                            </div>
+
+                            <div style="margin-top: 15px;">
+                                <span>Incluir juros no parcelamento?</span>
+                            </div>
+
+                            <div style="margin-top: 10px;">
+                                <input type="radio" name="data[Offer][parcels_off_impost]" id="interestYes"
+                                       class="css-checkbox" value="ACTIVE" <?php
+                                       if ($oferta['parcels_off_impost'] == 'ACTIVE') {
+                                           echo "checked='true'";
+                                       }
+                                       ?>/><label for="interestYes"
+                                       class="css-label" style="margin-left: -10px;">Sim</label> <input
+                                       type="radio" name="data[Offer][parcels_off_impost]" id="interestNo"
+                                       class="css-checkbox" value="INACTIVE" <?php
+                                       if ($oferta['parcels_off_impost'] == 'INACTIVE') {
+                                           echo "checked='true'";
+                                       }
+                                       ?>/><label for="interestNo"
+                                       class="css-label" style="margin-left: 10px;">Não</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOURTH LINE -->
+                <div id="fourthLine" onclick="unblockLine('4')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">4</div>
+                    <div class="linha-par-nome">
+                        <span class="texto-linha">Descrição</span>
+                    </div>
+
+                    <div class="fourthline-body" id="fourthline-body" style="height: 235px;">
+                        <!-- TROCAR POR CKeditor -->
+                        <div
+                            style="padding-top: 5px; margin-left: 15px; margin-right: 5px; border-bottom: 5px;">
+                            <textarea name="data[Offer][description]"
+                                      class="textbox ckeditor" id="textEditor" placeholder="Descrição"><?php if ($this->Session->check('addOffer.Offer.description')) echo $this->Session->read('addOffer.Offer.description'); ?></textarea>
+                        </div>
+                        <!--  <textarea
+                                style="margin-left: 35px; width: 92%; height: 170px; margin-top: 10px;"
+                                cols=""></textarea> -->
+                    </div>
+                </div>
+
+                <!-- FIFTH LINE -->
+                <div id="fifthline" onclick="unblockLine('5')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">5</div>
+                    <div class="linha-impar-nome">
+                        <span class="texto-linha">Especificações</span>
+                    </div>
+                    <div class="fifthline-body" id="fifthline-body" style="height: 235px;">
+                        <div
+                            style="padding-top: 5px; margin-left: 15px; margin-right: 5px;">
+                            <textarea name="data[Offer][specification]"
+                                      class="textbox ckeditor" id="textEditor"><?php if ($this->Session->check('addOffer.Offer.specification')) echo $this->Session->read('addOffer.Offer.specification'); ?></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIXTH LINE -->
+                <div id="sixthline" onclick="unblockLine('6')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">6</div>
+                    <div class="linha-par-nome">
+                        <span class="texto-linha">Opções do produto</span>
+                    </div>
+
+                    <div class="sixthline-body" id="sixthline-body" style="height: 305px;">
+
+                        <div id="selectbox">
+                            <select id="selectbox" name="data[Offer][extra_infos][category_id]">
+                                <?php if ($extraOffer) { ?>
+                                    <option value="<?php echo $extraOffer['companies_categories']['id']; ?>"><?php echo $extraOffer['companies_categories']['name']; ?></option>
+                                <?php } ?>
+                                <option>Categoria</option>
+                                <?php
+                                if (is_array($categorias)) {
+                                    foreach ($categorias as $categoria) {
+                                        ?>
+                                        <option value="<?php echo $categoria['CompaniesCategory']['id']; ?>"><?php echo $categoria['CompaniesCategory']['name']; ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </select>                            
+                        </div>
+                        <br/>
+                        <br/>
+                        <br/>
+
+                        <div id="selectbox" style="margin-top: 0px;">
+
+                            <select id="selectboxY" name="selectboxY" class="selectbox" style="width: 100%;">
+                                <?php if ($colunas) { ?>
+                                    <option value="<?php echo $colunas[0]['offers_domains']['offer_attribute_id']; ?>">
+                                        <?php echo $colunas[0]['offers_attributes']['name']; ?>
+                                    </option>
+                                <?php } ?>
+                                <option>-- Atributo Y -- </option>
+                                <?php foreach ($atributos as $atributo) { ?>
+                                    <option id="optionY" value="<?php echo $atributo['offers_attributes']['id']; ?>"><?php echo $atributo['offers_attributes']['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <br/>
+                        <br/>
+
+                        <div id="selectbox"  style="margin-top: 0px;">
+
+                            <select id="selectboxX" class="selectbox" style="width: 100%;">
+                                <?php if ($linhas) { ?>
+                                    <option value="<?php echo $linhas[0]['offers_domains']['offer_attribute_id']; ?>">
+                                        <?php echo $linhas[0]['offers_attributes']['name']; ?>
+                                    </option>
+                                <?php } ?>
+                                <option>-- Atributo X -- </option>
+                                <?php foreach ($atributos as $atributo) { ?>
+                                    <option id="optionX" value="<?php echo $atributo['offers_attributes']['id']; ?>"><?php echo $atributo['offers_attributes']['name']; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+
+                        <div id="recebe" class="dynamic-table"></div>
+
+                        <!-- TABELA PREVIEW -->
+
+                        <div class="dynamic-preview-table" style="display: none;">
+                            <?php $qtdColunas = count($colunas); ?>
+                            <table>
+                                <tr>
+                                    <th>
+                                    </th>
+                                    <?php foreach ($colunas as $coluna) { ?>
+                                        <th style="padding-left: 20px; padding-right: 20px; padding-top: 3px; padding-bottom: 3px;">
+                                            <?php echo $coluna['offers_domains']['name']; ?>
+                                        </th>
+                                    <?php }
+                                    ?>
+                                </tr>
+
+                                <tr>
+                                    <th style="text-align: left; padding: 5px;">Preço</th>
+                                    <?php for ($i = 0; $i < $qtdColunas; $i++) { ?>
+                                        <td style="text-align: center;"> 
+                                            R$<?php echo number_format($linhas[$i]['offers_metrics']['value'], 2, ',', '.'); ?> 
+                                        </td>
+                                    <?php } ?>
+                                </tr>
+
+                                <?php foreach ($linhas as $linha) { ?>
+                                    <tr >
+                                        <th style="padding: 5px;"> <?php
+                                            if (!$linha['offers_domains']['offer_attribute_id'] == 3) {
+                                                echo $linha['offers_domains']['name'];
+                                            } else {
+                                                ?>
+                                        <div style=" width:10px; height:10px; background: <?php echo $linha['offers_domains']['name']; ?>"></div>
+                                    <?php }
+                                    ?></th>
+                                    <td style="padding: 10px;" > <?php echo $coluna['offers_metrics']['amount']; ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEVENTH LINE -->
+                <div id="seventhline" onclick="unblockLine('7')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">7</div>
+                    <div class="linha-impar-nome">
+                        <span class="texto-linha">Agendamento</span>
+                    </div>
+
+                    <div id="seventhline-body" class="seventhline-body" style="height: 235px;">
+                        <div>
+                            <div id="selectbox">
+                                <input type="text" id="calendarioInicio" name="data[Offer][begins_at]" placeholder="Data inicial" value="<?php if ($this->Session->check('addOffer.Offer.begins_at')) echo date("d/m/Y", strtotime($this->Session->read('addOffer.Offer.begins_at'))); ?>">
+                            </div>
+
+                            <div id="selectboxDatafinal">
+                                <input type="text" id="calendarioFinal" name="data[Offer][ends_at]" placeholder="Data final" value="<?php if ($this->Session->check('addOffer.Offer.ends_at')) echo date("d/m/Y", strtotime($this->Session->read('addOffer.Offer.ends_at'))); ?>">
+                            </div>
+                        </div>
+                        <br/><br/><br/>
+                        <div style='width: 100%; margin-left: 35px; font-family: Helvetica;'>
+                            <div>
+                                <span>Recorrência:</span><br/>
+                                <select name="data[Offer][recorrencia]" id='recorencia' style='width: 105px; padding: 3px; color: #666666; font-size: 16px; outline: none;'>
+                                    <?php if ($extraOffer) { ?>
+                                        <option value="<?php echo $extraOffer['offers_extra_infos']['recurrence']; ?>"><?php
+                                            echo $extraOffer['offers_extra_infos']['recurrence'];
+                                            if ($extraOffer['offers_extra_infos']['recurrence'] == 1) {
+                                                echo ' mês';
+                                            } else {
+                                                echo ' meses';
+                                            }
+                                            ?> </option>
+                                    <?php } ?>
+                                    <option>- - </option>
+                                    <?php for ($i = 1; $i <= 12; $i++) { ?>
+                                        <option value='<?php echo $i; ?>'><?php
+                                            echo $i;
+                                            if ($i == 1) {
+                                                echo ' mês';
+                                            } else {
+                                                echo ' meses';
+                                            }
+                                            ?> </option>
+                                    <?php } ?>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EIGHTH LINE -->
+                <div id="eighthline" onclick="unblockLine('8')">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">8</div>
+                    <div class="linha-par-nome">
+                        <span class="texto-linha">Imagens</span>
+                    </div>
+
+                    <style>
+                        .edit-image{
+                            width: 100px;
+                            height: 100px;
+                            cursor: pointer;
+                        }
+
+                        .principal-edit-image{
+                            width: 100px; 
+                            position: relative;
+                            margin-top: -100px;
+                            cursor: pointer;
+                        }
+
+                        .offers-imagem-body{
+                            width: 100%;
+                            text-align: center;
+                            padding-top: 10px;
+                        }
+
+                        .edit-image-xis{
+                            position: relative;
+                            margin-top: -100px;
+                            color: red;
+                            margin-left: 80px;
+                            cursor: pointer;
+                            font-family: Helvetica;
+                            opacity: 0.1;
+                        }
+
+                        .edit-image-xis:hover{
+                            opacity: 0.6;
+                        }
+                    </style>
+
+                    <script>
+                        $(function() {
+
+                            $("#uper").change(function() {
+                                readURL(this, 'editimage');
+                            });
+
+                            $("#uper1").change(function() {
+                                readURL(this, 'editimage1');
+                            });
+
+                            $("#uper2").change(function() {
+                                readURL(this, 'editimage2');
+                            });
+
+                            $("#uper3").change(function() {
+                                readURL(this, 'editimage3');
+                            });
+
+                            $("#uper4").change(function() {
+                                readURL(this, 'editimage4');
+                            });
+
+                            $("#uper5").change(function() {
+                                readURL(this, 'editimage5');
+                            });
+
+                            //executar input file quando imagem for clicada
+                            $("#principal-editimage").bind('click', function() {
+                                $('#uper').click( );
+                            });
+                            $("#editimage1").bind('click', function() {
+                                $('#uper1').click( );
+                            });
+                            $("#editimage2").bind('click', function() {
+                                $('#uper2').click( );
+                            });
+                            $("#editimage3").bind('click', function() {
+                                $('#uper3').click( );
+                            });
+                            $("#editimage4").bind('click', function() {
+                                $('#uper4').click( );
+                            });
+                            $("#editimage5").bind('click', function() {
+                                $('#uper5').click( );
+                            });
+
+                            $(".edit-image-xis").click(function() {
+                                id = $(this).attr('id');
+                                deletePhoto(id);
+                            });
+                        });
+                        function deletePhoto(id) {
+                            var control = $("#upser" + id);
+                            control.replaceWith(control = control.clone(true));
+                            $('#editimage' + id).attr('src', '../img/adv/Nova Oferta/Adventa Icones Empresas-14.png');
+
+                        }
+
+                        function readURL(input, id) {
+                            if (input.files && input.files[0]) {
+                                var reader = new FileReader();
+
+                                reader.onload = function(e) {
+                                    $('#' + id).attr('src', e.target.result);
+                                }
+                                reader.readAsDataURL(input.files[0]);
+                            }
+                        }
+                    </script>
+
+                    <!-- galeria de imagens -->
+                    <div class="eighthline-body" id="eighthline-body" style="height: 230px;">
+
+                        <div class="offers-imagem-body">
+                            <div style="width: 720px; text-align: center; margin: 0 auto; display: table; margin-top: 30px;">
+
+                                <div style=" float: left; width: 100px; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($this->Session->check('addOffer.Offer.photo')) {
+                                        echo $this->Session->read('addOffer.Offer.photo');
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>" class="edit-image" id='editimage'/>
+
+                                    <img src="../img/adv/Nova Oferta/Adventa Icones Empresas-15-16.png" class="principal-edit-image" id='principal-editimage' />
+                                    <div class='edit-image-xis' id=''>X</div>
+                                </div>
+
+                                <div style=" float: left; width: 100px; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($offersPhotos) {
+                                        echo $offersPhotos[0]['OffersPhoto']['photo'];
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>" class="edit-image"  id='editimage1'/>
+                                    <div class='edit-image-xis' id='1'>X</div>
+                                </div>
+
+                                <div style=" width: 100px; float: left; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($offersPhotos) {
+                                        if (count($offersPhotos) > 2 && $offersPhotos[1]['OffersPhoto']['photo'] != 'UPLOAD_ERROR') {
+                                            echo $offersPhotos[1]['OffersPhoto']['photo'];
+                                        } else {
+                                            echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                        }
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>" class="edit-image" id='editimage2' />
+                                    <div class='edit-image-xis' id='2'>X</div>
+                                </div>
+
+                                <div style=" float: left; width: 100px; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($offersPhotos) {
+                                        if (count($offersPhotos) > 3 && $offersPhotos[2]['OffersPhoto']['photo'] != 'UPLOAD_ERROR') {
+                                            echo $offersPhotos[2]['OffersPhoto']['photo'];
+                                        } else {
+                                            echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                        }
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>"  class="edit-image" id='editimage3'/>
+                                    <div class='edit-image-xis' id='3'>X</div>
+                                </div>
+
+
+                                <div style=" float: left; width: 100px; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($offersPhotos) {
+                                        if (count($offersPhotos) > 4 && $offersPhotos[3]['OffersPhoto']['photo'] != 'UPLOAD_ERROR') {
+                                            echo $offersPhotos[3]['OffersPhoto']['photo'];
+                                        } else {
+                                            echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                        }
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>" class="edit-image" id='editimage4' />
+                                    <div class='edit-image-xis' id='4'>X</div>
+                                </div>
+
+
+                                <div style=" width: 100px; float: left; height: 100px; margin-left: 15px;">
+                                    <img src="<?php
+                                    if ($offersPhotos) {
+                                        if (count($offersPhotos) > 5 && $offersPhotos[4]['OffersPhoto']['photo'] != 'UPLOAD_ERROR') {
+                                            echo $offersPhotos[4]['OffersPhoto']['photo'];
+                                        } else {
+                                            echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                        }
+                                    } else {
+                                        echo "../img/adv/Nova Oferta/Adventa Icones Empresas-14.png";
+                                    }
+                                    ?>" class="edit-image" id='editimage5' />
+                                    <div class='edit-image-xis' id='5'>X</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="eighthline-body" id="eighthline-body" style="height: 230px; display: none;">
+                        <div id="eighthline-lado-esquerdo">
+                            <div class="eighthline-botao-1" onclick="unblockUperImage('1')"></div>
+                            <div class="eighthline-botao-2" onclick="unblockUperImage('2')"></div>
+                        </div>
+                        <div id="box1">
+                            <span class="eighthline-box1" id="title">Qual a primeira imagem
+                                que o usuário verá do seu produto?</span>
+
+                            <br/>
+                            <?php if ($editOrInsert == 'edit') { ?>   <a href="javascript:void(0);" id="mostra" style="color: #fff; font-family: Helvetica;">Ver imagem da oferta</a>
+                                <a href="#" onclick="return launchEditor('blah',
+                                                    '<?php echo $this->Session->read('addOffer.Offer.photo'); ?>');">Edit!</a>
+                               <?php } ?>
+                            <div class="eighthline-box1" id="uperBack">
+                                <div class="eighthline-box1" id="imageBack">
+                                    <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                </div>
+                                <div id="pop">
+                                    <a href="javascript:void(0);" id="closePop">[Fechar]</a>
+                                    <img id="blah" src="<?php
+                                    if ($this->Session->check('addOffer.Offer.photo'))
+                                        echo $this->Session->read('addOffer.Offer.photo');
+                                    else
+                                        echo '#';
+                                    ?>" alt="your image" style="max-width: 400px;"/>
+                                </div>
+                                <input type="file" name="data[Offer][photo]" class="eighthline-box1" id="uper" style="margin-top: 2px;" />  
+                            </div>
+
+                            <div>
+                                <div class="eighthline-box1" id="divDown">
+                                    <div style="float: left;">
+                                        <?php echo $this->Html->image('icones/cadastro-oferta/icon-exclamacao-branco-small.png'); ?>
+                                    </div>
+                                    <span class="eighthline-box1" id="textBody">O limite máximo
+                                        aceito é de 5mb. <br />Somente é possivel fazer o upload de
+                                        imagens nos <br /> formatos ".jpeg - .png - .gif".
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="box2">
+
+                            <span class="eighthline-box2" id="title">Adicione as imagens
+                                extras da sua oferta</span>
+                            <p></p>
+                            <div class="eighthline-box2" id="divLeft">
+                                <!-- UPER 1 -->
+                                <div class="eighthline-box2" id="uperBack1">
+                                    <div class="eighthline-box2" id="imageBack1">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                    </div>
+                                    <input type="file" class="eighthline-box2" name="data[Offer][photos_extra_zero]" id="uper1" style="margin-top: 2px;"/>
+                                </div>
+                                <!-- UPER 2 -->
+                                <div class="eighthline-box2" id="uperBack2">
+                                    <div class="eighthline-box2" id="imageBack2">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                    </div>
+                                    <input type="file" class="eighthline-box2" name="data[Offer][photos_extra_one]" id="uper2" style="margin-top: 2px;" />
+                                </div>
+                                <!-- text span --> 
+                                <div id="textBody2">
+                                    <div style="float: left; margin-left: 26px;">
+                                        <?php echo $this->Html->image('icones/cadastro-oferta/icon-exclamacao-branco-smaller.png'); ?>
+                                    </div>
+                                    <span class="eighthline-box2" id="textBody">O limite máximo
+                                        aceito por imagem é de 2mb.<br /> Somente é possivel fazer o
+                                        upload de imagens<br /> nos formatos ".jpeg - .png - .gif".
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- right -->
+                            <div class="eighthline-box2" id="divRight">
+
+                                <!-- UPER 3 -->
+                                <div class="eighthline-box2" id="uperBack3">
+                                    <div class="eighthline-box2" id="imageBack3">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                    </div>
+                                    <input type="file" class="eighthline-box2" name="data[Offer][photos_extra_two]" id="uper3" style="margin-top: 2px;" />
+                                </div>
+
+                                <!-- UPER 4 -->
+                                <div class="eighthline-box2" id="uperBack4">
+                                    <div class="eighthline-box2" id="imageBack4">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                    </div>
+                                    <input type="file" class="eighthline-box2" name="data[Offer][photos_extra_three]" id="uper4" style="margin-top: 2px;"/>
+                                </div>
+
+                                <!-- UPER 5 -->
+                                <div class="eighthline-box2" id="uperBack5">
+                                    <div class="eighthline-box2" id="imageBack5">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                                    </div>
+                                    <input type="file" class="eighthline-box2" name="data[Offer][photos_extra_four]" id="uper5" style="margin-top: 2px;"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- NINTH LINE -->
+                <div id="ninthline" onclick="unblockLine('9')" style="display: none;">
+                    <div class="linha-numero-laranja" style=" background: #3399cc;">9</div>
+                    <div class="linha-impar-nome">
+                        <span class="texto-linha">Público</span>
+                    </div>
+
+                    <div class="ninthline-body" id="ninthline-body">
+                        <div>
+                            <span class="ninthline-body-title" id="offersUser">Usuários da
+                                sua oferta: <?php echo count($offerFiltersData); ?></span> <span class="ninthline-body-title"
+                                                                                             id="pubTotal">Público total: <?php echo count($offerFiltersData); ?> usuários</span>
+                        </div>
+
+                        <div id="ninthline-right-menu">
+                            <ul class="ninth-menuver" id="ninth-menuver">
+                                <a href="javascript:void(0);"> <li onclick="unblockStatics('1')" class="genero">Genero</li></a>
+                                <a href="javascript:void(0);"><li onclick="unblockStatics('2')" class="localidade">Localidade</li></a>
+                                <a href="javascript:void(0);"><li onclick="unblockStatics('3')" class="faixa">Faixa etária</li></a>
+                                <a href="javascript:void(0);"><li onclick="unblockStatics('4')" class="politica">Politica</li></a>
+                                <a href="javascript:void(0);"><li onclick="unblockStatics('5')" class="relacionamento">Relacionamento</li></a>
+                                <a href="javascript:void(0);"><li onclick="unblockStatics('6')" class="religiao">Religi&atilde;o</li></a>
+                            </ul>
+                        </div>
+                        <div id="staticsBody">
+                            <!-- GENERO -->
+                            <div id="staticsGenero">
+
+                                <?php
+                                $percentTotal = 0;
+                                foreach ($offerFiltersData['gender'] as $filter) {
+                                    $percentTotal = $filter['percent'] + $percentTotal;
+                                    ?>
+                                    <a href="javascript:void(0);">
+                                        <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('gender', '<?php echo $filter['name']; ?>');">
+                                            <span><?php
+                                                switch ($filter['name']) {
+                                                    case 'male':
+                                                        echo 'Masculino';
+                                                        break;
+                                                    case 'female':
+                                                        echo 'Feminino';
+                                                    default:
+                                                        break;
+                                                }
+                                                ?></span> <br />
+                                            <p id="porcentagem"><?php echo $filter['percent']; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $filter['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                <?php } ?>
+
+                                <?php
+                                if ($percentTotal < 100) {
+                                    $percentual = 100 - $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="femaleBox" style="height: 85%; padding-bottom: 5px;">
+                                            <span>Não Informado</span> <br />
+                                            <p id="porcentagem"><?php echo $percentual; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $percentual; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+
+                            </div>
+
+                            <!-- LOCALIDADE -->
+                            <div id="staticsLocalidade">
+
+                                <?php
+                                $percentTotal = 0;
+                                foreach ($offerFiltersData['location'] as $filter) {
+                                    $percentTotal = $filter['percent'] + $percentTotal;
+                                    ?> <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('location', '<?php echo $filter['name']; ?>');">
+                                            <span><?php echo $filter['name']; ?></span> <br />
+                                            <p id="porcentagem"><?php echo $filter['percent'] ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $filter['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                                <?php
+                                if ($percentTotal < 100) {
+                                    $percentual = 100 - $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="femaleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('location', 'Nao informado');">
+                                            <span>Não <br/>Informado</span> <br />
+                                            <p id="porcentagem"><?php echo $percentual; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $percentual; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+
+                            </div>
+
+                            <!-- FAIXA ETARIA -->
+                            <div id="staticsFaixaEtaria">
+
+                                <?php
+                                foreach ($offerFiltersData['age_group'] as $age) {
+                                    if ($age['percent'] > 0) {
+                                        ?> <a href="#">
+                                            <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('age_group', '<?php echo $age['label']; ?>');">
+                                                <span><?php
+                                                    if ($age['label'] == 'Não informado') {
+                                                        echo 'Não<br/> informado';
+                                                    } else {
+                                                        echo $age['label'];
+                                                    }
+                                                    ?></span> <br />
+                                                <p id="porcentagem"><?php echo $age['percent'] ?>%</p>
+                                                <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                    <div style="width: <?php echo $age['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                                </div>
+                                            </div>	
+                                        </a>
+                                        <?php
+                                    }
+                                }
+                                ?>	
+
+
+                            </div>
+
+                            <!-- POLITICA -->
+                            <div id="staticsPolitica">
+                                <?php
+                                $percentTotal = 0;
+                                foreach ($offerFiltersData['political'] as $filter) {
+                                    $percentTotal = $filter['percent'] + $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('political', '<?php echo $filter['name']; ?>');">
+                                            <span><?php
+                                                if ($age['label'] == 'Não informado') {
+                                                    echo 'Não<br/> informado';
+                                                } else {
+                                                    echo $age['label'];
+                                                }
+                                                ?></span> <br />
+                                            <p id="porcentagem"><?php echo $filter['percent']; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $filter['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+
+                                <?php
+                                if ($percentTotal < 100) {
+                                    $percentual = 100 - $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="femaleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('political', 'Nao informado');">
+                                            <span>Não <br/>informado</span> <br />
+                                            <p id="porcentagem"><?php echo $percentual; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $percentual; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                            </div>
+
+                            <!-- RELACIONAMENTO -->
+                            <div id="staticsRelacionamento">
+                                <?php
+                                $percentTotal = 0;
+                                foreach ($offerFiltersData['relationship_status'] as $filter) {
+                                    $percentTotal = $filter['percent'] + $percentTotal;
+                                    ?>                                   <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('relationship_status', '<?php echo $filter['name']; ?>');">
+                                            <span><?php echo $filter['name']; ?></span> <br />
+                                            <p id="porcentagem"><?php echo $filter['percent'] ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $filter['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                                <?php
+                                if ($percentTotal < 100) {
+                                    $percentual = 100 - $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="femaleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('relationship_status', 'Nao informado');">
+                                            <span>Não <br/>Informado</span> <br />
+                                            <p id="porcentagem"><?php echo $percentual; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $percentual; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                            </div>
+
+                            <!-- RELIGIAO -->
+                            <div id="staticsReligiao">
+                                <?php
+                                $percentTotal = 0;
+                                foreach ($offerFiltersData['religion'] as $filter) {
+                                    $percentTotal = $filter['percent'] + $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="maleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('religion', '<?php echo $filter['name']; ?>');">
+                                            <span><?php echo $filter['name']; ?></span> <br />
+                                            <p id="porcentagem"><?php echo $filter['percent'] ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $filter['percent']; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                                <?php
+                                if ($percentTotal < 100) {
+                                    $percentual = 100 - $percentTotal;
+                                    ?>
+                                    <a href="#">
+                                        <div class="staticsBox-cad-ofer" id="femaleBox" style="height: 85%; padding-bottom: 5px;" onclick="savePublico('religion', 'Nao informado');">
+                                            <span>Não <br/>Informado</span> <br />
+                                            <p id="porcentagem"><?php echo $percentual; ?>%</p>
+                                            <div style="bottom: 5px; height:15px; width: 90%; background: #d6d6d6; margin-left: 5px; margin-top: -10px;">
+                                                <div style="width: <?php echo $percentual; ?>%; height: 100%; background: #73ff73;"></div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                <?php } ?>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <input type="text" name="data[Offer][editOrSelec]" value="<?php echo $editOrInsert; ?>" style="display: none;"/>
+                <input type="hidden" id="gender" name="data[Offer][filters][gender]" />
+                <input type="hidden" id="location" name="data[Offer][filters][location]"/>
+                <input type="hidden" id="religion" name="data[Offer][filters][religion]"/>
+                <input type="hidden" id="political" name="data[Offer][filters][political]"/>
+                <input type="hidden" id="age_group" name="data[Offer][filters][age_group]"/>
+                <input type="hidden" id="relationship_status" name="data[Offer][filters][relationship_status]" />
+                <br/>
+
+                <button type="submit" name="edita" id="edita" style="padding: 10px; cursor: pointer;float: right; background: transparent; border: 0px; background: #3399cc;color: #fff; <?php
+                if ($oferta) {
+                    echo "display: block";
+                } else {
+                    echo "display:none;";
+                }
+                ?>">CONTINUAR </button>
+
+                <?php echo $this->Form->end(); ?>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+<?php //echo $this->Session->read('direcOfferUserId');                   ?>
+</div>
+</div>
+
+<div class="valida-error">
+    <span id="valida-img-error">TES</span><br/>
+    <div id="btn-img-error">OK</div>
+</div>

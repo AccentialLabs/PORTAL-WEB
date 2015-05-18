@@ -1,0 +1,68 @@
+<div class="topo">
+	<?php echo $this->Html->image('logo-empresas.png', array('class'=>'logo'));?>	
+	<div class="oquehadenovo">
+		<a href="javascript:void(0);" class="abriroquehadenovo"><span>0</span></a>
+		<div class="conteudooquehadenovo">
+			<h2><span>O que há de novo</span><a href="javascript:void(0);"><?php echo $this->Html->image('icones/close.png');?></a></h2>
+		</div>
+	</div>
+	<?php if($this->Session->check('CompanyLoggedIn.Company')){?>
+	<div class="usuariologado">
+		<div class="abriropcoesusuario"><span><b><?php echo $this->Session->read('CompanyLoggedIn.Company.fancy_name');?></b></span></div>
+		<div class="conteudoopcoesusuario">
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/preferencias'); ?>';"><span>Preferencias</span></a>
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/compras'); ?>';"><span>Compras</span></a>
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/ofertas'); ?>';"><span>Ofertas</span></a>
+			<a href="<?php echo $this->Html->url('/company/convites-facebook'); ?>" target="_blank"><span>Convidar amigos - Facebook</span></a>
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/desejos'); ?>';"><span>Desejos</span></a>
+			<a href="javascript:void(0);" onclick="location.href='<?php echo $this->Html->url('/company/logoof'); ?>';"><span>Sair</span></a>
+		</div>
+	</div>	
+	<?php } ?>
+	
+	<?php if($menu['tipo']=='cadastro'){ ?>
+	<!-- Cadastro de ofertas | Botões de navegação | Start -->
+<div class="Navegacao_CadastroOfertas">
+
+		<div class="Atv_Bts_cadastroOfertas">
+		<?php echo $this->Html->link(
+					$this->Html->image('Companies.bt_01.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'detalhes'),
+					array('escape' => false, 'title'=>'DADOS DA OFERTA')
+				);
+			?>
+			<br>
+			Dados da oferta
+		</div><!--Atv_Bts_cadastroOfertas-->
+	<img src="/portal/img/line_v_btcadastrooofertas.jpg" class="line_v_btcadastrooofertas">
+
+<?php if($this->Session->check('addOffer.Offer')){ ?>
+
+	<div class="empresa_06_Cols">
+		<?php echo $this->Html->link(
+				$this->Html->image('Companies.bt_02.png', array('border' => '0')),
+				array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'offerFilters'),
+				array('escape' => false, 'title'=>'PUBLICO ALVO')
+			);
+		?><br>
+		Público alvo
+	</div><!--Bts_cadastroOfertas-->
+	<img src="/portal/img/line_v_btcadastrooofertas.jpg" class="line_v_btcadastrooofertas">
+
+	<div class="empresa_06_Cols">
+		<?php echo $this->Html->link(
+				$this->Html->image('Companies.bt_03.png', array('border' => '0')),
+				array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'resume'),
+				array('escape' => false, 'title'=>'RESUMO DA OFERTA')
+			);
+		?><br>
+		Resumo da oferta
+	</div><!--Bts_cadastroOfertas-->
+	<img src="/portal/img/line_v_btcadastrooofertas.jpg" class="line_v_btcadastrooofertas">
+<?php } 
+	}
+?>
+
+</div><!--Navegacao_CadastroOfertas-->
+<!-------- Cadastro de ofertas | Botões de navegação | End -------->
+</div>	

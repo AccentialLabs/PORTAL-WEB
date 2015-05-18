@@ -1,0 +1,136 @@
+/*
+    Created on : 20/10/2014, 11:02:21
+    Author     : Matheus Odilon
+*/
+
+.orange-header{
+    width: 100%;
+    height: 40%;
+    background-size: 100%;
+    background-image:
+        url("../../img/icones/users-vitrine/bg_box_wishlist.png");
+}
+.title-header{
+    width: 100%;
+    padding-top: 10px;
+    color: #fff;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 18px;
+
+}
+
+.table-list-title{
+    font-family: Helvetica;
+    color: #fff;
+    text-align: center;
+    width: 70.8%;
+    background: #C96705;
+    padding: 13px;
+    font-size: 18px;
+    float: left;
+    height: 100%;
+}
+.back-titles{
+    background: #AC5804;
+}
+.top-10-title{
+    text-align: center;
+    font-family: Helvetica;
+    color: #fff;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.top-10-list{
+    font-family: Helvetica;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 12px;
+    color: gray;
+    float: right;
+    width: 24%;
+    max-height: 290px;
+    padding-top: 10px;
+    overflow: auto;
+}
+
+.table-list{
+    float: left;
+    width: 73.8%;
+    max-height: 300px;
+    overflow: auto;
+}
+
+
+.area-form{
+    width: 100%;
+
+}
+
+.form-esquerdo{
+    width: 38%;
+    margin-left: 15%;
+    float: left;
+}
+
+.form-direito{
+    width: 30%;
+}
+
+select{
+    -webkit-appearance: none;
+    border: 0;
+    width: 100%;
+    margin-top: 10px;
+    font-family: Helvetica;
+    color: #666666;
+    font-size: 13px;
+    height: 30px;
+    padding-left: 10px;
+    background: url('../../companies/img/icones/seta-select-two.png') no-repeat
+        right #fff;
+    outline: none;
+}
+
+.input-cadastrais {
+    height: 28px;
+    width: 97.5%;
+    padding-left: 5px;
+    font-family: Helvetica;
+    color: #666666;
+    font-size: 16px;
+    outline: none;
+    margin-top: 10px;
+}
+
+.input-cadastrais#data{
+    width: 55%;
+}
+
+#desc{
+    margin-top: 10px;
+    height: 105px;
+    font-family: Helvetica;
+    color: #666666;
+    padding-top: 5px;
+    padding-left: 10px;
+    width: 90%;
+    margin-left: 10px;
+}
+.wish-title{
+    font-weight: bold;
+    color: #000000;
+    font-size: 14px;
+}
+
+#loading{
+    position: absolute;
+    left: 47%;
+    top: 35%;
+    width: 80px;
+    height: 80px;
+    z-index: 999999;
+    display: none;
+}
+

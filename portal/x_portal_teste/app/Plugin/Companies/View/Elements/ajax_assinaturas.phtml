@@ -1,0 +1,20 @@
+<div class="area-assinantes-ajax">
+			<?php
+			  if(!empty($assinaturasAnoAtual)){			 
+				foreach($assinaturasAnoAtual as $assinatura){
+					$nome = explode(" ", $assinatura['User']['name']);					
+					?>
+					<div class="item">
+						<img src="<?php echo $assinatura['User']['photo'];?>">
+						<strong><?php echo $nome[0];?></strong>
+					</div>											
+			<?php } 
+				}else{
+					echo "NAO EXISTE REGISTRO";
+				}
+			?>		
+	<div id="paginacao" limit="<?php echo $limit;?>"></div>	
+	<?php if($update==true){?>	
+		<a href="javascript:void(0);" id="MaisAssinaturas">MAIS</a>
+	<?php } ?>								
+</div>

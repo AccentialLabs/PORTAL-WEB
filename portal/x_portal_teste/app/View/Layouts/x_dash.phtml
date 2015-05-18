@@ -1,0 +1,383 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo $title_for_layout; ?></title>
+
+        <!-- META TAGS -->
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+
+        <?php
+        if ($pluginName) {
+            echo $this->Html->css("empresas/X_Companies");
+            echo $this->Html->css("x_style");
+            echo $this->Html->css("empresas/x_comp");
+            echo $this->fetch('css');
+
+            echo $this->Html->script('jqueryTunado');
+            echo $this->Html->script('jquery.roundabout.min.js');
+            echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+            echo $this->Html->script('jquery.mask.min');
+            echo $this->Html->script('javascript.lib');
+            echo $this->Html->script('jquery.stringify');
+            echo $this->Html->script('complete');
+            echo $this->Html->script('jquery.cycle.all');
+            echo $this->Html->script('jquery.jcarousel.min');
+            echo $this->Html->script("empresas/Companies");
+            echo $this->Html->script('refresh');
+            echo $this->fetch('script');
+        }
+        ?>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+        <script>
+
+            $(function() {
+                $("#comp-logo").click(function() {
+                    $("#username").toggle(200);
+                    $("#mask").toggle(100);
+                    $("#menu-users-1").toggle(300);
+                });
+
+                $("#menu-users-1").mouseleave(function() {
+                    $("#mask").fadeOut(100);
+                    $("#menu-users-1").fadeOut(300);
+                });
+
+            });
+        </script>
+        <style>
+
+            #comp-logo{
+                cursor: pointer;
+            }
+
+            #mask {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 800;
+                background-color: #000;
+                opacity: 0.6;
+                display: none;
+            }
+
+            #area-user{
+                background: #ffffff;
+                width: 25%;
+                height: 25%;
+                position: absolute;
+                z-index: 900;
+                right: 90px;
+                color: #000000;
+                display: none;
+            }
+
+            .menu-users-1{
+                border: 1px solid #DCDCDC;
+                width: 300px;
+                position: absolute;
+                top: 6%;
+                z-index: 99999;
+                right: 1%;
+                background: #fff;
+                font-family: Helvetica;
+                font-size: 14px;
+                padding-top: 45px;
+                padding-left: 10px;
+                display: none;
+            }
+
+            .menu-users-1 a{
+                text-decoration: none;
+                padding: 10px;
+                font-size: 16px;
+                color: #000;
+                margin-left: 10px;
+            }
+
+            .menu-users-1 a:hover{
+                color: orange;
+            }
+
+            /*            body{
+                            background:url(../img/icones/dashboard/buildings-2-image.jpg) no-repeat;
+                            background-size: cover;
+                            height:100%;
+                        }*/
+
+            html { 
+
+                <?php $aparen = $this->Session->read('compPreferences'); ?>
+                <?php
+                if (!empty($this->Session->read('compPreferences.background'))) {
+                    if (strpos($this->Session->read('compPreferences.background'), "#") == 1) {
+                        ?>
+                        background: #fff;
+                        <?php } else {
+                        ?>
+                        background-image: 
+                            url("<?php echo $this->Session->read('compPreferences.background'); ?>");
+                        <?php
+                        }
+                    } else {
+                        ?>
+                    background-image:
+                        url("../img/icones/users-vitrine/bg_layout.jpg");
+<?php } ?>
+                //background: url(<?php echo $aparen['backgound']; ?>) no-repeat center center fixed;
+                //background: url(../img/icones/dashboard/buildings-2-image.jpg) no-repeat center center fixed;
+                -webkit-background-size: cover;
+                -moz-background-size: cover;
+                -o-background-size: cover;
+                background-size: cover;
+            }
+
+            #adv-comp-header{
+                background: #363636;
+                position: fixed;
+                width: 96%;
+                height: 50px;
+                top: 0;
+                right: 0;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+
+            }
+
+            #adv-comp-logo{
+                height: 70%;  
+                margin-top: 5px;
+                margin-left: 0.5%;
+                float: left;
+            }
+
+            #adv-comple-logo{
+                font-family: Helvetica;
+                color: #ffffff;
+                float: left;
+                margin-top: 0.4%;
+                font-size: 35px;
+                opacity: 0.9;
+                margin-left: -3px;
+            }
+
+            #adv-comp-logo-text{
+                color: #3399cc;
+                float: left;
+                font-size: 16px;
+                font-family: Helvetica;
+                margin-top: 15px;
+                margin-left: 3px;
+            }
+
+            #adv-comp-menu{
+                width: 4%;
+                background: #808080;
+                height: 100%;
+                top: -15px;
+                left: 0;
+                position: fixed;
+            }
+
+            #adv-comp-menu-tab{
+                //border-collapse: collapse;
+                // border: 0px solid;
+                margin-top: 15px;
+                border: none;
+                border-collapse: collapse;
+            }
+
+            #adv-comp-menu-tab td{
+                padding-top: 15px;
+                border: 0px solid;
+            }
+
+            #adv-comp-menu-tab img{
+                width: 100%;
+                cursor: pointer;
+            }
+
+            #adv-comp-fundo{
+                background: #fff;
+                width: 100%;
+                height: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+                opacity: 0.4;
+                z-index: -10;
+            }
+
+            @font-face {
+                font-family: MyriadProLight;
+                src: url("../fonts/MyriadProLight.otf") format("opentype");
+            }
+        </style>
+    </head>
+
+    <body id="corp">
+
+
+        <div id="adv-comp-fundo">
+        </div>
+
+        <div id="adv-comp-header">
+            <img src="../img/adv/Adventa Logo/Adventa-2.png" id="adv-comp-logo"/>
+            <div id="adv-comple-logo">|</div>
+            <div id="adv-comp-logo-text">empresas</div>
+
+            <div style="height: 40px; color: #fff; font-family: MyriadProLight; margin-top: 5px; position: fixed; right: 70px;">
+                <?php echo $this->Session->read('CompanyLoggedIn.Company.fancy_name'); ?><br/>
+                <?php
+                if ($this->Session->read('userLoggedType') == 1) {
+                    echo "<span style='color: #999;'>Administrador</span>";
+                } else {
+                    echo "<span style='color: #999;'>Operador</span>";
+                }
+                ?>
+            </div>
+            <?php
+            $comp = $this->Session->read('CompanyLoggedIn.Company.logo');
+            if (empty($comp)) {
+                ?>
+                <img id="comp-logo"  src="http://www.novoseculo.com.br/config/imagens_conteudo/produtos/imagensGRD/GRD_930_Ex.jpg" id="adv-cabecalho-user" onclick="areaUser()" style="border-radius: 50px 50px 50px 50px; width: 40px; height: 40px; margin-top: 3.5px; margin-right: 4px; cursor: pointer; position: fixed; right: 10px;"/>
+            <?php } else { ?>
+                <img id="comp-logo"  src="<?php echo $this->Session->read('CompanyLoggedIn.Company.logo'); ?>" id="adv-cabecalho-user" onclick="areaUser()" style="border-radius: 50px 50px 50px 50px; width: 40px; height: 40px; margin-top: 3.5px; margin-right: 4px; cursor: pointer; position: fixed; right: 10px;"/>
+<?php } ?>
+        </div>
+
+        <div id="adv-comp-menu">
+            <table id="adv-comp-menu-tab"  border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td style="padding-top: 0px;">
+                        <a class="dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/company/layout-dash">
+                            <?php if ($pageName == 'dashboard') { ?>
+                                <img src="../img/adv/Menu/Company/Icones.png" />
+                            <?php } else if ($pageName == 'preferencias') { ?>
+                                <img src="../img/adv/Menu/Company/Icones.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu/Company/Icones2.png" />
+<?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/company/layout-offers">
+                            <?php if ($pageName == 'offers') { ?>
+                                <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu/Company/Icones3.png" />
+                            <?php } else { ?>
+                                <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu/Company/Icones4.png" />
+<?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/company/layout-vendas">
+                            <?php if ($pageName == 'vendas') { ?>
+                                <img src="../img/adv/Menu/Company/Icones5.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu/Company/Icones6.png" />
+<?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/company/layout-assinaturas">
+                            <?php if ($pageName == 'assinaturas') { ?>
+                                <img src="../img/adv/Menu/Company/Icones7.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu/Company/Icones8.png" />
+<?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a class="dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/company/layout-wishlist">
+                            <?php if ($pageName == 'wishlist') { ?>
+                                <img src="../img/adv/Menu/Company/Icones9.png"/>
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu/Company/Icones10.png"/>
+<?php } ?>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="area-user">
+
+        </div>
+        <div id="mask"></div>
+        <!-- <input type="text" id="calendario">  --> 
+        <!--        <div class="topo_xcode" style="height: 40px;">
+        <?php
+        if ($this->Session->read('CompanyLoggedIn.Company.logo') == 'UPLOAD_ERROR') {
+            echo "<img onclick=\"areaUser()\" id=\"comp-logo\" src=\"http://trueone.com.br/uploads/img-users/male.jpg\" style=\"float: right; margin-right: 90px; margin-top: 3px; width: 80px; height: 80px; border-radius: 50px 50px 50px 50px; border: 5px solid #000000;z-index:600;\" />";
+        } else if (!empty($this->Session->read('CompanyLoggedIn.Company.logo'))) {
+            $compImage = $this->Session->read('CompanyLoggedIn.Company.logo');
+            echo "<img onclick=\"areaUser()\" id=\"comp-logo\" src=\"" . $compImage . "\" style=\" float: right; margin-right: 90px; background: #fff; margin-top: 3px; width: 80px; height: 80px; border-radius: 50px 50px 50px 50px; border: 5px solid #000000;z-index:600;\" />";
+        } else {
+            echo "<img onclick=\"areaUser()\" id=\"comp-logo\" src=\"http://trueone.com.br/uploads/img-users/male.jpg\" style=\"float: right; background: #fff; margin-right: 90px; margin-top: 3px; width: 80px; height: 80px; border-radius: 50px 50px 50px 50px; border: 5px solid #000000;z-index:600;\" />";
+        }
+        ?>
+        
+                    <a href="http://localhost/work/x_portal_teste/company/layout-dash"><?php echo $this->Html->image('logo-empresas-2.png', array('class' => 'top')); ?></a>
+                    <div id="username"
+                         style="float: right; margin-top: 50px; margin-right: 20px; font-family: Helvetica; color: #000000;"> 
+        <?php
+        if ($this->Session->read('secondUserLogado') == true) {
+            echo $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.name') . ' - ';
+        }
+        echo $this->Session->read('CompanyLoggedIn.Company.fancy_name')
+        ;
+        ?></div>
+        
+                </div>-->
+
+
+        <div class="menu-users-1" id="menu-users-1">
+            <div style="font-family: MyriadProLight; margin-top: -35px; border-bottom: 1px solid #ccc; color: #666; margin-right: 10px; padding-bottom: 10px;">
+                <strong><?php echo $this->Session->read('CompanyLoggedIn.Company.fancy_name'); ?></strong>
+            </div>
+
+<?php if (!empty($this->Session->read('CompanyLoggedIn'))) { ?>
+                <a href="http://localhost/work/x_portal_teste/company/layout-configs">
+                    <div class="menu-option">
+                        Preferências
+                    </div>
+                </a>
+                <a href="http://localhost/work/x_portal_teste/company/sair">
+                    <div class="menu-option">
+                        Sair
+                    </div>
+                </a>
+<?php } else { ?>
+                <a href="http://localhost/work/x_portal_teste/company/layout-popup" >
+                    <div class="menu-option">
+                        Login
+                    </div>
+                </a>
+<?php } ?>
+        </div>
+
+
+        <div style="margin-top: 70px; height: 91%; margin-left: 6%;">
+<?php echo $this->fetch('content'); ?>
+        </div>
+
+        <!-- RODAPE -->
+<?php // echo $this->element('x_menu_rodape');      ?>
+    </body>
+</html>

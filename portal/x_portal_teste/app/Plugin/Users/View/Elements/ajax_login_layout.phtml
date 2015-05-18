@@ -1,0 +1,183 @@
+<?php ?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+    $(function() {
+        $(".input-login-user").keyup(function() {
+            $('#email2').val($(this).val());
+        });
+
+        $(".input-login-user").focusout(function() {
+            $('#email2').val($(this).val());
+        });
+
+        $(".input-login-pass").keyup(function() {
+            $('#pass2').val($(this).val());
+        });
+
+        $(".input-login-pass").focusout(function() {
+            $('#pass2').val($(this).val());
+        });
+        
+         $("#xis-login").click(function() {
+            $('#pop-login').fadeOut(300);
+            $("#mask").fadeOut(200);
+        });
+    });
+    
+</script>
+<style>
+
+    ::-webkit-input-placeholder {
+        color: #fff;
+
+    }
+
+    :-moz-placeholder {
+        color: #fff;
+
+    }
+
+    ::-moz-placeholder {
+        color: #fff;  
+
+    }
+
+    :-ms-input-placeholder {  
+        color: #fff;  
+
+    }
+
+    .input-login-user{
+        background-position: 10px 20px;
+        font-family: Helvetica;
+        border: 0px;
+        background: transparent;
+        border-bottom: 1px solid #fff;
+        font-size: 14px;
+        outline: none;
+        padding-bottom: 10px;
+        color: #fff;
+        width: 85%;
+
+    }
+
+    .input-login-pass{
+        background-position: 10px 20px;
+        font-family: Helvetica;
+        border: 0px;
+        border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
+        background: transparent;
+        font-size: 14px;
+        outline: none;
+        color: #fff;
+        width: 85%;
+        margin-left: 5px;
+    }
+    .campo-de-entrada{
+
+        padding-top: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .campo-de-entrada-senha{
+        text-align: center;
+        margin-top: 15px;
+        width: 100%;
+    }
+    .entrar{
+        font-family: Helvetica;
+        color: #fff;
+        line-height: 42px;
+        text-align: center;
+        margin-left: 15px;
+        margin-top: 15px;
+        position: relative;
+    }
+
+    .button-entrar{
+        background: #3399cc;
+        font-family: Helvetica;
+        color: #fff;
+        width: 85%;
+        height: 40px;
+        text-align: center;
+        margin-top: 5px;
+        cursor: pointer;
+    }
+
+    .button-cadastrar{
+        background-color: rgba(255,255,255,0.4);
+        font-family: Helvetica;
+        color: #fff;
+        width: 85%;
+        margin-top: 5px;
+        height: 40px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .termos{
+        font-family: Helvetica;
+        font-size: 11px;
+        color: #fff;
+        text-align: center;   
+        margin-top: 15px;
+        cursor: pointer;
+        position: absolute;
+        bottom: 25;
+        width: 100%;
+        text-align: center;
+    }
+
+
+    .adv-logo{
+        margin-left: 10%;
+        width: 50%;
+        margin-top: 5%;
+    }
+</style>
+
+<div style="position: absolute; top: 0; background: url('../img/adv/Login/adventa_background_resize.png') no-repeat center; 
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+     width: 316px;
+     height: 506px;
+     text-align: center;"> 
+    <div style="cursor: pointer; background: url('../img/icones/users-vitrine/fechar.png') transparent; width: 12px; height: 12px; float: right; margin-right: 20px; margin-top: 20px; opacity: 0.8;" id="xis-login"></div>
+    <br/>
+    <img src="../img/adv/Adventa Logo/Adventa-2.png" class="adv-logo"/>
+    <div style="width: 100%; margin-top: 20px; text-align: center;">
+        <div class="campo-de-entrada">
+
+            <input type="text" class="input-login-user" placeholder="Email" name='data[User][email]' id="email" />
+        </div>
+        <div class="campo-de-entrada-senha"> 
+
+            <input type="password" id="pass" class="input-login-pass" placeholder="Senha" name='data[User][password]' />
+        </div>
+
+        <a href="<?php echo $loginUrl; ?>" style="text-decoration: none; font-family: Helvetica; font-size: 13px;"><div style="color: #fff; text-decoration: none; cursor: pointer; margin-left:7.5%; background: #3b5998; width: 84.7%; height: 41px; line-height: 41px; margin-top: 50px;">
+                Log in with Facebook
+            </div> 
+        </a>
+        <button class="button-entrar" type="submit" style="border: 0px;" onclick="logar2()">Entrar</button>
+        <button class="button-cadastrar" type="submit" style="border: 0px;" onclick="showCreate()">Cadastrar</button>
+
+        <div onclick="showForgotMyPass()" style="margin-left: 8%; cursor: pointer; margin-top: 5px; position: relative; line-height: 42px; text-align: center; opacity: 0.8; width: 84%; height: 40px; color: #fff; font-family: Helvetica; border: 1px solid #fff;">
+            Esqueci minha senha
+        </div>
+
+    </div>
+
+
+    <div class="termos">
+        Termos de Uso - Política de Privacidade.
+    </div>
+    <input type="hidden" id="email2" />
+    <input type="hidden" id="pass2" />
+</div>
+<div id="cont" style="z-index: 99999; position: relative;"></div>

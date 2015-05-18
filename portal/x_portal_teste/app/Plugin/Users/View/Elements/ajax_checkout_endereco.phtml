@@ -1,0 +1,21 @@
+<?php ?>
+<table style='width: 100%; margin-top: -55px;'>
+    <tr id="title">
+        <th colspan='4'>End.</th>
+    </tr>
+<?php foreach ($enderecos as $end) { ?>
+        <tr>
+            <td class='td-end' id='desc-end'>
+                <strong><?php echo $end['AditionalAddressesUser']['label']; ?></strong> - <?php echo $end['AditionalAddressesUser']['address'] . ' ' . $end['AditionalAddressesUser']['number'] . ' - ' . $end['AditionalAddressesUser']['complement']; ?><br/>
+                <strong> <?php echo $end['AditionalAddressesUser']['zip_code'] . '</strong> - ' . $end['AditionalAddressesUser']['city'] . ' - ' . $end['AditionalAddressesUser']['state']; ?>
+            </td>
+            <td class='td-end' onclick="excluir(<?php echo $end['AditionalAddressesUser']['id']; ?>)"><img src="../img/icones/users-vitrine/bt_remove_02.png" style="cursor: pointer;" /></td>
+                        <td class='td-end' style="cursor: pointer;" onclick="editAddress('<?php echo $end['AditionalAddressesUser']['id']; ?>')"> <?php echo $this->Html->image('icones/ofertas/icon-editar.png'); ?></td>
+                        <td class='td-end'>
+                            <input type='radio' id="<?php echo $end['AditionalAddressesUser']['id']; ?>" class="css-checkbox" name='data[Carro][end]' value='<?php echo $end['AditionalAddressesUser']['id']; ?>' onclick="escolheEnd(this.value)">
+                            <label for="<?php echo $end['AditionalAddressesUser']['id']; ?>"
+                               class="css-label" style="margin-left: -10px;"></label>
+                        </td>
+        </tr>
+<?php } ?>
+</table>

@@ -1,0 +1,70 @@
+<?php
+ 	echo $this->Html->script('bootstrap.min');
+ 	echo $this->Html->script('bootstrap-tab');
+ 	echo $this->Html->script('bootstrap-modal');
+ 	echo $this->Html->script('google-code-prettify/prettify');
+ 	echo $this->Html->script('moip');
+	echo $this->Html->script('transparente'); 
+	
+?>
+<div id="MoipWidget" data-token="<?php echo $token['token']; ?>" callback-method-success="sucesso" callback-method-error="erroValidacao"></div>
+ 
+<div class="detalhe-forma-pagamento">
+		<h4>Formas de Pagamento</h4>
+		<div id="selecione-o-meio">
+			<h5>Modo de Pagamento</h5>
+			<a href="javascript:void(0);" caminho="boleto-bancario">Boleto</a>
+			<a href="javascript:void(0);" caminho="cartao">Cartão</a>
+		</div>
+		<div id="boleto-bancario">
+			<h5>Boleto Bancário</h5>
+				<input type="button" id="boleto" class="btn" value="Clique para gerar o boleto bancário">
+	 			<span id="link-boleto"></span>	
+		</div>
+		<div id="cartao">
+			<h5>Dados do Cartão</h5>
+
+            <span class="formulario">
+                <!-- <select  class="textbox" id="instituicao">
+                  <option value="Visa">Visa</option>
+                  <option value="Mastercard">Mastercard</option>
+                  <option value="AmericanExpress">AmericanExpress</option>
+                  <option value="Invalido">Invalido</option>
+                </select> -->
+                <input type="radio" id="instituicao" value="Visa" name="instituicao"><img src="../users/img/icones/visa.gif" for="instituicao">
+                <input type="radio" id="instituicao" value="Mastercard" name="instituicao"><img src="../users/img/icones/master.gif">
+                <input type="radio" id="instituicao" value="AmericanExpress" name="instituicao"><img src="../users/img/icones/amex.gif">
+
+            </span>
+	
+	
+              <span class="formulario">
+                <input type="text" id="Parcelas" name="Parcelas" value="Parcelas" size="5" alt="Parcelas">
+
+                <input type="text" id="Numero" name="Numero" value="Número do cartao" alt="Número do cartao">
+            
+                <input type="text" id="Expiracao" name="Expiracao" value="Validade" size="5" alt="Validade">
+            
+                <input type="text" id="CodigoSeguranca" name="CodigoSeguranca" value="Cod" size="4" alt="Cod">
+            </span>
+            <span class="formulario">
+                <input type="text" id="Portador" name="Portador" value="Nome gravado no cartão" alt="Nome gravado no cartão">
+
+                <input type="text" id="CPF" name="CPF" value="CPF" alt="CPF">
+
+                <input type="text" id="DataNascimento" name="DataNascimento" value="Data de Nascimento" alt="Data de Nascimento">
+
+                <input type="text" id="Telefone" name="Telefone" value="Telefone" alt="Telefone"><br>
+            </span>
+			<button class="fechar-compra" id="sendToMoip">Confirmar Pagamento</button>
+			<!-- <img src="imagens/logo-moip.png" class="copyright-pagamento"> -->
+		</div>
+
+	</div>
+	
+<!-- -
+	<div class="area-botoes">
+		<button class="envio"  id="sendToMoip">Fechar compra</button>
+		<button>Cancelar</button>
+	</div>	
+ -->

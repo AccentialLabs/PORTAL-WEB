@@ -1,0 +1,63 @@
+a:hover,a:active {
+	outline: none;
+}
+
+#sizer {
+	width: 340px;
+	margin: 0 auto;
+	padding: 144px 200px 240px;
+	background:
+		url(http://webdesign.maratz.com/lab/fancy-checkboxes-and-radio-buttons/highlight.png)
+		no-repeat 50% 0;
+}
+
+fieldset {
+	border: 0;
+	padding-bottom: 9px;
+}
+
+label {
+	display: block;
+	cursor: pointer;
+	line-height: 36px;
+	padding-bottom: 9px;
+	text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+}
+
+.radios {
+	padding: 10px 0 5px 0;
+}
+
+.label_check input,.label_radio input {
+	margin-right: 5px;
+	padding: 30px 0 50px 0;
+	width: 120px;
+	float: left;
+}
+
+.has-js .label_check,.has-js .label_radio {
+	color: #FFF;
+	text-align: center;
+	line-height: 25px;
+}
+
+.has-js .label_radio {
+	background: url(../../img/botoes/radio-off.png) no-repeat;
+	padding: 30px 0 50px 0;
+	width: 120px;
+	color: #FFF;
+	text-align: center;
+	line-height: 15px;
+	float: left;
+	margin: 0 50px 0 -40px !important;
+}
+/*.has-js .label_check    { background: url(http://webdesign.maratz.com/lab/fancy-checkboxes-and-radio-buttons/check-off.png) no-repeat; }
+.has-js label.c_on      { background: url(http://webdesign.maratz.com/lab/fancy-checkboxes-and-radio-buttons/check-on.png) no-repeat; }*/
+.has-js label.r_on {
+	background: url(../../img/botoes/radio-on.png) no-repeat;
+}
+
+.has-js .label_check input,.has-js .label_radio input {
+	position: absolute;
+	left: -9999px;
+}

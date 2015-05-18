@@ -1,0 +1,969 @@
+<?php
+$news = $this->Session->read('userData.Notification');
+
+$serv = $_SERVER['SERVER_NAME'];
+$end = $_SERVER ['REQUEST_URI'];
+
+$totalNotify = count($news['OffersToMe']) + count($news['InvitesToMe']);
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title><?php echo $title_for_layout; ?></title>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <script>
+            //movendo div
+            $(function() {
+                $('body').on('mousedown', '#pop-notifications', function() {
+                    $(this).addClass('draggable').parents().on('mousemove', function(e) {
+                        $('.draggable').offset({
+                            top: e.pageY - $('.draggable').outerHeight() / 2,
+                            left: e.pageX - $('.draggable').outerWidth() / 2
+                        }).on('mouseup', function() {
+                            $(this).removeClass('draggable');
+                        });
+                    });
+                    e.preventDefault();
+                }).on('mouseup', function() {
+                    $('.draggable').removeClass('draggable');
+                });
+            });
+
+            function fechaLogin() {
+                $("#mask").fadeOut(500);
+                $('#pop-login').fadeOut(500);
+            }
+
+            //MOSTRA TELA INICIO
+            function login() {
+                $("#mask").fadeIn(500);
+
+                $.ajax({
+                    type: "POST",
+                    data: {},
+                    url: 'http://localhost/work/x_portal_teste/user/ajaxLogin/login',
+                    success: function(result) {
+                        $('#pop-login-body').html(result);
+                        $('#pop-login').fadeIn(500);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            //EXECUTA FUNÇÃO PARA CRIAR USUARIO
+            //RETORNA SUCESSO OU ERRO 
+            function createUser() {
+                var nome = $("#input-create-nome").val();
+                var email = $("#input-create-email").val();
+                var pass = $("#input-create-pass").val();
+
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        nome: nome,
+                        email: email,
+                        pass: pass},
+                    url: 'http://localhost/work/x_portal_teste/user/ajaxLogin/createUser',
+                    success: function(result) {
+
+                        var text = jQuery('<div>' + result + '</div>');
+                        if (text.find("#return").html() == 'SAVE_ERRO') {
+                            alert('SAVE ERROR');
+                        }
+                        location.reload();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            //MOSTRA TELA DE CRIAR USER
+            function showCreate() {
+                $("#mask").fadeIn(500);
+                $.ajax({
+                    type: "POST",
+                    data: {},
+                    url: 'http://localhost/work/x_portal_teste/user/ajaxLogin/show-create',
+                    success: function(result) {
+
+                        $('#pop-login-body').html(result);
+                        $('#pop-login').fadeIn(500);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            //MOSTRA TELA DE RECUPERAÇÃO DE SENHA
+            function showForgotMyPass() {
+                $("#mask").fadeIn(500);
+                $.ajax({
+                    type: "POST",
+                    data: {},
+                    url: 'http://localhost/work/x_portal_teste/user/ajaxLogin/show-forgot-pass',
+                    success: function(result) {
+                        $('#pop-login-body').html(result);
+                        $('#pop-login').fadeIn(500);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            function recoverPass() {
+                var email = $("#forgot-pass").val();
+                $("#loading").fadeIn(500);
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        email: email},
+                    url: 'http://localhost/work/x_portal_teste/user/ajaxLogin/recover-pass',
+                    success: function(result) {
+                        $("#loading").fadeOut(500);
+                        var text = jQuery('<div>' + result + '</div>');
+                        $("#recebe").html(text.find("#return").html());
+
+                        if ($("#input-retorno").val() == 'SAVE_ERROR') {
+                            $("#aviso-error").fadeIn();
+                        } else {
+                            $("#recebe-email").val($("#forgot-pass").val());
+                            $("#cont-recover").fadeOut();
+                            $("#cont-sucess").fadeIn();
+                        }
+
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            //MOSTRA TELA LOGIN
+            function vazio() {
+                $("#mask").fadeIn(500);
+                $('#pop-login').fadeIn(500);
+                minhaUrl = 'http://localhost/work/x_portal_teste/user/ajaxLogin/login';
+                $.ajax({
+                    type: "POST",
+                    data: {},
+                    url: minhaUrl,
+                    success: function(result) {
+
+                        $('#pop-login-body').html(result);
+                        $('#pop-login').fadeIn(1000);
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+
+            function logar2() {
+                var email = $("#email2").val();
+                pass = $("#pass2").val();
+                minhaUrl = 'http://localhost/work/x_portal_teste/user/ajaxLogin/logar';
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        email: email,
+                        pass: pass},
+                    url: minhaUrl,
+                    success: function(result) {
+                        document.location.reload();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        //alert(errorThrown);
+                    }
+                });
+            }
+
+            $(document).ready(function() {
+
+                $(".notifications-users").click(function() {
+                    $("#pop-notifications").toggle(200);
+                    $("#mask").toggle();
+                });
+
+                $("#pop-notification-ex").click(function() {
+                    $("#pop-notifications").fadeOut(100);
+                    $("#mask").toggle();
+                });
+
+                $("#xis-login").click(function() {
+                    $('#pop-login').fadeOut(300);
+                    $("#mask").fadeOut(200);
+                    location.reload();
+                });
+
+                $("#notificacao").click(function() {
+                    $("#cont-notifies").fadeIn();
+                    $("#mask").fadeIn();
+                });
+
+                $("#xis-notify").click(function() {
+                    $("#cont-notifies").fadeOut();
+                    $("#mask").fadeOut();
+                });
+
+                $(":not(.menu-users)").click(function() {
+                    $(".menu-users").remove();
+                });
+
+                $("#forgot-pass").click(function() {
+                    $("#aviso-error").fadeOut(500);
+                });
+
+                $("#voltar").click(function() {
+                    $("#mask").fadeOut(500);
+                    $("#pop-login").fadeOut(500);
+                });
+
+                /*
+                 * Mostra menu de opções do usuario
+                 * quando clicado na foto
+                 */
+                $(".users-photo").click(function() {
+                    $(".users-name").toggle(200);
+                    $("#menu-users-1").toggle(200);
+                });
+
+                $("#adv-cabecalho-user").click(function() {
+                    $("#menu-users-1").toggle(200);
+                });
+
+                /**
+                 * mostra input de busca
+                 */
+                $("#adv-cabecalho-filtro").click(function() {
+                    $("#input-search").animate({width: 'toggle'}, 120);
+                });
+
+                $("#adv-back-button").click(function() {
+                    window.history.back();
+                });
+            });
+
+            /*
+             * Quando o usuario aceita seguir a empresa pela notificação
+             */
+            function notificationAssina(id) {
+                $("#loading").fadeIn();
+                var assina = true;
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        id: id,
+                        assina: assina
+                    },
+                    url: "http://localhost/work/x_portal_teste/user/notification/" + "assina",
+                    success: function(result) {
+                        $("#" + id).slideUp(500, function() {
+                            $("#" + id).remove();
+                            $("#second-" + id).remove();
+                            $("#loading").fadeOut();
+                        });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('ERROR');
+                    }
+                });
+            }
+
+            /*
+             * Quando o usuario rejeita seguir a empresa pela notificação
+             */
+            function notificationNaoAssina(id) {
+                $("#loading").fadeIn();
+                var assina = false;
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        id: id,
+                        assina: assina
+                    },
+                    url: "http://localhost/work/x_portal_teste/user/notification/" + "nao-assina",
+                    success: function(result) {
+                        $("#" + id).slideUp(500, function() {
+
+                            minhaDiv = document.getElementById("notificacao");
+                            var divValue = minhaDiv.innerHTML;
+                            qtd = "<span>" + (divValue - 1) + "</span>"
+                            $("#notificacao").html(qtd);
+                            $("#" + id).remove();
+                            $("#second-" + id).remove();
+                            $("#loading").fadeOut();
+                        });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('ERROR');
+                    }
+                });
+            }
+
+        </script>
+        <style>
+
+            @font-face {
+                font-family: MyriadProRegular;
+                src: url("../fonts/MyriadPro-Regular.otf") format("opentype");
+            }
+
+            @font-face{
+                font-family: MyriadProLightSemiExtended;
+                src: url(../fonts/MyriadProLightSemiExtended.ttf);
+            }
+
+            .notification-table{
+                border: 0px;
+            }
+
+            .topo-users{
+                z-index: 99999999;
+                position: relative;
+                position: fixed;
+                box-shadow: 0px 5px 3px gray;
+                width: 100%;
+                left: 0;
+                background: #ffffff;
+                height: 40px;
+                top: 0;
+            }
+
+            body{
+
+                background:url(../img/adv/adv-background.jpg) no-repeat;
+                background-size: cover;
+                height:100%;
+                // <?php if (!empty($this->Session->read('userPreferences.background'))) { ?>
+                    //    background-image:
+                    //   url("<?php echo $this->Session->read('userPreferences.background'); ?>");
+                    // <?php } else { ?>
+                    // background-image:
+                    //   url("../img/icones/users-vitrine/bg_layout.jpg");
+                    // <?php } ?>
+                //  background-repeat: no-repeat;
+            }
+
+            .users-logo{
+                height: 100%;
+                padding-top: 5px;
+                margin-left: 3%;
+                float: left;
+            }
+
+            .users-photo{
+                float: right;
+                margin-right: 2%; 
+                background: #fff; 
+                margin-top: 3px; 
+                width: 70px; 
+                height: 70px; 
+                border-radius: 50px 50px 50px 50px; 
+                border: 5px solid #fff;
+            }
+
+            .users-photo:hover{
+                opacity: 0.9;
+                cursor: pointer;
+            }
+
+            .users-notifications{
+                height: 90%; 
+                width: 82%;
+                float: left;
+                text-align: right;
+                padding-top: 7px;
+            }
+
+            .draggable {
+                background-color:yellow;
+            }
+
+            .users-name{
+                float: right;
+                padding-right: 10px;
+                margin-top: 5px;
+                font-family: Helvetica;
+                font-size: 16px;
+                z-index: 9000;
+            }
+            .users-conteudo{
+                margin-top: 90px;
+                height: 99%;
+                z-index: 99999;
+            }
+
+            .menu-users-1{
+                border: 1px solid #DCDCDC;
+                width: 300px;
+                position: absolute;
+                right: 0px;
+                top: 40px;
+                z-index: 99999;
+                right: 2%;
+                background: #fff;
+                font-family: Helvetica;
+                font-size: 12px;
+                padding-top: 45px;
+                box-shadow: 0px 5px 3px gray;
+                display: none;
+            }
+            .menu-option{
+                width: 94%;
+                padding: 10px;
+                font-size: 14px;
+                color: #666;
+            }
+            .menu-option:hover{
+                cursor: pointer;
+                background: #3399cc ;
+                color: #fff;
+            }
+            a{
+                text-decoration: none;
+                color: #000;
+            }
+            #faz-login{
+                top: 5px;
+                right: 40px;
+                border: 1px solid orange;
+                color: orange;
+                font-family: Helvetica;
+                position: absolute;
+
+                padding: 5px;
+            }
+            #faz-login:hover{
+                color: #fff;
+                background: orange;
+            }
+
+            #adv-lateral {
+                color: #ccc;
+                height:100%;
+                overflow:hidden;
+                width: 57.5px; 
+                position:fixed;
+                top:0;
+                left: 0;
+                background: #808080;
+            }
+
+            table#adv-menu{
+                width: 100%;
+                margin-top: -20px;
+            }
+
+            table#adv-menu td{
+                border: 0px solid;
+                padding: 0px;
+            }
+
+            table#adv-menu img{
+                cursor: pointer;
+                padding-top: 15px;
+                width: 100%;
+            }
+
+            #cabecalho-adv{
+                top: 0;
+                width: 95.7%;
+                height:50px;
+                position: fixed;
+                margin-left: 50px;
+                text-align: center;
+                background: #fff;
+            }
+
+            #adv-title-bar{
+                background: url('../img/adv/TARJA_CLEAN.png');
+                width: 100%;
+                height:40px;
+                top: 52px;
+                position: fixed;
+                margin-left: 50px;
+                text-align: right;
+            }
+
+            #adv-title-bar-text{
+                font-family: MyriadProLightSemiExtended;
+                color: #fff;
+                margin-right: 5%;
+                font-size: 2.2em;
+                line-height: 43px;
+            }
+
+            #adv-logo{
+                height: 100%;
+                margin-right: 95px;
+            }
+
+            #adv-cabecalho-menu{
+                height: 50%;
+                left: 0;
+                margin-left: 10px;
+                position: absolute;
+                top: 14px;
+                cursor: pointer;
+            }
+
+            #adv-cabecalho-filtro{
+                height: 50%;
+                left: 0;
+                margin-left: 40px;
+                position: absolute;
+                top: 12px;
+                cursor: pointer;
+            }
+
+
+            #adv-cabecalho-notification{
+                height: 60%;
+                float: right;
+                margin-right: 65px;
+                margin-top: 8px;
+                cursor: pointer;
+            }
+
+            #adv-cabecalho-user{
+                height: 100%;
+                right: 0; 
+                position: absolute;
+            }
+
+            #adv-cabecalho-user-login{
+                height: 50%;
+                top: 13px;
+                right: 10px; 
+                position: absolute;
+            }
+
+            @font-face{
+                font-family: AliquamREG;
+                font-style: normal;
+                font-weight: normal;
+                src: url(../fonts/AliquamREG.ttf);
+            }
+            .input-search{
+                float: left;
+                padding:7px;
+                margin-top: 10px;
+                border: 1px solid #ccc;
+                font: AliquamREG;
+                position: absolute;
+                left: 6.5%;
+                display: none;
+            }
+
+            .notifications-users{
+                color: #3399cc;
+                position: absolute;
+                right: 73px;
+                cursor: pointer;
+                font-family: Myriad Pro Light;
+                top: 20px;
+            }
+
+            .pop-notifications{
+                position: absolute;
+                top: 20%;
+                left: 35%;
+                width: 30%;
+                height: 60%;
+                background: #fff;
+                box-shadow: 5px 5px 10px #666;
+                -webkit-box-shadow: 5px 5px 10px #666;
+                -moz-box-shadow: 5px 5px 10px #666;
+                display: none;
+                z-index: 99999;
+            }
+
+            #pop-header{
+                width: 100%;
+                height: 50px;
+                background: #3399cc;
+                color: #fff;
+                font-family: Myriad Pro Light;
+                text-align: center;
+                line-height: 50px;
+            }
+
+            .title-pop-notification{
+                font-family: Myriad Pro Light;
+                margin-left: 10px;
+            }
+
+            .invites-infos-body{
+                margin-left: 5px;
+                height: 120px;
+                overflow: auto;
+            }
+
+            .item-invite-notification{
+                height: 60px;
+                padding-left: 5px;
+                font-family: Myriad Pro Light;
+                line-height: 60px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .item-offer-notification{
+                width: 100%;
+                margin-top: 5px;
+                cursor: pointer;
+            }
+
+            #item-offer-name{
+                font-family: Myriad Pro Light;
+                margin-left: 10px;
+                font-weight: bold;
+            }
+
+            .offers-infos-body{
+                height: 200px;
+                overflow: auto;
+            }
+
+            #adv-menu tr{
+                text-align: center;
+                padding-top: 10px;
+            }
+
+            #adv-menu td{
+                text-align: center;
+            }
+
+            #adv-menu td img{
+                padding-top: 20px;
+            }
+
+            #adv-menu-back{
+                display: none; 
+                margin-top: -3px;
+                width: 100%;
+                border: none;
+                border-collapse: collapse;
+                cursor: pointer;
+            }
+        </style>
+        <!-- META TAGS -->
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+    </head>
+    <body>
+        <!-- M E N U - L A T E R A L - A D V E N T A -->
+        <div id="adv-lateral">
+            <table id="adv-menu" style="border: none; border-collapse: collapse;" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <a class="dashboard" title="Dashboard" alt="Dashboard" href="http://localhost/work/x_portal_teste/user/vitrine">
+                            <?php if ($pageName == "VITRINE") { ?>
+                                <img src="../img/adv/Menu2/Icones.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu2/Icones2.png" />
+                            <?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <?php
+                        $user = $this->Session->read('userData');
+                        if (!empty($user)) {
+                            ?>
+                            <a class="dashboard" title="Ofertas" alt="Ofertas" href="http://localhost/work/x_portal_teste/user/ofertasParaMim">
+                                <?php if ($pageName == "DETALHES DA OFERTA") { ?>
+                                    <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu2/Icones3.png" />
+                                <?php } else if ($pageName == "FINALIZAR COMPRA") { ?>
+                                    <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu2/Icones3.png" />
+                                <?php } else if ($page == 'Ofertas para mim') { ?>
+                                    <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu2/Icones3.png" />
+                                <?php } else { ?>
+                                    <img title="Ofertas" alt="Ofertas" src="../img/adv/Menu2/Icones4.png" /> 
+                                <?php } ?>
+                            </a>
+                        <?php } else { ?>
+                            <img title="Ofertas" alt="Ofertas" src="../img/adv/Ofertas/Adventa Icones_White-09.png"  onclick='login()'/> 
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <?php
+                        $user = $this->Session->read('userData');
+                        if (!empty($user)) {
+                            ?>
+                            <a title="Compras" alt="Compras" class="compras" href="http://localhost/work/x_portal_teste/user/minhas-compras">
+                                <?php if ($pageName == "Compras") { ?>
+                                    <img src="../img/adv/Menu2/Icones5.png" />
+                                <?php } else { ?>
+                                    <img src="../img/adv/Menu2/Icones6.png"  />
+                                <?php } ?>
+                            </a>
+                        <?php } else { ?>
+                            <img src="../img/adv/Menu2/Icones6.png"  onclick='login()'/>
+                        <?php } ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a title="Assinaturas" alt="Assinaturas" class="assinaturas" href="http://localhost/work/x_portal_teste/user/assinaturas">
+                            <?php if ($pageName == "Assinaturas") { ?>
+                                <img src="../img/adv/Menu2/Icones7.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu2/Icones8.png" />
+                            <?php } ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a title="Lista de Desejos" alt="Wishlist" class="wishlist" href="http://localhost/work/x_portal_teste/user/wish" >
+                            <?php if ($pageName == "Wishlist") { ?>
+                                <img src="../img/adv/Menu2/Icones9.png" />
+                            <?php } else { ?>
+                                <img src="../img/adv/Menu2/Icones10.png" />
+                            <?php } ?>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- BOTAO VOLTAR -->
+            <table  id="adv-menu-back" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <img src="../img/adv/Seta-4.png" width='70%' style="margin-left: -10px; margin-top: 5px;" id="adv-back-button"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- C A B E C A L H O - A D V E N T A --> 
+        <div id="cabecalho-adv"> 
+            <?php if ($pageName == 'VITRINE') { ?>
+                <img src="../img/adv/Home/Adventa Icones_Filtro-03.png" id="adv-cabecalho-menu" title="Filtro" alt="Filtro"/>
+                <img src="../img/adv/Pesquisar/Adventa icones-Pesquisar-4.png" id="adv-cabecalho-filtro" title="Pesquisar" alt="Pesquisar"/>
+                <input type='text' class='input-search' id='input-search' placeholder="Pesquisar"/>
+            <?php } ?>
+            <img src="../img/adv/Adventa Logo/Adventa-1.png" id="adv-logo"/>
+
+            <!-- mostra notificacao apenas se usuario estiver logado -->
+            <?php
+            $userDataPhoto = $this->Session->read('userData.User.photo');
+            if (!empty($userDataPhoto)) {
+                ?>
+                <img src="../img/adv/Home/Adventa Icones_Notificacao-01.png" id="adv-cabecalho-notification" />
+
+                <div class="notifications-users"><?php
+                    $userNotificationOTM = $this->Session->read('userData.Notification.OffersToMe');
+                    $userNotificationITM = $this->Session->read('userData.Notification.InvitesToMe');
+                    echo count($userNotificationOTM) + count($userNotificationITM);
+                    ?></div>
+            <?php } ?>
+            <?php
+            $ussPhoto = $this->Session->read('userData.User.photo');
+            if (!empty($ussPhoto)) {
+                ?>
+                <img src="<?php echo $this->Session->read('userData.User.photo'); ?>" id="adv-cabecalho-user" style="border-radius: 50px 50px 50px 50px; width: 40px; height: 40px; margin-top: 3.5px; margin-right: 4px; cursor: pointer;"/>
+
+            <?php } else { ?>
+                <img src="../img/adv/Usuario/Adventa icones-Usuario-4.png" id="adv-cabecalho-user-login" onclick='login()' style='cursor: pointer;'/>
+            <?php } ?>
+        </div>
+
+        <div id="adv-title-bar">
+            <div id="adv-title-bar-text"> 
+                <?php echo $pageName; ?>
+            </div>
+            <?php if ($pageName == 'VITRINE') { ?>
+                <div style="float: left; margin-right: 90px; height: 37px; margin-top: -40px;">
+                    <img id="list-grid" src="../img/adv/Icones.png" height="100%" style="margin-left: 3px; float: right;  cursor: pointer;" class="orientation-btn"/>
+                    <img id="list-list" src="../img/adv/Icones2.png" height="100%" style=" margin-left: 3px;float: right; cursor: pointer;" class="orientation-btn"/>
+                    <img id="list-detail" src="../img/adv/Icones3.png" height="100%" style=" margin-left: 3px;float: right; cursor: pointer;" class="orientation-btn"/>
+                </div>
+            <?php } ?>
+        </div>
+
+        <div class="users-conteudo">
+            <?php echo $this->fetch('content'); ?>
+        </div>
+
+
+        <!--        <div class="topo-users">
+                    <a href="http://localhost/work/x_portal_teste/user/vitrine">
+                        <div class="users-logo">
+                            <img src="../img/icones/users-vitrine/trueone.png" /> 
+                        </div>
+                    </a>
+                    <div class="users-notifications">
+                    </div>
+        <?php if (!empty($this->Session->read('userData.User'))) { ?>
+            <?php if (!$totalNotify == 0) { ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div style='top: 7%; line-height: 30px; position: absolute; right:6.5%; height: 30px; width: 30px; text-align: center; background: orange; color: #fff; font-size: 18px; font-family: Helvetica; -moz-border-radius: 50%;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -webkit-border-radius: 50%; cursor: pointer;' id="notificacao"><?php echo $totalNotify; ?></div>
+                <?php
+            }
+        }
+        ?>
+        <?php if (!empty($this->Session->read('userData.User.photo'))) { ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <img src="<?php echo $this->Session->read('userData.User.photo'); ?>"  class="users-photo" />
+        <?php } ?>
+        
+                    <div class="users-name"><?php echo $this->Session->read('userData.User.name'); ?>
+        <?php
+        if (empty($this->Session->read('userData'))) {
+            echo "<div onclick='login()' style='cursor: pointer;' id='faz-login'>LOGIN</div>";
+        }
+        ?>
+                    </div>
+                </div>-->
+
+
+        <br/>
+
+        <div class="menu-users-1" id="menu-users-1">
+            <?php if (!empty($this->Session->read('userData'))) { ?>
+                <a href="http://localhost/work/x_portal_teste/user/meus-dados">
+                    <div class="menu-option">
+                        Meus Dados
+                    </div>
+                </a>
+                <a href="http://localhost/work/x_portal_teste/user/sair">
+                    <div class="menu-option">
+                        Sair
+                    </div>
+                </a>
+            <?php } else { ?>
+                <div class="menu-option">
+                    Login
+                </div>
+            <?php } ?>
+        </div>
+
+        <br/>
+
+
+
+        <!-- RODAPE -->
+        <!-- adv COMENTEI ISSO -->
+        <!-- ?php echo $this->element('users_menu'); ? -->
+
+
+        <div id="cont-notifies" style=" 
+             position: absolute;
+             left: 38%;
+             top: 29%;
+             margin-top: 25px;
+             padding: 10px;
+             border: 1px solid #d0d0d0;
+             background: #ffffff;
+             z-index: 999999;
+             font-family: Helvetica;
+             opacity: 0.99;
+             padding: 10px;
+             width: 300px;
+             text-align: center;
+             display: none;">
+            <div id="popheader" style="text-align: right;">
+                <span style="font-size: 18px; color: orange; cursor: pointer;" id="xis-notify"><strong>X</strong></span><br/>
+            </div>
+
+            <div id="popbody" style="text-align: left;">
+
+                <?php if ($news['OffersToMe']) { ?>
+                    <span style="font-size: 16px; font-weight: bold;"><i>Voce tem <?php echo count($news['OffersToMe']); ?> oferta(s):</i></span><br/><br/>
+                    <?php foreach ($news['OffersToMe'] as $offerToMe) { ?>
+                        <span id="offer-name"><a href="http://localhost/work/x_portal_teste/user/offerDetail?offer=<?php echo $offerToMe['Offer']['id']; ?>"><?php echo $offerToMe['Offer']['title']; ?></a></span><br/>
+                        <?php
+                    }
+                }
+                ?>
+
+                <?php if ($news['InvitesToMe']) { ?>
+                    <hr/>
+                    <span style="font-size: 16px; font-weight: bold;"><i>Você tem <?php echo count($news['InvitesToMe']); ?> convite(s):</i></span><br/><br/>
+                    <table class="notification-table">
+                        <?php foreach ($news['InvitesToMe'] as $invitesToMe) { ?>
+                            <tr id="<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>">
+                                <td colspan="2"><?php echo $invitesToMe['Company']['fancy_name']; ?></td>
+                            </tr>
+                            <tr id="second-<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>">
+                                <td><img src="../img/icones/users-vitrine/bt_more.png" class="img-assina" title="Assinar" onclick="notificationAssina(<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>)"/></td>
+                                <td><img  src="../img/icones/users-vitrine/bt_remove_02.png" class="img-assina" title="Não Assinar" onclick="notificationNaoAssina(<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>)"/></td>
+                            </tr>
+                        <?php } ?>
+                    </table>
+                <?php } ?>
+            </div>
+        </div>
+    </body>
+</html>
+
+<div class="pop-notifications" id="pop-notifications" onselectstart="return false">
+    <div  id="pop-header">
+        <span style="float: right; margin-right: 10px; cursor: pointer;" id="pop-notification-ex">X</span>
+        Minhas Notificaçãoes
+    </div>
+    <div>
+        <?php if ($this->Session->read('userData.Notification.OffersToMe')) { ?>
+            <br/>
+            <span class="title-pop-notification">Ofertas para você:</span>
+            <div class="offers-infos-body">
+                <?php
+                $offersToMe = $this->Session->read('userData.Notification.OffersToMe');
+                foreach ($offersToMe as $offer) {
+                    ?>
+                    <form name="form-<?php echo $offer['Offer']['id']; ?>" action="offerDetail?offer=<?php echo $offer['Offer']['id']; ?>" method="post">
+                    </form>
+                    <div class="item-offer-notification" onClick="document.forms['form-<?php echo $offer['Offer']['id']; ?>'].submit();">
+                        <div style="float:left; width: 75%; height: 100px;">
+                            <span id="item-offer-name">
+                                <?php echo $offer['Offer']['title']; ?>
+                            </span>
+                            <p style='margin-left: 10px; font-family: Myriad Pro Light; color: #999;'>
+                                <?php echo substr($offer['Offer']['resume'], 0, 115) . '...'; ?>
+                            </p>
+                        </div>
+                        <div style="width: 100px; float: right; bo">
+                            <img src="<?php echo $offer['Offer']['photo']; ?>" width="100px" height="100px"/>
+                        </div>
+
+                    </div>
+
+                <?php }
+                ?>
+            </div>
+        <?php } ?>
+        <br/>
+        <hr />
+        <span class="title-pop-notification">Convites para você:</span>
+        <div class="invites-infos-body">
+            <?php
+            $invites = $this->Session->read('userData.Notification.InvitesToMe');
+            foreach ($invites as $invite) {
+                ?>
+                <form name="companiesProfile" id="companiesProfile<?php echo $invite['Company']['id']; ?>" action="companiesProfile" method="post">
+                    <input type="text" name="compId" id="compId" value="<?php echo $invite['Company']['id']; ?>" style="display: none;"/>                              
+                </form>
+                <div>
+                    <img src="<?php echo $invite['Company']['logo']; ?>" width="100px" height="60px" style="float: left; padding-right: 5px;"/>
+                    <div class="item-invite-notification" onClick="document.forms['companiesProfile<?php echo $invite['Company']['id']; ?>'].submit();"><?php echo $invite['Company']['fancy_name']; ?></div>
+                </div>
+                <br/>
+            <?php }
+            ?>
+        </div>
+    </div>
+</div>

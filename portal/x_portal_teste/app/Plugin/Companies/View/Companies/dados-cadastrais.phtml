@@ -1,0 +1,119 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('empresas/preferencias');		
+?>
+<h4><span>Dados Principais</span></h4>
+<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+<?php echo $this->Form->create('CompanySenha', array('url'=>array('controller'=>'companies','action'=>'preferencias')));?>	
+<div class="area-formulario"style="width:40%;">
+		<label>Raz√£o Social</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.corporate_name');?>" name="data[Company][fancy_name]" style="width:425px;">
+	</div>
+
+
+	<div style="clear:both;"></div>
+
+	<div class="area-formulario" style="width:22%;">
+		<label>Nome Fantasia</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.fancy_name');?>" name="data[Company][fancy_name]">
+	</div>
+	<div class="area-formulario"style="width:22%;">
+		<label>CNPJ</label>
+		<input type="text" readonly=îreadonlyî class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.cnpj');?>" id="CNPJ" name="data[Company][cnpj]" style="width:150px;">
+	</div>
+
+
+	<h4><span>Formas de Contato</span></h4>
+	 <div class="area-formulario" style="width:100px;">
+		<label>Telefone 1</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.phone');?>" id="telefone" name="data[Company][phone]">
+	</div>
+	 <div class="area-formulario" style="width:100px;">
+		<label>Telefone 2</label>
+		<input type="text" class="textbox"  value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.phone2');?>" id="telefone_2" name="data[Company][phone2]">
+	</div>
+			<div style="clear:both;"></div>
+
+	<div class="area-formulario" style="width:200px;">
+		<label>Email</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.email');?>" name="data[Company][email]" style="width:425px;">
+	</div>
+	
+
+
+	<h4><span>Endere√ßo</span></h4>	
+
+	<div class="area-formulario" style="width:100px;">		
+		<input type="text" class="textbox" maxlength="9" id="CEP" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.zip_code');?>" name="data[Company][zip_code]">
+		<label>CEP</label>
+	</div>
+
+
+	<div style="clear:both;"></div>
+
+
+<div class="Hidden_Endereco">
+
+	<div class="area-formulario" style="width:250px">
+		<label>Endere√ßo</label>
+		<input type="text" class="textbox" id="Endereco"  value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.address');?>" name="data[Company][address]" style="width:510px;">
+	</div>
+
+
+	<div style="clear:both;"></div>
+
+
+<div class="area-formulario" style="width:20px;">
+		<label>N√∫mero</label>
+		<input type="text" class="textbox" maxlength="8" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.number');?>" name="data[Company][number]" style="width:100px;">
+	</div>
+
+	<div class="area-formulario" style="width:150px;">
+		<label>Bairro</label>
+		<input type="text" id="Bairro" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.district');?>" name="data[Company][district]">
+	</div>			
+	<div class="area-formulario" style="width:40px;">
+		<label>UF</label>
+		<input type="text" id="Estado" class="textbox" maxlength="2" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.state');?>" name="data[Company][state]">
+	</div>		
+	<div class="area-formulario" style="width:150px;">
+		<label>Cidade</label>
+		<input type="text" class="textbox" id="Cidade"  value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.city');?>" name="data[Company][city]">
+	</div>
+
+
+</div><!--Hidden_Endereco-->
+<h3>Responsavel da Empresa</h3>	
+			<div class="area-formulario" tamanho="395">
+				<label>Responsavel</label><input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_name');?>"  name="data[Company][responsible_name]">
+			</div>					
+			<div class="area-formulario" tamanho="115">
+				<label>CPF</label><input type="text" readonly=îreadonlyî class="textbox" id="cpf" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_cpf');?>" name="data[Company][responsible_cpf]">
+			</div>
+
+					<div style="clear:both;"></div>
+
+
+			<div class="area-formulario" tamanho="140">
+				<label>Email</label><input type="text" readonly=îreadonlyî class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_email');?>" name="data[Company][responsible_email]" style="width:425px;">
+				<span class="exemplo">E-mail que ser√° usado para acesso ao sistema</span>
+			</div>
+
+					<div style="clear:both;"></div>
+
+			<div class="area-formulario" tamanho="110">
+				<label>Telefone 1</label><input type="text" class="textbox" id="telefone" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_phone');?>" name="data[Company][responsible_phone]">
+			</div>
+			<div class="area-formulario" tamanho="110">
+				<label>Telefone 2</label><input type="text" class="textbox" id="telefone_2" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_phone_2');?>" name="data[Company][responsible_phone_2]">
+			</div>
+			<div class="area-formulario" tamanho="110">
+				<label>Celular</label><input type="text" class="textbox"  value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.Company.responsible_cel_phone');?>" id="celular" name="data[Company][responsible_cell_phone]" style="width:125px;">
+			</div>
+
+	
+	<div class="area-botoes">
+		<button class="envio">Salvar</button>
+		<button>Cancelar</button>
+	</div>
+<?php echo $this->Form->end();?>

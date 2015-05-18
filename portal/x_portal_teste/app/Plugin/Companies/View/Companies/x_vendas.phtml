@@ -1,0 +1,641 @@
+<?php
+echo $this->Html->script('empresas/x-pre-cadastro');
+echo $this->Html->script("bytescoutbarcode128_1.00.07");
+?>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script   
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js">
+</script>
+<script>
+
+    function scrolify(tblAsJQueryObject, height) {
+        var oTbl = tblAsJQueryObject;
+
+        // for very large tables you can remove the four lines below
+        // and wrap the table with <div> in the mark-up and assign
+        // height and overflow property  
+        var oTblDiv = $("<div/>");
+        oTblDiv.css('height', height);
+        oTblDiv.css('overflow', 'scroll');
+        oTbl.wrap(oTblDiv);
+
+        // save original width
+        oTbl.attr("data-item-original-width", oTbl.width());
+        oTbl.find('thead tr td').each(function() {
+            $(this).attr("data-item-original-width", $(this).width());
+        });
+        oTbl.find('tbody tr:eq(0) td').each(function() {
+            $(this).attr("data-item-original-width", $(this).width());
+        });
+
+
+        // clone the original table
+        var newTbl = oTbl.clone();
+
+        // remove table header from original table
+        oTbl.find('thead tr').remove();
+        // remove table body from new table
+        newTbl.find('tbody tr').remove();
+
+        oTbl.parent().parent().prepend(newTbl);
+        newTbl.wrap("<div/>");
+
+        // replace ORIGINAL COLUMN width                
+        newTbl.width(newTbl.attr('data-item-original-width'));
+        newTbl.find('thead tr td').each(function() {
+            $(this).width($(this).attr("data-item-original-width"));
+        });
+        oTbl.width(oTbl.attr('data-item-original-width'));
+        oTbl.find('tbody tr:eq(0) td').each(function() {
+            $(this).width($(this).attr("data-item-original-width"));
+        });
+    }
+
+    $(document).ready(function() {
+        //scrolify($('#table-todas'),200); // 160 is height
+    });
+
+
+</script>
+
+<style>
+    .table-vendas-show {
+        margin-left: 1.5%;
+        border-collapse: collapse;
+        width: 96.7%;
+        display: block;
+    }
+
+    .qtd-invisible{
+        display: none;
+    }
+
+    a{
+        color: #999999;
+    }
+
+    td#etiqueta{
+        text-align: center;
+    }
+    th#etiqueta{
+        text-align: center;
+    }
+
+    #nota-fiscal{
+        position: absolute;
+        left: 35%;
+        top: 29%;
+        margin-top: 25px;
+        display: none;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        z-index: 999999;
+        font-family: Helvetica;
+        opacity: 0.99;
+        font-size: 14px;
+        width: 400px;
+        text-align: center;
+    }
+
+
+    #mask {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 90000;
+        background-color: #000;
+        opacity: 0.6;
+        display: none;
+    }
+
+    .vendas-inferior-botao {
+        background: #eeeeee;
+        width: 10%;
+        text-align: center;
+        height: 25px;
+        float: left;
+        line-height: 30px;
+        margin-left: 1.5%;
+    }
+
+    .vendas-inferior-botao:HOVER {
+        background: #f37165;
+        color: #ffffff;
+    }
+
+    .vendas-inferior-botao-hover{
+        background: #f37165;
+        color: #ffffff;
+        width: 10%;
+        text-align: center;
+        height: 25px;
+        float: left;
+        line-height: 30px;
+        margin-left: 1.5%;
+    }
+
+</style>
+
+<script>
+
+    /**
+     * Gera código de barras de acordo com parâmentros
+     * @returns {undefined}
+     */
+    function updateBarcode()
+    {
+        var canvas1 = document.getElementById("barcodeCanvas");
+
+        var barcode = new bytescoutbarcode128();
+
+        var value = document.getElementById("barcodeValue").value;
+
+        barcode.valueSet(value);
+        barcode.setMargins(5, 5, 5, 5);
+        barcode.setBarWidth(2);
+        barcode.setSize(barcode.getMinWidth(), canvas1.height);
+
+        canvas1.width = barcode.getMinWidth();
+        barcode.exportToCanvas(canvas1);
+
+        var dtaUrl = canvas1.toDataURL();
+        document.getElementById('imgBarcode').src = dtaUrl;
+    }
+
+    /**
+     * Mostra etiqueta de entrega
+     * @returns {undefined}
+     */
+    function mostraNota(nome, end, cep, state, id, barcodeText) {
+        $("#nota-nome").html(nome);
+        $("#nota-end").html(end);
+        $("#nota-cep").html(cep);
+        $("#nota-est").html(state);
+        $("#nota-num").html(id);
+        $("#barcodeValue").val(barcodeText);
+        updateBarcode();
+        $("#mask").fadeIn(200);
+        $("#nota-fiscal").fadeIn(500);
+    }
+
+    $(document).ready(function() {
+
+        $("#xis-nota-fiscal").click(function() {
+            $("#nota-fiscal").fadeOut(200);
+            $("#mask").fadeOut(500);
+        });
+
+        //tabela de compras concluídas
+        $("#btn-concluido").click(function() {
+            $("#table-todas").fadeOut(0);
+            $("#table-pendentes").fadeOut(0);
+            $("#table-concluidas").fadeIn(1000);
+
+            $("#btn-concluido").addClass("vendas-inferior-botao-hover");
+            $("#btn-pendente").removeClass("vendas-inferior-botao-hover");
+            $("#btn-todos").removeClass("vendas-inferior-botao-hover");
+
+            $("#total").fadeOut();
+            $("#pendentes").fadeOut();
+            $("#concluidas").fadeIn();
+
+        });
+
+        //tabela de compras pendentes
+        $("#btn-pendente").click(function() {
+            $("#table-todas").fadeOut(0);
+            $("#table-concluidas").fadeOut(0);
+            $("#table-pendentes").fadeIn(1000);
+
+            $("#total").fadeOut();
+            $("#concluidas").fadeOut();
+            $("#pendentes").fadeIn();
+
+            $("#btn-concluido").removeClass("vendas-inferior-botao-hover");
+            $("#btn-pendente").addClass("vendas-inferior-botao-hover");
+            $("#btn-todos").removeClass("vendas-inferior-botao-hover");
+
+        });
+
+        //tabela de compras 
+        $("#btn-todos").click(function() {
+            $("#table-pendentes").fadeOut(0);
+            $("#table-concluidas").fadeOut(0);
+            $("#table-todas").fadeIn(1000);
+
+            $("#btn-concluido").removeClass("vendas-inferior-botao-hover");
+            $("#btn-pendente").removeClass("vendas-inferior-botao-hover");
+            $("#btn-todos").addClass("vendas-inferior-botao-hover");
+
+            $("#concluidas").fadeOut();
+            $("#pendentes").fadeOut();
+            $("#total").fadeIn();
+
+
+        });
+    });
+
+    function printPartOfPage(elementId)
+    {
+        var printContent = document.getElementById(elementId);
+        var windowUrl = 'about:blank';
+        var uniqueName = new Date();
+        var windowName = 'Print' + uniqueName.getTime();
+        var printWindow = window.open(windowUrl, windowName, 'left=50000,top=50000,width=0,height=0');
+
+        printWindow.document.write(printContent.innerHTML);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.print();
+        printWindow.close();
+    }
+</script>
+
+<div id="mask"></div>
+<!-- css no 'x_style.css' -->
+<div class="vendas-body" >
+
+    <div class="vendas-title">
+        <br> <span class="title-vendas" style="color: #808080;">Vendas</span><br />
+        <div class="subtitle-vendas">Gerenciando vendas - Concluidas e
+            Pendentes</div>
+    </div>
+    <hr />
+
+    <!-- N�O H� REGISTROS -->
+    <?php if (!is_array($todasCompras)) { ?> 
+        <div id="vendas-vazio" style="display: block;">
+            <div class="vendas-lado-esquerdo">
+                <img src="../img/icones/vendas/vendas-imagens.png"
+                     class="vendas-imagem" />
+            </div>
+
+            <div class="vendas-lado-direito">
+                <div class="vendas-lado-direito-titulo">Liste os detalhes das vendas
+                    que fez...</div>
+                <div class="vendas-lado-direito-texto">
+                    <p>
+                        Nesta opção voce acompanha os detalhes e os status <br /> das
+                        compras que os usuários fizeram dos seus produtos<br />
+                        anunciados.
+                    </p>
+                    <p>
+                        Além da possibilidade de moderar os comentários <br /> realizados
+                        pelos usuários aos seus produtos.
+                    </p>
+                </div>
+            </div>
+
+            <div class="vendas-inferior">
+                <div class="vendas-inferior-botoes">
+                    <div class="vendas-inferior-botao">TODOS</div>
+                    <div class="vendas-inferior-botao">concluido</div>
+                    <div class="vendas-inferior-botao">pendente</div>
+                    <hr />
+
+                    <div class="vendas-inferior-cabecalho-tabela">
+                        <div class="vendas-inferior-titulo-tabela">Lista de Vendas</div>
+                        <div class="vendas-inferior-titulo-qtd">0</div>
+                        <div class="vendas-tabela-not-found">Não há registros</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } else { ?> 
+
+        <!--TABELA COM REGITROS -->
+        <div id="vendas-tabela-registros" style="display: block; height: 88%;">
+            <div class="vendas-inferior-botoes">
+                <a href="#"><div class="vendas-inferior-botao" id="btn-todos">TODOS</div></a>
+                <a href="#"><div class="vendas-inferior-botao" id="btn-concluido">concluido</div></a>
+                <a href="#"><div class="vendas-inferior-botao" id="btn-pendente">pendente</div></a>
+                <hr />
+            </div>
+
+            <div class="vendas-inferior-cabecalho-tabela" >
+                <div class="vendas-inferior-titulo-tabela" style="background: #3399cc;">Lista de Vendas</div>
+                <div class="vendas-inferior-titulo-qtd">
+                    <div id="total" style="background: #2F2F4F;"><?php echo count($todasCompras); ?></div>
+                    <div id="concluidas" class="qtd-invisible" style="background: #2F2F4F;"><?php echo count($finalizadas); ?></div>
+                    <div id="pendentes" class="qtd-invisible" style="background: #2F2F4F;"><?php echo count($pendentes); ?></div>
+                </div>
+            </div>
+
+            <table id="table-todas" class="table-vendas" width="100%" style="margin-left: 18px; width: 96.7%;">
+                <thead>
+                    <tr>
+                        <th id="data" class="th-vendas" style="">DATA</th>
+                        <th id="status" class="th-vendas" style="width: 15.3%;">STATUS</th>
+                        <th id="produto" class="th-vendas" style="">PRODUTO</th>
+                        <th id="comprador" class="th-vendas" style="">COMPRADOR</th>
+                        <th id="valor" class="th-vendas"  style="width: 10%;">VALOR</th>
+                        <th id="comentario" class="th-vendas"  style="">COMENTARIO</th>
+                        <th class="th-vendas"  style=" text-align: center;">Etiqueta de Entrega</th>
+                    </tr>
+                </thead>
+            </table>
+
+            <!-- tabela todas vendas -->
+       
+            <div style='width: 96.5%; height: 85%; margin-left: 20px; overflow: auto; max-height: 500px;'>
+                <table id="table-todas" class="table-vendas" width="100%" >
+                    
+                            <?php
+                            if (is_array($todasCompras)) {
+                                foreach ($todasWithComment as $compra) {
+                                    ?>
+                                    <tr>
+                                        <td id="data" class="td-vendas" style="width: 10%;"><?php echo date('d/m/Y', strtotime($compra['Checkout']['date'])); ?></td>
+                                        <td id="status" class="td-vendas" style="width: 15%;"> 
+                                            <?php
+                                            switch ($compra['Checkout']['payment_state_id']) {
+                                                case 1:
+                                                    echo "AUTORIZADO";
+                                                    break;
+                                                case 2:
+                                                    echo "INICIADO";
+                                                    break;
+                                                case 3:
+                                                    echo "BOLETO IMPRESSO";
+                                                    break;
+                                                case 4:
+                                                    echo "CONCLUIDO";
+                                                    break;
+                                                case 5:
+                                                    echo "CARTÃO DE CRÉDITO";
+                                                    break;
+                                                case 6:
+                                                    echo "EM ANALISE";
+                                                    break;
+                                                case 7:
+                                                    echo "CARTÃO DE CRÉDITO";
+                                                    break;
+                                                case 8:
+                                                    echo "EM REVISAO";
+                                                    break;
+                                                case 9:
+                                                    echo "REEMBOLSADO";
+                                                    break;
+                                                case 14:
+                                                    echo "INICIO DA TRANSACAO";
+                                                    break;
+                                                case 73:
+                                                    echo "BOLETO IMPRESSO";
+                                                    break;
+                                            }
+                                            ?>
+                                        </td>
+                                        <td id="produto" class="td-vendas" style="color: #333333; width: 22%;"><?php echo $compra['Offer']['title']; ?></td>
+                                        <td id="comprador" class="td-vendas" style="width: 13%;"><?php echo $compra['User']['name']; ?></td>
+                                        <td id="valor" class="td-vendas" style="width: 10%;">R$ <?php echo $compra['Checkout']['total_value']; ?></td>
+                                        <td id="comentario" class="td-vendas" style="width: 30%;">
+                                            <div>
+                                                <?php if ($compra['OffersComment']) { ?>
+                                                    <i><?php echo substr($compra['OffersComment']['description'], 0, 300); ?></i>
+                                                    <?php
+                                                } else {
+                                                    echo '<b>Não possui comentário.</b>';
+                                                }
+                                                ?>
+                                            </div>
+                                        </td>
+                                        <td class="td-vendas" id="etiqueta"
+                                            onclick="mostraNota('<?php echo $compra['User']['name']; ?>',
+                                                                '<?php echo $compra['Checkout']['address'] . ' ' . $compra['Checkout']['number'] . ' - ' . $compra['Checkout']['complement'] . ' - ' . $compra['Checkout']['city']; ?>',
+                                                                '<?php echo $compra['Checkout']['zip_code']; ?>',
+                                                                '<?php echo $compra['Checkout']['state']; ?>',
+                                                                '<?php echo $compra['Checkout']['id']; ?>',
+                                                                '<?php echo $compra['Checkout']['id'] . $compra['Checkout']['company_id'] . $compra['Checkout']['user_id']; ?>')">
+                                            <img src="../img/icones/vendas/tag.png" style="width: 25px; height: 25px; cursor: pointer;"/>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                }
+                            }
+                            ?>
+
+                    </table>
+
+                    <!-- tabela compras concluidas -->
+                    <table class="table-vendas" id="table-concluidas" style="max-height: 420px; overflow: auto; display: none;">
+                        <tr>
+                            <th id="data" class="th-vendas">DATA</th>
+                            <th id="status" class="th-vendas">STATUS</th>
+                            <th id="produto" class="th-vendas">PRODUTO</th>
+                            <th id="comprador" class="th-vendas">COMPRADOR</th>
+                            <th id="valor" class="th-vendas">VALOR</th>
+                            <th id="comentario" class="th-vendas">COMENTARIO</th>
+                            <th class="th-vendas" id="etiqueta">Etiqueta de Entrega</th>
+                        </tr>
+
+                        <?php
+                        if (is_array($finalizadas)) {
+                            foreach ($finalizadasWithComment as $compra) {
+                                ?>
+                                <tr>
+                                    <td id="data" class="td-vendas"><?php echo date('d/m/Y', strtotime($compra['Checkout']['date'])); ?></td>
+                                    <td id="status" class="td-vendas"> 
+                                        <?php
+                                        switch ($compra['Checkout']['payment_state_id']) {
+                                            case 1:
+                                                echo "AUTORIZADO";
+                                                break;
+                                            case 2:
+                                                echo "INICIADO";
+                                                break;
+                                            case 3:
+                                                echo "BOLETO IMPRESSO";
+                                                break;
+                                            case 4:
+                                                echo "CONCLUIDO";
+                                                break;
+                                            case 5:
+                                                echo "CARTÃO DE CRÉDITO";
+                                                break;
+                                            case 6:
+                                                echo "EM ANALISE";
+                                                break;
+                                            case 7:
+                                                echo "CARTÃO DE CRÉDITO";
+                                                break;
+                                            case 8:
+                                                echo "EM REVISAO";
+                                                break;
+                                            case 9:
+                                                echo "REEMBOLSADO";
+                                                break;
+                                            case 14:
+                                                echo "INICIO DA TRANSACAO";
+                                                break;
+                                            case 73:
+                                                echo "BOLETO IMPRESSO";
+                                                break;
+                                        }
+                                        ?>
+                                    </td>
+                                    <td id="produto" class="td-vendas"><?php echo $compra['Offer']['title']; ?></td>
+                                    <td id="comprador" class="td-vendas"><?php echo $compra['User']['name']; ?></td>
+                                    <td id="valor" class="td-vendas">R$ <?php echo $compra['Checkout']['total_value']; ?></td>
+                                    <td id="comentario" class="td-vendas"><div>
+                                            <div>
+                                                <?php if ($compra['OffersComment']) { ?>
+                                                    <i><?php echo substr($compra['OffersComment']['description'], 0, 300); ?></i>
+                                                    <?php
+                                                } else {
+                                                    echo '<b>Não possui comentário.</b>';
+                                                }
+                                                ?>
+                                            </div>
+                                        </div></td>
+                                    <td class="td-vendas" id="etiqueta"
+                                        onclick="mostraNota('<?php echo $compra['User']['name']; ?>',
+                                                                '<?php echo $compra['Checkout']['address'] . ' ' . $compra['Checkout']['number'] . ' - ' . $compra['Checkout']['complement'] . ' - ' . $compra['Checkout']['city']; ?>',
+                                                                '<?php echo $compra['Checkout']['zip_code']; ?>',
+                                                                '<?php echo $compra['Checkout']['state']; ?>',
+                                                                '<?php echo $compra['Checkout']['id']; ?>')">
+                                        <img src="../img/icones/vendas/tag.png" style="width: 25px; height: 25px; cursor: pointer;"/>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+
+                    </table>
+
+                    <!-- tabela compras pendentes -->
+                    <table class="table-vendas" id="table-pendentes" style="max-height: 420px; overflow: auto; display: none;">
+                        <tr>
+                            <th id="data" class="th-vendas">DATA</th>
+                            <th id="status" class="th-vendas">STATUS</th>
+                            <th id="produto" class="th-vendas">PRODUTO</th>
+                            <th id="comprador" class="th-vendas">COMPRADOR</th>
+                            <th id="valor" class="th-vendas">VALOR</th>
+                            <th id="comentario" class="th-vendas">COMENTARIO</th>
+                            <th class="th-vendas" id="etiqueta">Etiqueta de Entrega</th>
+                        </tr>
+
+                        <?php
+                        if (is_array($pendentes)) {
+                            foreach ($pendentesWithComment as $compra) {
+                                ?>
+                                <tr>
+                                    <td id="data" class="td-vendas"><?php echo date('d/m/Y', strtotime($compra['Checkout']['date'])); ?></td>
+                                    <td id="status" class="td-vendas"> 
+                                        <?php
+                                        switch ($compra['Checkout']['payment_state_id']) {
+                                            case 1:
+                                                echo "AUTORIZADO";
+                                                break;
+                                            case 2:
+                                                echo "INICIADO";
+                                                break;
+                                            case 3:
+                                                echo "BOLETO IMPRESSO";
+                                                break;
+                                            case 4:
+                                                echo "CONCLUIDO";
+                                                break;
+                                            case 5:
+                                                echo "CARTÃO DE CRÉDITO";
+                                                break;
+                                            case 6:
+                                                echo "EM ANALISE";
+                                                break;
+                                            case 7:
+                                                echo "CARTÃO DE CRÉDITO";
+                                                break;
+                                            case 8:
+                                                echo "EM REVISAO";
+                                                break;
+                                            case 9:
+                                                echo "REEMBOLSADO";
+                                                break;
+                                            case 14:
+                                                echo "INICIO DA TRANSACAO";
+                                                break;
+                                            case 73:
+                                                echo "BOLETO IMPRESSO";
+                                                break;
+                                        }
+                                        ?>
+                                    </td>
+                                    <td id="produto" class="td-vendas"><?php echo $compra['Offer']['title']; ?></td>
+                                    <td id="comprador" class="td-vendas"><?php echo $compra['User']['name']; ?></td>
+                                    <td id="valor" class="td-vendas">R$ <?php echo $compra['Checkout']['total_value']; ?></td>
+                                    <td id="comentario" class="td-vendas">
+                                        <div>
+                                            <?php if ($compra['OffersComment']) { ?>
+                                                <i><?php echo substr($compra['OffersComment']['description'], 0, 300); ?></i>
+                                                <?php
+                                            } else {
+                                                echo '<b>Não possui comentário.</b>';
+                                            }
+                                            ?>
+                                        </div>
+                                    </td>
+                                    <td class="td-vendas" id="etiqueta"
+                                        onclick="mostraNota('<?php echo $compra['User']['name']; ?>',
+                                                                '<?php echo $compra['Checkout']['address'] . ' ' . $compra['Checkout']['number'] . ' - ' . $compra['Checkout']['complement'] . ' - ' . $compra['Checkout']['city']; ?>',
+                                                                '<?php echo $compra['Checkout']['zip_code']; ?>',
+                                                                '<?php echo $compra['Checkout']['state']; ?>',
+                                                                '<?php echo $compra['Checkout']['id']; ?>')">
+                                        <img src="../img/icones/vendas/tag.png" style="width: 25px; height: 25px; cursor: pointer;"/>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </table>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+<!-- POPUP DA 'NOTA FISCAL' -->
+<div id="nota-fiscal">
+    <div id="nota-header" style="text-align: right; padding: 5px;">
+        <span style="font-size: 18px; color: orange; cursor: pointer;" id="xis-nota-fiscal"><strong style="color: #3399cc;">X</strong></span><br/>
+    </div>
+
+    <div id="nota-body" style="text-align: left; background: #eeeeee; padding: 10px; width: 380px;
+         font-family: Helvetica;">
+        <div style='width: 100%; background: #363636; padding: 5px;'>
+            <img src='../img/adv/Adventa Logo/Adventa-2.png' height="20px;" />
+            <span style='color: #fff; float: right; margin-right: 10px;' id="nota-num">000</span>
+        </div>
+        <strong>Destinatário:</strong><br/>
+        <span id="nota-nome"></span> - <span id="nota-end"></span><br/>
+        <strong><span id="nota-cep"></span></strong> - <span id="nota-est"></span>
+        <br/><br/>
+
+        <div >
+            <canvas id="barcodeCanvas" width="400" height="100" style="display: none;"></canvas>
+            <img id="imgBarcode" />
+        </div>
+        <br/>
+
+        <strong>Remetente:</strong><br/>
+        <?php
+        echo $this->Session->read('CompanyLoggedIn.Company.fancy_name') . ' - ' . $this->Session->read('CompanyLoggedIn.Company.address') . ' ' . $this->Session->read('CompanyLoggedIn.Company.number') . ' - ' .
+        $this->Session->read('CompanyLoggedIn.Company.complement') . ' - ' . $this->Session->read('CompanyLoggedIn.Company.city');
+        ?><br/>
+        <strong><?php echo $this->Session->read('CompanyLoggedIn.Company.zip_code'); ?></strong> - <?php echo $this->Session->read('CompanyLoggedIn.Company.state'); ?>
+    </div>
+    <div style='width: 100%; text-align: left; padding: 10px;'>
+        <button type="button" onclick="JavaScript:printPartOfPage('nota-body');">Imprimir</button>
+    </div>
+</div>
+
+<!-- gera código de barras -->
+<div onload="updateBarcode()">
+    <form action="">
+        <input id="barcodeValue" type="hidden" name="value" value="abcd123456" />
+    </form>
+</div>
+

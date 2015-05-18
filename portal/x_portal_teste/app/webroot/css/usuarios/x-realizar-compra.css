@@ -1,0 +1,413 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20/10/2014, 11:56:07
+    Author     : user
+*/
+.metrica-cor{
+    cursor: pointer;
+}
+
+
+
+.metrica-tamanho{
+    cursor: pointer;
+}
+
+
+
+.input-resume#resume-dias-entrega{
+    width: 10px;
+
+}
+
+.input-resume{
+    background: transparent;
+    border: 0px;
+}
+
+.table-confirm tr{
+    border: 0px;
+
+}
+
+.table-confirm td{
+    border: 0px;
+}
+
+.button-compra{
+    border: 0px; 
+    background: #3399cc;
+    color: #fff;
+    padding: 10px; 
+    cursor: pointer;
+}
+
+.confirm-table{
+    text-align: left;   
+    border: 0px;
+}
+.confirm-table td{
+    padding: 5px;
+    border: 0px;
+}
+
+.confirm-table input{
+    border: 0px;
+    background: transparent;
+}
+
+#uf{
+    text-transform: uppercase;
+}
+
+.input-cadastrais#NumeroCartao{
+    width: 200px;
+} 
+
+.input-cadastrais#CodigoSeguranca{
+    width: 150px;
+}
+
+.input-cadastrais#Expiracao{
+    width: 70px;
+}
+
+.input-cadastrais#Portador{
+    width: 285px;
+}
+
+.input-cadastrais#parcels{
+    width: 290px;
+}
+
+.input-cadastrais#CPF{
+    width: 150px;
+}
+
+.input-cadastrais#DataNascimento{
+    width: 132.5px;
+}
+
+.input-cadastrais#Telefone{
+    width: 142.5px;
+}
+
+#td-title-frete{
+    text-align: left;
+}
+
+
+#valor-do-frete{
+    text-align: right;
+    background: transparent;
+    border: 0px;
+    font-family: Helvetica;
+
+}
+
+#cont-editar{
+    position: absolute;
+    left: 40%;
+    top: 15%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}
+
+#cont-info{
+    position: absolute;
+    left: 40%;
+    top: 15%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}
+
+.pop-confirm{
+    position: absolute;
+    left: 48%;
+    top: 15%;
+    margin-left: -140px;
+    margin-top: 25px;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    display: none;
+}
+
+.input-cadastrais {
+    height: 28px;
+    width: 97.5%;
+    padding-left: 5px;
+    font-family: Helvetica;
+    color: #666666;
+    font-size: 16px;
+    outline: none;
+    margin-top: 10px;
+}
+html{
+    overflow-y:hidden;
+    overflow-x:hidden;
+}
+
+.fisrt{
+    width: 100%;
+}
+.div-produto{
+    width: 48%; 
+    float: left;
+    border: 1px solid;
+    font-family: Helvetica;
+    font-size: 12px;
+}
+.offer-img{
+    width: 100px;
+    height: 100px;
+}
+
+.offer-img-div{
+    border: 1px solid red;
+    float: left;
+    width: 50%;
+}
+.div-qtd{
+    float: left;
+    border: 1px solid; 
+    width: 45%;
+    font-family: Helvetica;
+    font-size: 12px;
+}
+div.fundo-cad-ofer {
+    background: #ffffff;
+    width: 90%;
+    height: 600px;
+    margin-left: 10%;
+    margin-top: 6%;
+}
+
+div.lado-esquerdo{
+    width: 49.9%;
+    border-right: 1px solid #dcdcdc;
+    height: 100%;
+    float: left;
+}
+
+div.lado-direito{
+    width: 49.9%;
+
+    height: 100%;
+    float: left;
+}
+
+table{
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Helvetica;
+    font-size: 12px;
+}
+td{
+    border: 1px solid #dcdcdc;  
+}
+#titulo{
+    text-align: left;
+    padding-left: 5px;
+    font-size: 14px;
+}
+#desc{
+    text-align: left;
+    padding: 5px;
+}
+#metrics{
+    text-align: left;
+    padding: 5px;
+}
+
+#qtd{
+    float: left;
+    width: 50px;
+    margin-top: 0px;
+
+}
+#valor{
+
+}
+th{
+    padding: 10px;
+    font-size: 16px;
+
+}
+.td-end{
+    padding: 10px;
+}
+#desc-end{
+    text-align: left;
+}
+
+#add-endereco{
+    width: 98%;
+    text-align: right;
+    font-family: Helvetica;
+    padding-right: 10px; 
+    padding: 5px;
+    color: #fff;
+    background: orange;
+    cursor: pointer;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+tr#title{
+    background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1));
+    background: -moz-linear-gradient(top, #eeeded, #e1e1e1);
+}
+
+td#correios{
+    padding: 10px;
+    text-align: center;
+}
+
+#loading{
+    position: absolute;
+    left: 47%;
+    top: 35%;
+    width: 100px;
+    height: 100px;
+    display: none;
+}
+
+input[type=radio].css-checkbox {
+    display: none;
+}
+
+input[type=radio].css-checkbox+label.css-label {
+    padding-left: 30px;
+    height: 25px;
+    margin-left: 30px;
+    display: inline-block;
+    line-height: 30px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    font-size: 12px;
+    vertical-align: middle;
+    font-family: Helvetica35-Thin;
+    color: #f27900;
+    cursor: pointer;
+    display: inline-block;
+}
+
+input[type=radio].css-checkbox:checked+label.css-label {
+    background-position: 0 -25px;
+}
+
+label.css-label {
+    background-image:
+        url('../../img/icones/cadastro-oferta/orange-check-box.png');
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-qtd-plus{
+    background: orange;
+    border: 0px;
+    padding: 0;
+    width: 25px;
+    font-family: Helvetica;
+    font-size: 22px;
+    color: #ffffff;
+    margin-left: 0px;
+
+}
+
+.btn-qtd-less{
+    background: orange;
+    border: 0px;
+    padding: 0;
+    width: 25px;
+    font-family: Helvetica;
+    font-size: 22px;
+    color: #ffffff;
+
+}
+#div-total{
+    font-family: Helvetica;
+    font-size: 14px;
+    padding: 5px;
+}
+#total{
+    font-size: 20px;
+}
+#escolhe-pagamento{
+    padding: 5px;
+}
+.btn-card-boleto{
+    background: orange;
+    color: #fff;
+    padding: 5px;
+    font-family: Helvetica;
+    border: 0px;
+    cursor: pointer;
+}
+
+.btn-metrics{
+    background: orange;
+    color: #fff;
+    padding: 10px;
+    font-family: Helvetica;
+    border: 0px;
+    cursor: pointer;
+}
+
+a#clique-aqui{
+    color: #f27900;
+    font-weight: bold;
+}
+
+.confirm-text{
+    font-size: 14px;
+}
+
+.title-pop{
+    font-size: 16px;
+}
+
+.pop-ver-pedido{
+    position: absolute;
+    left: 40%;
+    top: 5%;
+    margin-left: -140px;
+    margin-top: 25px;
+    border: 1px solid #d0d0d0;
+    background: #ffffff;
+    z-index: 999999;
+    font-family: Helvetica;
+    opacity: 0.95;
+    max-height: 600px;
+    overflow: auto;
+    width: 650px;
+    display: none;
+}
+#dados-produto{
+    font-size: 14px;
+}

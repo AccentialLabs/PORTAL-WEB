@@ -1,0 +1,98 @@
+<?php ?>
+<style>
+    #cabecalho-adv{
+        display: none;
+    }
+
+    #adv-title-bar{
+        display: none;
+    }
+    #forgot-pass{
+        background: transparent;
+        border: 0px;
+        font-family: Helvetica;
+        font-size: 14px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #dcdcdc;
+        outline: none;
+        width: 85%;
+    }
+
+    .button-entrar{
+        background: #3399cc;
+        font-family: Helvetica;
+        color: #fff;
+        width: 90%;
+        line-height: 42px;
+        text-align: center;
+        height: 40px;
+        margin-top: 40px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    #aviso-error{
+        width: 240px;
+        height:41px;
+        background: url('../img/icones/login/aviso_error.png') no-repeat;
+        position: relative; 
+        top: -140px;
+        left: 10px;
+        display: none;
+    }
+    #cont-sucess{
+        display: none;
+    }
+    #recebe-email{
+        color: #000;
+        background: transparent;
+        border: 0px;
+    }
+
+    .adv-logo{
+        margin-left: 10%;
+        width: 50%;
+        margin-top: 5%;
+    }
+</style>
+<div style="text-align: center; position: absolute; top: 0; background: #fff; width: 316px; height: 506px;"> 
+    <div style="cursor: pointer; background: url('../img/icones/users-vitrine/fechar.png') transparent; width: 12px; height: 12px; float: right; margin-right: 20px; margin-top: 20px; opacity: 0.8;" id="xis-login"></div>
+    <br/>
+    <img src="../img/adv/Adventa Logo/Adventa-4.png" class="adv-logo"/>
+
+    <div style="margin-top: 65px;">
+        <input type="text" id="forgot-pass" placeholder="Email de Cadastro"/>
+        <br />
+        <img src='../img/adv/Login/adventa_recovery_balloon_resize.png' style="width: 90%; margin-top:20px;"/>
+        <div style=" width: 100%; text-align: center; position: absolute; top:180px;" id='cont-recover'>
+
+            <div style="background: url('../img/adv/Login/adventa_recovery_cadeado.png');  position: relative; left: 100px; top: 40px;"></div>
+            <img src="../img/adv/Login/adventa_recovery_cadeado.png" width="90" height="90" style="margin-top: 40px;"/>
+
+            <div style="position: relative; font-family: Helvetica; font-size: 16px; color: #fff">
+                <span style="font-size: 16px; " >Redefinir senha </span><br/>
+                <div style="padding-top: 10px;  text-align: center;"><span>
+                        Digite o email de cadastro e<br/>
+                        enviaremos uma nova senha.
+                    </span></div>
+            </div>
+
+            <button class="button-entrar" type="submit" style="border: 0px;" onclick="recoverPass()">ENVIAR NOVA SENHA</button>
+            <div id="aviso-error"></div>
+
+            <div id="recebe" style='display: none;'></div><br/>
+
+
+        </div>
+    </div>
+
+
+    <div id='cont-sucess' style="background: url('../img/icones/login/box_pass_sucess.png') no-repeat; width: 252px; height: 282px; margin-left: 31px; margin-top: 200px;">
+        <div style='text-align: center; padding-top: 140px;'>
+            <span style='font-size: 12px;'>Enviamos uma nova senha de acesso para</span>
+            <input type='text' id='recebe-email' placeholder="teste@tst.com" style='text-align: center;' readonly="true"/>
+        </div>
+        <button class="button-entrar" id='voltar' type="submit" style="border: 0px; margin-top: 45px;" >VOLTAR</button>
+    </div>
+</div>
+

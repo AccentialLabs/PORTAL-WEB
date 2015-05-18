@@ -1,0 +1,1690 @@
+<?php
+//PARA COMPARTILHAMENTO NO FBK
+$server = $_SERVER['SERVER_NAME'];
+$endereco = $_SERVER ['REQUEST_URI'];
+$url = "http://" . $server . $endereco . "?offer=" . $offer['Offer']['id'];
+$orientacao = $extraInfos['0']['offers_extra_infos']['offer_orientation'];
+$nota = 0;
+foreach ($offer['OffersComment'] as $comentario) {
+    $nota = $nota + $comentario['evaluation'];
+}
+$nota = $nota / count($offer['OffersComment']);
+$nota = explode(".", $nota);
+
+echo $this->Html->css('usuarios/x-offers-detail');
+echo $this->Html->script('usuarios/x-offers-details');
+?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<?php
+$limit = 1;
+foreach ($offer['OffersPhoto'] as $phot) {
+    if ($phot['photo'] != "UPLOAD_ERROR") {
+        $limit++;
+    }
+}
+?>
+<script>
+
+    function changePhoto(position) {
+
+        $(".offers-photos").fadeOut(10);
+        $("#foto" + position).fadeIn(100);
+
+        $(".photo-selector").attr("src", "../img/adv/Detalhes do Produto/select_empty.png");
+        $("#seletor" + position).attr("src", "../img/adv/Detalhes do Produto/select_all.png");
+    }
+
+    $(document).ready(function() {
+
+        var photoNum = 1;
+        var photoLimit = <?php echo $limit; ?>;
+        //alert(photoLimit);
+
+        // seta fotos
+        $("#plus-photo").click(function() {
+            if (photoNum < photoLimit) {
+                photoNum++;
+            }
+            changePhoto(photoNum);
+            //alert(photoNum);
+        });
+
+        $("#less-photo").click(function() {
+            if (photoNum > photoLimit) {
+                photoNum--;
+            }
+            changePhoto(photoNum);
+
+            //alert(photoNum);
+        });
+
+        $("#adv-comp-photo").click(function() {
+
+            document.getElementById('companiesProfile').submit();
+        });
+        $("#adv-produto").click(function() {
+            $(".adv-value-inf").fadeOut(0);
+            $("#adv-offer-resume").fadeIn(300);
+        });
+        $("#adv-espe").click(function() {
+            $(".adv-value-inf").fadeOut(0);
+            $("#adv-offer-specification").fadeIn(300);
+        });
+        $("#adv-info").click(function() {
+            $(".adv-value-inf").fadeOut(0);
+            $("#adv-offer-infos").fadeIn(300);
+        });
+        $("#adv-opn").click(function() {
+            $(".adv-value-inf").fadeOut(0);
+            $("#adv-offer-comments").fadeIn(300);
+        });
+        $("#adv-second-metric").click(function() {
+            $("#mask").fadeIn(100);
+            $("#cont-metricas-adv").fadeIn(200);
+        });
+        $("#adv-first-metric").click(function() {
+            $("#mask").fadeIn(100);
+            $("#cont-metricas-adv").fadeIn(200);
+        });
+        $("#mask").click(function() {
+            $("#mask").fadeOut(100);
+            $("#cont-metricas-adv").fadeOut(200);
+        });
+        $("#adv-metrics-confirm").click(function() {
+            $("#mask").fadeOut(100);
+            $("#cont-metricas-adv").fadeOut(200);
+        });
+        $(".footer-menu-td").click(function() {
+            var id = $(this).attr("id");
+            $('.footer-menu-td').css("background", "#f4f4f4");
+            $("#" + id).css("background", "#dcdcdc");
+        });
+
+        $("#adv-share").click(function() {
+            $("#social-box").toggle(300);
+        });
+
+        $("#login-buy").click(function() {
+            login();
+        });
+    });
+    function chooseValue(div) {
+
+    }
+
+    function escolheTamanho(tamanho) {
+        var meuid = tamanho;
+        $('.div-metrica-Tamanho').css("border", "1px solid #dcdcdc");
+        document.getElementById(meuid).style.border = "1px solid orange";
+        $("#metricaY").val(meuid);
+        $('#adv-first-metric').html("<span>" + tamanho + "</span>");
+    }
+
+    function escolheCor(cor) {
+        var meuid = cor;
+        $('.cores').css("border", "0px");
+        document.getElementById(meuid).style.border = "1px solid orange";
+        $("#metricaX").val(meuid);
+        $('#adv-second-metric').css("background", cor);
+    }
+</script>
+<style>
+    @font-face {
+        font-family: helveticaneue;
+        src: url('../fonts/HelveticaNeueLTStd-Th.ttf');
+    }
+
+    @font-face {
+        font-family: MyriadProLight;
+        src: url("../fonts/MyriadProLight.otf") format("opentype");
+    }
+
+    #adv-offer-detail-right{
+        top: 90px;
+        right: 0;
+        position: fixed;
+        width: 35%;
+        height: 100%;
+        background: #808080;
+        z-index: 99999;
+    }
+
+    #adv-offer-title{
+        color: #fff;
+        font-size: 30px;
+        margin-top: 10px;
+        margin-left: 28px;
+        font-family: helveticaneue;
+    }
+
+    #adv-offer-desc{
+        color: #ffffff;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: justify;
+        font-family: helveticaneue;
+        font-size: 18px;
+        margin-top: 25px;
+        max-height: 150px;
+        overflow:hidden;
+    }
+
+    #adv-precos{
+        color: #fff;
+        font-family: helveticaneue;
+        margin-top: 20px;
+        padding-left: 30px;
+        font-size: 20px;
+        text-align: left;
+    }
+
+    #adv-precos-por{
+        font-size: 32px;
+        font-weight: bold;
+        font-family: helveticaneue;
+    }
+
+    #adv-offer-photo{
+        width: 60.9%;
+        height: 50%;
+        position: fixed;
+        top: 90px;
+        left: 4%;
+        text-align: center;
+        z-index: 99999;
+        background: #f4f4f4;
+    }
+
+    #adv-offer-footer-menu{
+        position: fixed;
+        bottom: 0;
+        left: 58px;
+        width: 61%;
+        height: 6%;
+        background: #f4f4f4;
+    }
+
+    .footer-menu-img{
+    }
+
+    #adv-offer-comments{
+        display: none;
+    }
+
+    #adv-offer-infos{
+        display: none;
+    }
+
+    #adv-offer-specification{
+        display: none; 
+    }
+
+    #adv-stars{
+        height: 30px;
+        text-align: left; 
+        padding-left: 30px;
+        padding-top: 20px;
+        float: left;
+    }
+
+    #adv-campos-metricas{
+        padding-left: 30px;
+        padding-top: 20px;
+        text-align: center;
+    }
+
+    #adv-campo-comp-photo{
+        text-align: left;
+        padding-left: 30px;
+        padding-top: 40px;
+    }
+
+    #adv-comp-photo{
+        width: 150px;
+        height: 65px;
+        cursor: pointer;
+    }
+
+    #adv-metrics-confirm{
+        background: #f37165;
+        width: 100%;
+        height: 40px;
+        position: absolute;
+        line-height: 40px;
+        bottom: 0;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    #adv-menu{
+        display: none;
+    }
+
+    #adv-menu-back{
+        display: block;
+    }
+
+    #adv-cards{
+        margin-left: 20px;
+    }
+
+    #ranking-text{
+        color: #fff;
+        font-size: 12px;
+        font-family: MyriadProLight;
+    }
+
+    .offers-extra-photos{
+        height: 100%;
+        display: none;
+    }
+
+    .photo-selector{
+        cursor: pointer;
+    }
+
+    .corpo-seta{
+        height: 100%;
+        line-height: 100%;
+        margin-left: 5px;
+        width: 35px; 
+    }
+
+</style>
+<div id="mask"></div>
+<div id="mask2"></div>
+<!-- popup para a insercao do endereco de email -->
+<div id="pop">
+    <div id="popheader">
+        <a href="#" id="closePop"><strong>X</strong></a> 
+    </div>
+    <div id="popbody">
+        Para quem deseja enviar? <br/>
+        <input type="text" placeholder="Email" id="email" style=" height: 25px;
+               width: 80%;
+               padding-left: 5px;
+               font-family: Helvetica;
+               color: #666666;
+               font-size: 16px;
+               outline: none;
+               margin-top: 5px;"/><br /><br/>
+        <button type="submit" id="<?php echo $offer['Offer']['id']; ?>" onclick="sendEmail()" style="color: orange;
+                text-decoration: none;
+                font-family: Helvetica; cursor: pointer; margin-left: 0px; background: transparent; border: 0px;">
+            ENVIAR
+        </button>
+        <input type="hidden" name="id" id="id" value="<?php echo $offer['Offer']['id']; ?>" />
+    </div>
+</div>
+
+<div class="img-zoom" id="img-zoom">
+    <div>
+        <span id="fecha-img-zoom">X</span>
+    </div>
+    <img src="<?php echo $offer['Offer']['photo']; ?>" class="photo-zoom" id="photo-zoom"/>
+    <div id="zoom-menu-photos">
+        <div style="width: 100px; height: 100px; float: left;padding: 3px;">                
+            <img src="<?php echo $offer['Offer']['photo']; ?>" class="photo-zoom-menu" style="max-width: 100px; max-height: 100px;"/>
+        </div>
+        <?php foreach ($offer['OffersPhoto'] as $photo) { ?>
+            <?php if ($photo['photo'] != 'UPLOAD_ERROR') { ?>
+                <div style="width: 100px; height: 100px; float: left;padding: 3px;">                
+                    <img src="<?php echo $photo['photo']; ?>" class="photo-zoom-menu" style="max-width: 100px; max-height: 100px;"/>
+                </div>
+                <?php
+            }
+        }
+        ?>
+    </div>
+</div>
+
+<div id="notify-email" >Email enviado<br/>com sucesso!</div>
+<!-- -->
+
+<div style="width: 100%; height: 100%;  padding-top: 3.5px;">
+    <?php //echo $extraInfos['0']['offers_extra_infos']['offer_orientation'];     ?>
+    <div style="">
+        <?php if ($extraInfos['0']['offers_extra_infos']['offer_orientation'] == 'HORIZONTAL' or $extraInfos['0']['offers_extra_infos']['offer_orientation'] == '') { ?>
+            <!-- template horizental -->
+            <!--            <div style="width: 100%; height: 100%;"  id="detalhe-horizontal">
+                            <div style="line-height: 80px; font-family: Helvetica; text-align: center; width: 100%; height: 13%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 18px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+            
+                            <div id="cont-produto" style=" width: 100%; height: 100%;">
+                                <div style="width: 100%; height: 45%;">
+                                    <div id="offer-pic" style="width: 52%; height: 100%; float: left;">
+                                        <img src="../img/icones/lupa.png" class="lupa" />
+            
+                                         selector de imagens 
+                                         <div class="corpo-img-selectores-horizontal">
+                                             <div id="0" width="100%" height="100%;"  class="seletor-img"></div>
+            <?php foreach ($offer['OffersPhoto'] as $photo) { ?>
+                <?php if ($photo['photo'] != 'UPLOAD_ERROR') { ?>
+                                                                                                                                                                                                                    <div id="<?php echo $photo['id'] ?>" class="seletor-img"> </div>
+                    <?php
+                }
+            }
+            ?>
+                                         </div> 
+            
+                                        <img src="<?php echo $offer['Offer']['photo'] ?>" width="100%" height="100%;" class="offer-imgs" id="img-0"/>
+            
+            <?php foreach ($offer['OffersPhoto'] as $photo) { ?>
+                                                                                                                                                                                                                <img src="<?php echo $photo['photo']; ?>" width="100%" height="100%;" style="display: none;" id="img-<?php echo $photo['id']; ?>" class="offer-imgs"/>
+            <?php } ?>
+                                         
+                                    </div>
+                                    <div style="float: left; width: 48%; height:100%; border-bottom: 1px solid #dcdcdc;">
+                                        <div style=" height: 81%; width: 94%; overflow: auto; border-bottom: 1px solid #dcdcdc; font-family: Helveica15-Thin; padding-left: 10px; padding-right: 10px; font-size: 12px;">
+                                            <span style="margin-left: 10px;">
+                                                <div style="font-family: Helvetica; color: gray; word-break:break-all; width: 100%; margin-top: 10px; text-align: left; font-size: 12px;">
+            <?php echo $offer['Offer']['description']; ?>
+                                                </div>
+            
+                                            </span>
+                                        </div>
+                                        <div style="height: 18.5%; width: 102.5%;">
+                                            <div style="float: left; width: 48%; height: 100%;">
+                                                <div style="font-family: Helvetica; text-align: left; padding-top: 2%; padding-left: 10%; font-size: 12px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div>
+                                                 valor com desconto 
+                                                <div style="font-family: Helvetica; text-align: left; padding-top: 2%; padding-left: 10%; font-size: 12px; color: #000000;"><span>Por </span><span style="font-size: 20px; text-decoration: none;">
+                                                        R$<?php
+            $discount = $offer['Offer']['percentage_discount'];
+            $discount = $discount / 100;
+            $discountedVal = $discount * $offer['Offer']['value'];
+            $value = $offer['Offer']['value'] - $discountedVal;
+            //echo str_replace(".",",",$value);
+            echo number_format($value, 2, ',', '.');
+            //echo str_replace('.', ',', $offer['Offer']['discounted_value']);
+            ?>
+                                                    </span></div>
+                                            </div>
+            
+                                            <div style="float: left; width: 49.5%; height: 100%; border-bottom: 1px solid #dcdcdc;">
+            <?php if (empty($this->Session->read('userData'))) { ?>
+                                                                                                                                                                                                                <a href="#" onclick="login()">
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/bt_detalhe_comprar.png" style="width: 100%; height: 100%;">
+                                                                                                                                                                                                                </a>
+            <?php } else { ?>
+                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'), 'onsubmit' => "validaForm(this); return false;")); ?>
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                <input type="hidden" id="metricaY_chave" name="data[metricaY_chave]" value="<?php echo strtolower($filter[0]['offers_attributes']['name']); ?>" />
+                                                                                                                                                                                                                <input type="hidden" id="metricaY" name="data[metricaY]"/>
+                                                                                                                                                                                                                <input type="hidden" id="metricaX_chave" name="data[metricaX_chave]" value="<?php echo strtolower($filter2[0]['offers_attributes']['name']); ?>"/>
+                                                                                                                                                                                                                <input type="hidden" id="metricaX" name="data[metricaX]"/>
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                <button type="submit" style="padding: 0; border: 0px solid; width: 100%; height: 100%; background: transparent;" >
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/bt_detalhe_comprar.png" style="width: 100%; height: 100%;">
+                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                
+                <?php echo $this->Form->end(); ?>
+            <?php } ?>
+                                            </div>
+            
+                                        </div>
+            
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 8%; ">
+                                    <div style="width: 51.5%; height: 100%; float: left;">
+                                        <div style="width:45%; height: 100%; float: left; margin-left: 3.5%; ">
+                                            <a onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo $url; ?>?title=facebook', 'ventanacompartir', 'toolbar=0, status=0, width=650, height=450');">
+                                                <img src="../img/icones/users-vitrine/bt_compartilhar.png" style="width: 100%; margin-top: 6%; cursor: pointer;">
+                                            </a>
+                                        </div>
+                                        <div style="width:45%; height: 100%; float: left;">
+                                            <a onclick="mostraPopEmail()">
+                                                <img src="../img/icones/users-vitrine/bt_enviaramigo.png" style="cursor: pointer; width: 100%; margin-top: 6%; margin-left: 8%;">
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div style="width: 48%; height: 100%; border-left: 1px solid #dcdcdc; border-bottom: 1px solid #dcdcdc; float: right;">
+                                        <div style="padding-left: 5%; border-right: 1px solid #dcdcdc; font-size: 12px; width: 44.5%; height: 100%; float: left; font-family: Helvetica;">
+                                            <div style="margin-top: 5px;">em até <b style="font-size: 14px;">12x</b> de</div>
+                                            <div style="padding-left: 10%;  font-size: 16px; margin-top: 5px;"><b>
+                                                     valor parcelas 
+            <?php
+            $valParcel = $offer['Offer']['value'] / 12;
+            echo 'R$' . number_format($valParcel, 2, ',', '.');
+            ?>
+                                                </b></div>
+                                        </div>
+                                        <div style="width: 100%; height: 100%; text-align: center;">
+                                            <div style="left: 10%; margin-top: 14px; text-align: center;">
+            
+                                                 Comentario sobre a lógica na Controller
+            <?php for ($i = 0; $i < $nota[0]; $i++) { ?>
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/star_complete.png" title="<?php echo count($offer['OffersComment']); ?> pessoas votaram nessa oferta" style="float: left; margin-left: 5px;" >
+            <?php } $resto = 5 - $nota[0]; ?>
+            
+            <?php
+            if ($nota[1]) {
+                if ($nota[1] <= 5) {
+                    ?>
+                                                                                                                                                                                                                    <img src="../img/icones/users-vitrine/star_half.png" style="float: left; margin-left: 5px;" >
+                <?php } else {
+                    ?>
+                                                                                                                                                                                                                    <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" >
+                    <?php
+                }
+                $resto = $resto - 1;
+            }
+            ?>
+            
+            <?php
+            for ($j = 0; $j < $resto; $j++) {
+                ?>
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/star_empty.png" style="float: left; margin-left: 5px;" >
+            <?php } ?>  
+            
+                                                <span style="float: left; font-family: Helvetica; margin-left: 5px; font-size: 13px; color: #FFD700;">+<?php echo count($offer['OffersComment']); ?></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                                <div style="width: 100%; height: 27%; padding-top: 2%;">
+                                    <div id="tes" style="margin-left: 2%; height: 60%; border: 1px solid #dcdcdc; width: 22.5%; float: left;">
+                                        <img src="<?php echo $offer['Company']['logo']; ?>" style="width: 100%; height: 100%;"/>
+                                        <div id="validity" style="width: 100%; text-align: center; padding-top: 8px;">
+                                            <span id="validade" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?>   </span><br/>
+                                            <span id="estoque" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Temos <?php
+            $qtd = '';
+
+            foreach ($filter2 as $filt) {
+                $qtd = $qtd + $filt['offers_metrics']['amount'];
+            }
+            if ($qtd > 0) {
+                echo $qtd;
+            } else {
+                echo '1';
+            }
+            ?> em estoque!   </span>
+                                        </div>
+                                    </div>
+                                    <div style="height:90%; float: left; margin-left: 2%; width: 71%; border: 1px solid #dcdcdc; ">
+                                        <div id="tabela-dominios" class="tabela-dominios" >
+                                             PALETAS DE MÉTRICAS 
+                                             métrica de tamanho  
+            
+            <?php
+            $metricName = '';
+            foreach ($filter as $f) {
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    <div style="height: 100%; float: left;">
+                                                                                                                                                                                                                    <div id="paleta-metrica" class="paleta-metrica" onclick="mostraMetrica('<?php echo $nome[0]; ?>')" style="width: 45px;">
+                                                                                                                                                                                                                    <p class="vertical-text"><?php echo $nome[0]; ?> </p>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    <div id="<?php echo $nome[0]; ?>" class="metricas" style="text-align: center; margin-top: 13%; width: 300px; display: none;">
+                    <?php
+                    foreach ($filter as $m) {
+                        if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                            if ($f['offers_attributes']['name'] != 'Cores') {
+                                ?>
+                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome[0]; ?>">
+                                <?php echo $m['offers_domains']['name']; ?>
+                                                                                                                                                                                                                                </div>
+                            <?php } else {
+                                ?>
+                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores"></div>
+                                <?php
+                            }
+                        }
+                    }
+                    ?>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                    <?php
+                    $metricName = $f['offers_attributes']['name'];
+                }
+            }
+            ?>
+                                             
+            
+            <?php
+            $metricName = '';
+            foreach ($filter2 as $f) {
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome2 = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    <div style="height: 100%; float: left;">
+                                                                                                                                                                                                                    <div id="paleta-metrica" class="paleta-metrica" onclick="mostraMetrica('<?php echo $nome2[0]; ?>')" style="width: 45px;">
+                                                                                                                                                                                                                    <p class="vertical-text"><?php echo $nome2[0]; ?> </p>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    <div id="<?php echo $nome2[0]; ?>" class="metricas" style="margin-top: 13%; width: 300px; display: none;">
+                    <?php
+                    $metrica = '';
+                    foreach ($filter2 as $m) {
+                        if ($nome[0] == 'Tamanho') {
+                            if (!$metrica == $m['offers_domains']['name']) {
+                                if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                    ?>
+                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                    <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores">
+                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                    </div>   
+                                    <?php
+                                    $metrica = $m['offers_domains']['name'];
+                                }
+                            }
+                        } else {
+                            ?>
+                                                                                                                                                                                                                            <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome2[0]; ?>">
+                            <?php echo $m['offers_domains']['name']; ?>
+                                                                                                                                                                                                                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                    <?php
+                    $metricName = $f['offers_attributes']['name'];
+                }
+            }
+            ?>
+            
+                                             
+            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <table style="position: absolute; background: #FFE155; color: #A48700; margin-top: -80px;">
+                                <tr>
+                                    <td class="td-offer-menu" id="produto" onclick="offerMenu(this.id)">
+                                        PRODUTO
+                                    </td>
+                                    <td class="td-offer-menu" style="background: #FFF180;" id="info" onclick="offerMenu(this.id)">
+                                        INFORMAÇÕES
+                                    </td>
+                                    <td  style="background: #FFF180;" class="td-offer-menu" id="espe" onclick="offerMenu(this.id)">
+                                        ESPECIFICAÇÕES
+                                    </td>
+                                    <td  style="background: #FFF180;" class="td-offer-menu" id="opn" onclick="offerMenu(this.id)">
+                                        OPINIÕES
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>-->
+        <?php } else { ?>
+            <!-- Layout vertical-->
+            <!--            <div style="width: 100%; height: 100%;" id="detalhe-vertical">
+                            <div style="line-height: 80px; font-family: Helvetica; text-align: center; width: 100%; height: 13%; background: -webkit-gradient(linear, left top, left bottom, from(#eeeded), to(#e1e1e1)); background: -moz-linear-gradient(top, #eeeded, #e1e1e1); font-size: 18px;"><strong><?php echo $offer['Offer']['title'] ?></strong></div>
+                            <div style="width: 100%; border-bottom: 1px solid #dcdcdc; height: 70%;">
+                                <div id="quadro-foto" style="width: 29%; border-right: 1px solid #dcdcdc; height: 100%; float: left;">
+                                    <img src="../img/icones/lupa.png" class="lupa-vert" />
+                                     <div class="corpo-img-selectores">
+                                         <div id="0" width="100%" height="100%;"  class="seletor-img"></div>
+            <?php foreach ($offer['OffersPhoto'] as $photo) { ?>
+                <?php if ($photo['photo'] != 'UPLOAD_ERROR') { ?>
+                                                                                                                                                                                                                    <div id="<?php echo $photo['id'] ?>" class="seletor-img"> </div>
+                    <?php
+                }
+            }
+            ?>
+                                     </div> 
+            
+                                    <img src="<?php echo $offer['Offer']['photo'] ?>" width="100%" height="100%;" class="offer-imgs" id="img-0"/>
+            
+            <?php foreach ($offer['OffersPhoto'] as $photo) { ?>
+                                                                                                                                                                                                                <img src="<?php echo $photo['photo']; ?>" width="100%" height="100%;" style="display: none;" id="img-<?php echo $photo['id']; ?>" class="offer-imgs"/>
+            <?php } ?>
+            
+                                </div>
+                                <div id="quadro-desc-preco" style="float: left; height: 100%; width: 70.3%; border-bottom: 1px solid #dcdcdc;">
+                                    <div id="quadro-desc" style="float: left; padding-left: 15px; padding-top:10px; padding-right: 10px; border-bottom: 1px solid #dcdcdc; border-right: 1px solid #dcdcdc; width: 50%; height: 53%;">
+                                        <div style="font-family: Helvetica; color: gray; word-break:break-all; white-space: nomal;  width: 100%; text-align: left; font-size: 12px;">
+            <?php echo $offer['Offer']['description'] . '...'; ?>
+                                        </div>
+                                    </div>
+                                    <div id="quadro-preco" style="height: 55.4%; width: 45%; float: left; border-bottom: 1px solid #dcdcdc;">     
+                                        <div style="width:  101%; height: 29%; border-bottom: 1px solid #dcdcdc;">
+                                            <div style=" margin-left: 25%; width: 50%;">
+                                                <div style=" font-family: Helvetica; text-align: left; padding-top: 4%; padding-left: 7%; font-size: 12px; color: #666666;"><strike>de R$<?php echo str_replace('.', ',', $offer['Offer']['value']); ?></strike></div><br/>
+                                                <div style="font-family: Helvetica; text-align: left;  padding-right: 4%; font-size: 12px; color: #000000;"><span>Por </span><span style="font-size: 20px; text-decoration: none;">R$<?php
+            //Calculando Valor Desconto
+            $val = $offer['Offer']['value'];
+            $desc = $offer['Offer']['percentage_discount'];
+            $desc = $desc / 100;
+            $valDesc = $desc * $val;
+            $val = $val - $valDesc;
+            echo number_format($val, 2, ',', '.');
+            ?>
+                                                    </span></div>
+                                            </div>
+                                        </div>
+                                        <div style="padding-top: 10px; padding-bottom: -30px; font-family: Helvetica; width: 101%; height: 15%; border-bottom: 1px solid #dcdcdc; font-size: 12px; text-align: center;">
+                                            em até <b style="font-size: 14px;">12x</b> <br/>de <b style="font-size: 14px;">
+                                                 valor parcelas 
+            <?php
+            $valParcel = $offer['Offer']['value'] / 12;
+            echo 'R$' . number_format($valParcel, 2, ',', '.');
+            ?></b>
+                                        </div>
+                                        <div style="width: 101%; height: 29%; border-bottom: 1px solid #dcdcdc;">
+            <?php if (empty($this->Session->read('userData'))) { ?>
+                                                                                                                                                                                                                <a href="#" onclick="login()">
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/bt_detalhe_comprar.png" style="width: 100%; height: 100%; cursor: pointer;">
+                                                                                                                                                                                                                </a>
+            <?php } else { ?>
+                <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'), 'onsubmit' => "validaForm(this); return false;")); ?>
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                <input type="hidden" id="metricaY_chave" name="data[metricaY_chave]" value="<?php echo strtolower($filter[0]['offers_attributes']['name']); ?>" />
+                                                                                                                                                                                                                <input type="hidden" id="metricaY" name="data[metricaY]"/>
+                                                                                                                                                                                                                <input type="hidden" id="metricaX_chave" name="data[metricaX_chave]" value="<?php echo strtolower($filter2[0]['offers_attributes']['name']); ?>"/>
+                                                                                                                                                                                                                <input type="hidden" id="metricaX" name="data[metricaX]"/>
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                <button type="submit" style="padding: 0; border: 0px solid; width: 100%; height: 100%; background: transparent;" >
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/bt_detalhe_comprar.png" style="width: 100%; height: 100%;">
+                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                
+                <?php echo $this->Form->end(); ?>
+            <?php } ?>
+            
+            
+                                        </div>
+                                        <div style="width: 101%; height: 10%; padding-left: 10px; padding-top: 10px;">
+                                            <div style="margin-top: 4px;">
+                                                 Comentario sobre a lógica na Controller
+            <?php for ($i = 0; $i < $nota[0]; $i++) { ?>
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/star_complete.png" title="<?php echo count($offer['OffersComment']); ?> pessoas votaram nessa oferta" style="float: left; margin-left: 5px;" >
+            <?php } $resto = 5 - $nota[0]; ?>
+            
+            <?php
+            if ($nota[1]) {
+                if ($nota[1] <= 5) {
+                    ?>
+                                                                                                                                                                                                                    <img src="../img/icones/users-vitrine/star_half.png" style="float: left; margin-left: 5px;" >
+                <?php } else {
+                    ?>
+                                                                                                                                                                                                                    <img src="../img/icones/users-vitrine/star_complete.png" style="float: left; margin-left: 5px;" >
+                    <?php
+                }
+                $resto = $resto - 1;
+            }
+            ?>
+            
+            
+            <?php
+            for ($j = 0; $j < $resto; $j++) {
+                ?>
+                                                                                                                                                                                                                <img src="../img/icones/users-vitrine/star_empty.png" title="Compre e seja o primeiro a votar" style="float: left; margin-left: 5px;" >
+            <?php } ?>  
+            
+                                                <span style="float: left; font-family: Helvetica; margin-left: 5px; font-size: 13px; color: #FFD700;">+<?php echo count($offer['OffersComment']); ?></span>
+                                            </div>
+                                        </div>
+                                    </div><br/>
+            
+                                     TABELA DOMINIOS 
+                                    <div style="float: left; width: 100%; height: 44%;">
+                                        <div id="tabela-dominios" class="tabela-dominios" >
+                                             PALETAS DE MÉTRICAS 
+                                             métrica de tamanho  
+            
+            <?php
+            $metricName = '';
+            foreach ($filter as $f) {
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    <div style="height: 100%; float: left;">
+                                                                                                                                                                                                                    <div id="paleta-metrica" class="paleta-metrica" onclick="mostraMetrica('<?php echo $nome[0]; ?>')" style="height: 100px; line-height: 0px; padding-top: 80px;width: 45px;">
+                                                                                                                                                                                                                    <p class="vertical-text"><?php echo $nome[0]; ?> </p>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    <div id="<?php echo $nome[0]; ?>" class="metricas" style="text-align: center; margin-top: 13%; width: 300px; display: none;">
+                    <?php
+                    foreach ($filter as $m) {
+                        if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                            ?>
+                                                                                                                                                                                                                            
+                                                                                                                                                                                                                            <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome[0]; ?>">
+                            <?php echo $m['offers_domains']['name']; ?>
+                                                                                                                                                                                                                            </div>
+                            <?php
+                        }
+                    }
+                    ?>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                    <?php
+                    $metricName = $f['offers_attributes']['name'];
+                }
+            }
+            ?>
+            
+            
+                                             SEGUNDO 
+                                            <div style="height: 100%; float: left;">
+            <?php $nome2 = explode(" ", $filter2[0]['offers_attributes']['name']); ?>
+                                                <div id="paleta-metrica" class="paleta-metrica" onclick="mostraMetrica('<?php echo $nome2[0]; ?>')" style="width: 45px; height: 100px; line-height: 0px; padding-top: 80px;">
+                                                    <p class="vertical-text"><?php echo $nome2[0]; ?> </p>
+                                                </div>
+                                                <div id="<?php echo $nome2[0]; ?>" class="metricas" style="margin-top: 13%; width: 300px; display: none;">
+            
+            <?php
+            $name = '';
+            foreach ($filter2 as $m) {
+                if ($name != $m['offers_domains']['name']) {
+                    ?>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores">
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    </div>   
+                    <?php
+                    $name = $m['offers_domains']['name'];
+                }
+            }
+            ?>
+                                                </div>
+            
+                                            </div>
+            
+                                             
+            
+            <?php
+            $metricName = '';
+            foreach ($filter2 as $f) {
+                echo $f['offers_domains']['name'];
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome2 = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    <div style="height: 100%; float: left;">
+                                                                                                                                                                                                                    <div id="paleta-metrica" class="paleta-metrica" onclick="mostraMetrica('<?php echo $nome2[0]; ?>')" style="width: 45px; height: 100px; line-height: 0px; padding-top: 80px;">
+                                                                                                                                                                                                                    <p class="vertical-text"><?php echo $nome2[0]; ?> </p>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    <div id="<?php echo $nome2[0]; ?>" class="metricas" style="margin-top: 13%; width: 300px; display: none;">
+                                                                                                                                                                                                                    
+                    <?php
+                    $metrica = '';
+                    foreach ($filter2 as $m) {
+                        if (!$metrica == $m['offers_domains']['name']) {
+                            if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                ?>
+                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores">
+                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                </div>   
+                                <?php
+                                $metrica = $m['offers_domains']['name'];
+                            }
+                        }
+                    }
+                    ?>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                    
+                    <?php
+                    $metricName = $f['offers_attributes']['name'];
+                }
+            }
+            ?>
+            
+                                             
+            
+                                        </div>
+                                    </div>
+                                </div> 
+            
+                            </div>
+            
+                            <div id="bottom-infos" style="width: 100%; height: 16%;">
+                                <div style="width: 29%; height: 100%; float: left; text-align: center;">
+                                    <div style="margin-top: 18px;">
+                                        <span id="validade" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at'])); ?>   </span>
+                                        <br/>  <span id="estoque" style="font-size: 10px; font-family: Helvetica; color: #666666;"> Temos
+            <?php
+            $qtd = '';
+            foreach ($filter2 as $filt) {
+                $qtd = $qtd + $filt['offers_metrics']['amount'];
+            }
+            if ($qtd > 0) {
+                echo $qtd;
+            } else {
+                echo '1';
+            }
+            ?>
+                                            em estoque!   </span>
+                                    </div>
+                                </div>
+                                <div style="width: 20%; height: 100%; float: left;">
+                                    <a onclick="mostraPopEmail()">
+                                        <img src="../img/icones/users-vitrine/bt_enviaramigo.png" style="width: 100%; margin-top: 5px; cursor: pointer;">
+                                    </a>
+                                    <a onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo $url; ?>?title=facebook', 'ventanacompartir', 'toolbar=0, status=0, width=650, height=450');">
+                                        <img src="../img/icones/users-vitrine/bt_compartilhar.png" style="width: 100%; margin-top: 5px; cursor: pointer;">
+                                    </a>
+                                </div>
+                                <div style="float: right; width: 23%; height: 84%; margin-right: 10px; margin-top: 10px;">
+                                    <img src="<?php echo $offer['Company']['logo']; ?>" style="border:1px solid #dcdcdc; width: 100%; height: 100%;"/>
+                                </div>
+                            </div>
+            
+                            <table style="background: #FFE155; color: #A48700;">
+                                <tr>
+                                    <td class="td-offer-menu" id="produto" onclick="offerMenu(this.id)">
+                                        PRODUTO
+                                    </td>
+                                    <td class="td-offer-menu" style="background: #FFF180;" id="info" onclick="offerMenu(this.id)">
+                                        INFORMAÇÕES
+                                    </td>
+                                    <td  style="background: #FFF180;" class="td-offer-menu" id="espe" onclick="offerMenu(this.id)">
+                                        ESPECIFICAÇÕES
+                                    </td>
+                                    <td  style="background: #FFF180;" class="td-offer-menu" id="opn" onclick="offerMenu(this.id)">
+                                        OPINIÕES
+                                    </td>
+                                </tr>
+                            </table>
+            
+            
+                        </div>-->
+
+        <?php } ?>
+
+
+        <!-- L A Y O U T - A D V E N T A -->
+
+        <div id="adv-offer-photo">
+            <!-- seta esquerda -->
+            <div style="float: left; text-align: left;" class="corpo-seta">
+                <img src="../img/adv/Detalhes do Produto/seta-left.png" width="20px" style="position: absolute; top: 50%; cursor: pointer; margin-left: -5px;" id="less-photo"/>
+            </div>
+            <!-- seta direita -->
+            <div style="float: right;" class="corpo-seta">
+                <img src="../img/adv/Detalhes do Produto/seta-right.png" width="20px" style="position: absolute; top: 50%; cursor: pointer;" id="plus-photo"/>
+            </div>
+
+            <img src="<?php echo $offer['Offer']['photo'] ?>"  height="100%" id="foto1" class="offers-photos"/>
+
+            <?php
+            $i = 2;
+            foreach ($offer['OffersPhoto'] as $photo) {
+                if ($photo['photo'] != "UPLOAD_ERROR") {
+                    ?>
+
+                    <img src="<?php echo $photo['photo']; ?>" id="foto<?php echo $i; ?>" height="100%" style="display: none;" class="offers-photos"/>
+                    <?php
+                    $i++;
+                }
+            }
+            ?>
+
+
+            <img src="../img/icones/lupa.png" class="lupa" style="right: 1%; top: 1.5%; width: 25px; height: 25px;"/>
+            <div style="margin-top: -20px; z-index: 9999;">
+
+                <img src="../img/adv/Detalhes do Produto/select_all.png" width="10px" id="seletor1" class="photo-selector" onclick="changePhoto(1)"/>
+
+                <?php
+                $f = 2;
+                foreach ($offer['OffersPhoto'] as $photo) {
+                    if ($photo['photo'] != "UPLOAD_ERROR") {
+                        ?>
+                        <img src="../img/adv/Detalhes do Produto/select_empty.png" width="10px" id="seletor<?php echo $f; ?>" class="photo-selector" onclick="changePhoto(<?php echo $f; ?>)"/>
+                        <?php
+                        $f++;
+                    }
+                }
+                ?>
+            </div>
+        </div>
+
+        <div style="width: 57%;
+             position: fixed;
+             padding: 30px;
+             top: 61%;
+             color: #808080;
+             font-size: 16px;
+             font-family: Helvetica;
+             left: 4%; 
+             background: #fff; 
+             white-space: normal;
+             height: 220px;
+             overflow: auto;
+             ">
+
+            <span id="adv-offer-resume" class="adv-value-inf" style="display: none;">
+
+                <?php
+                if (!empty($offer['Offer']['resume'])) {
+                    echo "<span style=\"color: #808080;\">" . str_replace('&nbsp;', " ", $offer['Offer']['resume']) . "</span>";
+                } else {
+                    echo "Não há descrição sobre este produto.";
+                }
+                ?>
+
+            </span>
+
+            <span id="adv-offer-infos" class="adv-value-inf" style="display: block;">
+                <?php echo $offer['Offer']['description']; ?>
+            </span>
+
+            <span id="adv-offer-specification" class="adv-value-inf">
+                <?php echo $offer['Offer']['specification']; ?>
+            </span>
+
+            <span id="adv-offer-comments" class="adv-value-inf">
+                <?php
+                if (!empty($offer['OffersComment'])) {
+                    foreach ($offer['OffersComment'] as $comment) {
+                        ?>
+                        <div style="width: 100%; font-size: 14px;">
+                            <div>
+                                <div style="float: left;"><strong><?php echo $comment['title']; ?></strong><br/></div>
+                                <div style="float: left; margin-left: 5px;">
+                                    <?php
+                                    $notaC = $comment['evaluation'];
+                                    for ($m = 0; $m < $notaC; $m++) {
+                                        ?>
+                                        <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-2.png" height="30px" style="margin-left: -3px; margin-top:-6px;"/>
+                                        <?php
+                                    }
+                                    $resto = $comment['evaluation'] - 5;
+                                    for ($n = 0; $n < $resto; $n++) {
+                                        ?>
+                                        <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="30px"/>
+                                    <?php } ?>
+                                </div>
+                                <?php ?>
+                                <br/>
+                            </div>
+                            <br/>
+                            "<span style="font-family: Helvetica; color: gray;"><?php echo $comment['description']; ?></span>"<br/>
+                            Por: <?php echo $comment['nome']; ?> em <?php echo date('d/m/Y', strtotime($comment['date_register'])); ?>
+                        </div>
+                        <div style="height: 0.6px; width: 100%; background: #ccc; opacity: 0.5; margin-top: 10px;">
+
+                        </div>
+                        <br/>
+                        <?php
+                    }
+                } else {
+                    echo "Não há opiniões sobre este produto.";
+                }
+                ?>
+            </span>
+        </div>
+
+        <div id="adv-offer-detail-right">
+            <div id="adv-offer-title">
+                <?php echo $offer['Offer']['title'] ?>
+            </div>
+
+            <div id="adv-offer-desc" style="display: none;">
+                <?php echo $offer['Offer']['resume'] ?>
+            </div>
+
+            <div id="adv-precos">
+                <div>
+                    <strike> De R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></strike>
+                </div>
+                <div id="adv-precos-por">
+                    Por R$<?php
+                    $val = $offer['Offer']['value'];
+                    $desc = $offer['Offer']['percentage_discount'];
+                    $desc = $desc / 100;
+                    $valDesc = $desc * $val;
+                    $val = $val - $valDesc;
+                    echo number_format($val, 2, ',', '.');
+                    ?>
+                </div>
+                <div>
+                    12x de <?php
+                    $valParcel = $offer['Offer']['value'] / 12;
+                    echo 'R$' . number_format($valParcel, 2, ',', '.');
+                    ?>
+                </div>
+
+            </div>
+
+            <!-- CARTOES -->
+            <div id="adv-cards">
+                <img src="../img/adv/Detalhes do Produto/cartoes.png" height="45px" alt="Cartões disponiveis para pagamento" title="Cartões disponiveis para pagamento"/>
+            </div>
+
+            <!-- ESTRELAS -->
+            <div id="adv-stars">
+
+                <?php for ($i = 0; $i < $nota[0]; $i++) { ?>
+                    <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-2.png" height="100%" style="margin-right: -8px;"/>
+                <?php } $resto = 5 - $nota[0]; ?>
+
+                <?php
+                if ($nota[1]) {
+                    if ($nota[1] <= 5) {
+                        ?>
+                        <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%" style="margin-right: -8px;"/>
+                    <?php } else {
+                        ?>
+                        <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-2.png" height="100%" style="margin-right: -8px;"/>
+                        <?php
+                    }
+                    $resto = $resto - 1;
+                }
+                ?>
+
+
+                <?php
+                for ($j = 0; $j < $resto; $j++) {
+                    ?>
+                    <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>
+                <?php } ?>
+
+                <!--                
+                                <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>
+                                <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>
+                                <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>
+                                <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>
+                                <img src="../img/adv/Classificacao da Oferta/Adventa Icones-Classificacao-1.png" height="100%"/>-->
+            </div>
+            <div style='color: #dcdcdc; height: 50px; line-height: 73px; font-family: helveticaneue; font-size: 12px;'>
+                <?php echo "+" . count($offer['OffersComment']); ?>
+            </div>
+
+            <div id="adv-campos-metricas">
+                <!--
+                <?php
+                if (!empty($filter)) {
+
+                    $pos1 = strstr($filter[0]['offers_attributes']['name'], 'Tamanho');
+                    if (!empty($pos1)) {
+                        ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div id="adv-first-metric" style="cursor: pointer; margin-left: 10px; border: 1px solid #fff; width: 40px; height: 40px; line-height: 40px; font-family: Helvetica; float: left; color: #fff;">
+                        <?php echo $filter[0]['offers_domains']['name']; ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                    <?php } else { ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div id="adv-second-metric" style="cursor: pointer; margin-left: 10px; border: 1px solid red; background: red; width: 40px; height: 40px; line-height: 40px; color: #fff; font-family: Helvetica; float: left;">
+                        <?php echo $filter[0]['offers_attributes']['name']; ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                        <?php
+                    }
+                }
+                ?>
+
+                <?php
+                if (!empty($filter2)) {
+
+                    $pos1 = strstr($filter2[0]['offers_attributes']['name'], 'Tamanho');
+                    if (!empty($pos1)) {
+                        ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div id="adv-first-metric" style="cursor: pointer; margin-left: 10px; border: 1px solid #fff; width: 40px; height: 40px; line-height: 40px; font-family: Helvetica; float: left; color: #fff; ">
+                        <?php echo $filter2[0]['offers_domains']['name']; ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                    <?php } else { ?>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div id="adv-second-metric" style="cursor: pointer; margin-left: 10px; border: 1px solid <?php echo $filter2[0]['offers_domains']['name']; ?>; background: <?php echo $filter2[0]['offers_domains']['name']; ?>; width: 40px; height: 40px; line-height: 40px; color: #fff; font-family: Helvetica; float: left;">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
+                        <?php
+                    }
+                }
+                ?>
+                -->
+
+
+
+                <?php
+                $metricName = '';
+                foreach ($filter as $f) {
+                    if ($metricName != $f['offers_attributes']['name']) {
+                        $nome = explode(" ", $f['offers_attributes']['name']);
+                        ?>
+
+                        <div style="width: 100%; margin-top: 3px;">
+                            <?php
+                            foreach ($filter as $m) {
+                                if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                    if ($f['offers_attributes']['name'] != 'Cores') {
+                                        ?>
+
+                                        <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome[0]; ?>" style="cursor: pointer; margin-right: 10px; border: 1px solid #fff; width: 25px; height: 25px; line-height: 25px; font-family: Helvetica; float: left; color: #fff; ">
+                                            <?php echo $m['offers_domains']['name']; ?>
+                                        </div>
+                                    <?php } else {
+                                        ?>
+
+                                        <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores"></div>
+                                        <?php
+                                    }
+                                }
+                            }
+                            ?>
+                        </div>
+                        <?php
+                        $metricName = $f['offers_attributes']['name'];
+                    }
+                }
+                ?>
+
+                <br /><br/>
+                <?php
+                $metricName = '';
+                foreach ($filter2 as $f) {
+                    if ($metricName != $f['offers_attributes']['name']) {
+                        $nome2 = explode(" ", $f['offers_attributes']['name']);
+                        ?>
+
+                        <div style="width: 100%; margin-top: 3px;">
+                            <?php
+                            $metrica = '';
+                            foreach ($filter2 as $m) {
+                                if ($nome[0] == 'Tamanho') {
+                                    if (!$metrica == $m['offers_domains']['name']) {
+                                        if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                            ?>
+
+                                            <div id="<?php echo $m['offers_domains']['name']; ?>" style=" width: 35px; height: 35px; margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores">
+
+                                            </div>   
+                                            <?php
+                                            $metrica = $m['offers_domains']['name'];
+                                        }
+                                    }
+                                } else {
+                                    ?>
+                                    <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome2[0]; ?>" style="cursor: pointer; margin-right: 10px; border: 1px solid #fff; width: 25px; height: 25px; line-height: 25px; font-family: Helvetica; float: left; color: #fff; ">
+                                        <?php echo $m['offers_domains']['name']; ?>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </div>
+
+                        <?php
+                        $metricName = $f['offers_attributes']['name'];
+                    }
+                }
+                ?>
+            </div>
+            <br/>
+            <!-- LOGO EMPRESA -->
+            <div id="adv-campo-comp-photo">
+                <form name="companiesProfile" id="companiesProfile" action="companiesProfile" method="post">
+                    <input type="text" name="compId" value="<?php echo $offer['Company']['id']; ?>" style="display: none;"/>                              
+                </form>
+                <img src="<?php echo $offer['Company']['logo']; ?>"  id="adv-comp-photo"/>
+            </div>
+
+
+            <br/>
+            <!-- TENDENCIA E EXCLUSIVIDADE -->
+            <div>
+                <!-- TENDENCIA -->
+                <div style="margin-left: 30px;">
+                    <div style="color: #fff; font-size: 11px; font-family: MyriadProLight;">TENDÊNCIA</div>
+                    <div style="width: 300px;"><img src="../img/adv/Detalhes do Produto/tendencia-01.png" height="6" width="300" style="margin-top: 2px;"/>
+                        <br/>
+                        <div style="margin-top: 3px; color: #fff; font-size: 11px; font-family: MyriadProLight; float: right;">HOT!</div>
+                    </div>
+                </div>
+                <br/>
+                <!-- EXCLUSIVIDADE -->
+                <div style="margin-left: 30px;">
+                    <div style="color: #fff; font-size: 11px; font-family: MyriadProLight;">EXCLUSIVIDADE</div>
+                    <div style="width: 300px;"><img src="../img/adv/Detalhes do Produto/tendencia-01.png" height="6" width="300" style="margin-top: 2px;"/>
+                        <br/>
+                        <div style="margin-top: 3px; color: #fff; font-size: 11px; font-family: MyriadProLight; float: right;">SUPER EXCLUSIVO</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RANKING -->
+            <div>
+                <table id='ranking' style="padding: -20px; margin-left: 10px; width: 60%; height: 70px;">
+                    <tr>
+                        <td style="">
+                            <img src="../img/adv/Detalhes do Produto/Icones - Categorias-exclusive.png" width="60"/> 
+                            <div id='ranking-text'>000</div>
+                        </td>
+                        <td style="">
+                            <img src="../img/adv/Detalhes do Produto/Icones - Categorias-vip.png" width="60"/> 
+                            <div id='ranking-text'>000</div>
+                        </td>
+                        <td style="">
+                            <img src="../img/adv/Detalhes do Produto/Icones - Categorias-top.png" width="60"/> 
+                            <div id='ranking-text'>000</div>
+                        </td>
+                        <td style="padding-left: 150px;">
+                            <img src="../img/adv/Detalhes do Produto/secure-icon.png" width="50"/> 
+                        </td>
+                    </tr>                  
+                </table>
+            </div>
+
+            <?php
+            $isLogged = $this->Session->read('userData.User');
+            if (!empty($isLogged)) {
+                ?>
+                <div style="width: 35%; height: 50px; background: #f37165; bottom: 0; position: fixed; color: #fff; font-family: Helvetica; cursor: pointer;">
+                    <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', $offer['Offer']['id'], 'continuar-compra'), 'onsubmit' => "validaForm(this); return false;")); ?>
+
+                    <input type="hidden" id="metricaY_chave" name="data[metricaY_chave]" value="<?php echo strtolower($filter[0]['offers_attributes']['name']); ?>" />
+                    <input type="hidden" id="metricaY" name="data[metricaY]"/>
+                    <input type="hidden" id="metricaX_chave" name="data[metricaX_chave]" value="<?php echo strtolower($filter2[0]['offers_attributes']['name']); ?>"/>
+                    <input type="hidden" id="metricaX" name="data[metricaX]"/>
+
+                    <a href="http://localhost/work/x_portal_teste/user/assinaturas/assina?id=<?php
+                    echo $company['Company']['id'];
+                    $_SESSION['userIsLogged'] = false;
+                    ?>">
+                        <button type="submit" style="padding: 0; border: 0px solid; width: 100%; height: 100%; background: transparent; color: #fff; font-size: 16px;  line-height: 50px;" >
+                            COMPRAR
+                        </button>
+                    </a>
+
+                    <?php echo $this->Form->end(); ?>
+                </div>
+            <?php } else { ?>
+
+                <div style="width: 35%; height: 50px; background: #f37165; bottom: 0; position: fixed; color: #fff; font-family: Helvetica; cursor: pointer;">
+
+                    <button id="login-buy" type="submit" style="padding: 0; border: 0px solid; width: 100%; height: 100%; background: transparent; color: #fff; font-size: 16px;  line-height: 50px;" >
+                        COMPRAR
+                    </button>
+
+                </div>
+            <?php } ?>
+        </div>
+
+        <div id="adv-offer-footer-menu">
+            <table style="width: 70%; margin-top: -2px; height: 100%;">
+                <tr>
+                    <td  id="adv-produto"  style=" width: 10px;" class='footer-menu-td'>
+                        <img src="../img/adv/Detalhes do Produto/Adventa Icones_barra inferior-01.png" height="50%" class='footer-menu-img'/>
+                    </td>
+                    <td  id="adv-info"  style="width: 10px; background: #fff;" class='footer-menu-td'>
+                        <img src="../img/adv/Detalhes do Produto/Adventa Icones_barra inferior-02.png" height="50%" class='footer-menu-img'/>
+                    </td>
+                    <td   id="adv-espe"  style="width: 10px;" class='footer-menu-td'>
+                        <img src="../img/adv/Detalhes do Produto/Adventa Icones_barra inferior-03.png" height="50%" class='footer-menu-img'/>
+                    </td>
+                    <td    id="adv-opn"  style="width: 10px;" class='footer-menu-td'>
+                        <img src="../img/adv/Detalhes do Produto/Adventa Icones_barra inferior-04.png" height="50%" class='footer-menu-img'/>
+                    </td>
+                    <td id="adv-share"  style="width: 10px;" class='footer-menu-td'>
+                        <img src="../img/adv/Detalhes do Produto/Adventa Icones_barra inferior-05.png" height="50%" class='footer-menu-img'/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br/>   
+
+<!-- window.open('http://www.facebook.com/sharer.php?u=<?php echo $url; ?>?title=facebo
+                                    ok', 'ventanacompartir', 'toolbar = 0, status = 0, width = 650, height = 450'); -->
+
+</div>
+
+<!-- popup para exibir 'PRODUTO'-->
+<div id="cont-prod"  style="
+     position: fixed;
+     left: 11%;
+     top: 57.7%;
+     margin-left: -140px;
+     margin-top: 25px;
+     padding: 30px;
+     background: #ffffff;
+     width: 56.7%;
+     height: 200px;
+     z-index: 999999;
+     font-family: Helvetica;
+     color: #808080;
+     font-size: 16px;
+     display: none;
+     ">
+
+    <div id="popheader">
+
+    </div>
+
+    <div id="popbody">
+        <?php
+        echo $offer['Offer']['resume'];
+        ?>
+    </div>
+
+</div>
+
+<!-- popup para exibir 'COMENTARIOS' -->
+<div id="cont-opn" style=" position: absolute;
+     left: 13.8%;
+     top: 58.1%;
+     margin-left: -140px;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     width: 59.3%;
+     height: 240px;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.95;
+     display: none;
+     ">
+    <div id="popheader">
+
+    </div>
+
+    <div id="popbody">
+
+        <?php
+        if (!empty($offer['OffersComment'])) {
+            foreach ($offer['OffersComment'] as $comment) {
+                ?>
+                <div style="width: 100%; font-size: 14px;">
+                    <div>
+                        <div style="float: left;"><strong><?php echo $comment['title']; ?></strong><br/></div>
+                        <div style="float: left; margin-left: 5px;">
+                            <?php
+                            $notaC = $comment['evaluation'];
+                            for ($m = 0; $m < $notaC; $m++) {
+                                ?>
+                                <img src="../img/icones/users-vitrine/star_complete.png" title="<?php echo count($offer['OffersComment']); ?> pessoas votaram nessa oferta" style="float: left; margin-top: -5px; margin-right: 2px;" >
+                                <?php
+                            }
+                            $resto = $comment['evaluation'] - 5;
+                            for ($n = 0; $n < $resto; $n++) {
+                                ?>
+                                <img src="../img/icones/users-vitrine/star_empty.png" title="<?php echo count($offer['OffersComment']); ?> pessoas votaram nessa oferta" style="float: left; margin-top: -5px; margin-right: 2px;" >
+                            <?php } ?>
+                        </div>
+
+                    </div>
+                    <br/>
+                    "<span style="font-family: Helvetica; color: gray;"><?php echo $comment['description']; ?></span>"<br/>
+                    Por: <?php echo $comment['nome']; ?> em <?php echo date('d/m/Y', strtotime($comment['date_register'])); ?>
+                </div>
+                <br/>
+                <?php
+            }
+        } else {
+            echo "Não há opiniões sobre este produto.";
+        }
+        ?>
+    </div>
+</div>
+
+<!-- popup para exibir 'ESPECIFICACAO' -->
+<div id="cont-espe" style=" position: absolute;
+     left: 13.8%;
+     top: 58.1%;
+     margin-left: -140px;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     width: 59.3%;
+     height: 240px;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.95;
+     display: none;
+     ">
+    <div id="popheader">
+        <div style="white-space: normal; width: 100%; height: 86%; overflow: auto;">
+            <?php
+            if (!empty($offer['Offer']['specification'])) {
+                echo str_replace('&nbsp;', " ", $offer['Offer']['specification']);
+            } else {
+                echo "Não há especificações sobre este produto.";
+            }
+            ?>
+        </div>
+    </div>
+    <br/>
+    <div id="popbody">
+    </div>
+</div>
+
+<!-- popup para exibir 'INFOS' -->
+<div id="cont-info" style=" position: absolute;
+     left: 13.8%;
+     top: 58.1%;
+     margin-left: -140px;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     width: 59.3%;
+     height: 240px;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.95;
+     display: none;
+     ">
+    <div id="popheader">
+        <div style="white-space: normal; width: 100%; height: 86%; overflow: auto;">
+            <?php
+            if (!empty($offer['Offer']['description'])) {
+                echo str_replace('&nbsp;', " ", $offer['Offer']['description']);
+            } else {
+                echo "Não há informações sobre este produto.";
+            }
+            ?>
+        </div>
+    </div>
+    <br/>
+    <div id="popbody">
+    </div>
+</div>
+
+<!-- receberá o layout do login -->
+<div id="pop-login" style=" position: absolute;
+     left: 48%;
+     top: 20%;
+     margin-left: -140px;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.98;
+     display: none;">
+    <div id="popheader">
+    </div>
+    <br/>
+    <div id="pop-login-body">
+
+    </div>
+</div>
+
+<!-- pop up que mostra notificação caso 
+usuario não tenha selecionado metrica -->
+<div id="cont-notification" style=" position: absolute;
+     left: 45%;
+     top: 44%;
+     padding: 10px;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.99;
+     padding: 10px;
+     text-align: center;
+     display: none;
+     ">
+    <div id="popheader" style="text-align: right;">
+<!--        <span style="font-size: 16px; color: orange; cursor: pointer;"><strong>X</strong></span>-->
+    </div>
+
+    <div id="popbody">
+        <div style="float: left;background: #3399cc; color: #fff; padding: 5px; max-width: 240px;">
+            Antes de continuar selecione <strong><?php echo $filter[0]['offers_attributes']['name']; ?></strong> <?php
+            if ($filter2[0]['offers_attributes']['name']) {
+                echo "e <strong>" . $filter2[0]['offers_attributes']['name'] . "</strong>";
+            }
+            ?> <br/>
+            <span style="color: #666666; font-size: 12px;"></span>
+        </div>
+        <img src="../img/adv/Detalhes do Produto/notitication_triangulo.png" width="15px" style="margin-top: 10px;" />
+
+    </div>
+</div>
+<!-- -->
+<div id="img-seta" style="position: absolute; left: 26%; top: 38%; display: none;">
+    <img src='../img/icones/setaoffers.png' />
+</div>
+
+<div id="cont-metricas-adv" style=" position: absolute;
+     left: 28%;
+     height: 75%;
+     top: 10%;
+     width: 40%;
+     margin-top: 25px;
+
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     z-index: 999999;
+     font-family: Helvetica;
+     opacity: 0.99;
+     display: none;
+     text-align: center;
+     ">
+    <div id="popheader" style="text-align: right;">
+<!--        <span style="font-size: 16px; color: orange; cursor: pointer;"><strong>X</strong></span>-->
+    </div>
+
+    <div id="popbody">
+        <div id="tabela-dominios" class="tabela-dominios" >
+            <!-- PALETAS DE MÉTRICAS -->
+            <!-- métrica de tamanho --> 
+
+            <?php
+            $metricName = '';
+            foreach ($filter as $f) {
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+
+                    <div style="background: #ccc; color: #fff; width: 96.5%; padding: 10px;">
+                        <?php echo $nome[0]; ?>
+                    </div>
+                    <div style="text-align: left; padding-left: 20px; opacity: 0.4;  ">
+                        <img src="../img/adv/triangulo.png" width="25px" height="25px" />
+                    </div>
+
+                    <div style="width: 100%; height: 220px;; margin-top: 3px;">
+                        <?php
+                        foreach ($filter as $m) {
+                            if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                if ($f['offers_attributes']['name'] != 'Cores') {
+                                    ?>
+
+                                    <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome[0]; ?>" style="width: 40px; height: 40px; line-height: 40px;">
+                                        <?php echo $m['offers_domains']['name']; ?>
+                                    </div>
+                                <?php } else {
+                                    ?>
+
+                                    <div id="<?php echo $m['offers_domains']['name']; ?>" style="margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>; width: 25px; height: 25px;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores"></div>
+                                    <?php
+                                }
+                            }
+                        }
+                        ?>
+                    </div>
+                    <?php
+                    $metricName = $f['offers_attributes']['name'];
+                }
+            }
+            ?>
+
+
+            <?php
+            $metricName = '';
+            foreach ($filter2 as $f) {
+                if ($metricName != $f['offers_attributes']['name']) {
+                    $nome2 = explode(" ", $f['offers_attributes']['name']);
+                    ?>
+
+                    <div style="background: #ccc; color: #fff; width: 96.5%; padding: 10px;">
+                        <?php echo $nome2[0]; ?>
+                    </div>
+                    <div style="text-align: left; padding-left: 20px; opacity: 0.4;  ">
+                        <img src="../img/adv/triangulo.png" width="25px" height="25px" />
+                    </div>
+                    <div style="width: 100%; height: 220px;; margin-top: 3px;">
+                        <?php
+                        $metrica = '';
+                        foreach ($filter2 as $m) {
+                            if ($nome[0] == 'Tamanho') {
+                                if (!$metrica == $m['offers_domains']['name']) {
+                                    if ($m['offers_attributes']['id'] == $f['offers_attributes']['id']) {
+                                        ?>
+
+                                        <div id="<?php echo $m['offers_domains']['name']; ?>" style=" width: 40px; height: 40px; margin-left: 5px; float: left; background:  <?php echo $m['offers_domains']['name']; ?>;" onclick="escolheCor('<?php echo $m['offers_domains']['name']; ?>')" class="cores">
+
+                                        </div>   
+                                        <?php
+                                        $metrica = $m['offers_domains']['name'];
+                                    }
+                                }
+                            } else {
+                                ?>
+                                <div onclick="escolheTamanho('<?php echo $m['offers_domains']['name']; ?>')" id="<?php echo $m['offers_domains']['name']; ?>" class="div-metrica-<?php echo $nome2[0]; ?>">
+                                    <?php echo $m['offers_domains']['name']; ?>
+                                </div>
+                                <?php
+                            }
+                        }
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+
+            <?php
+            $metricName = $f['offers_attributes']['name'];
+        }
+    }
+    ?>
+
+    <!-- -->
+    <div id="adv-metrics-confirm">
+        Confirmar
+    </div>
+</div>
+</div>
+</div>
+<!-- -->
+<div id="img-seta" style="position: absolute; left: 26%; top: 38%; display: none;">
+    <img src='../img/icones/setaoffers.png' />
+</div>
+
+<!-- social box -->
+<div id="social-box" style="z-index: 999999; position: absolute; bottom: 48px; left: 41%; background: #fff; border: 1px solid #dcdcdc; border-bottom: 0px; width: 50px; height: 180px; display: none;">
+    <table style="width: 100%;">
+        <tr>
+            <td style="padding: 5px;">
+                <a href="http://www.facebook.com/sharer/sharer.php?u=<?php echo $url; ?>&t=Description" target="_blank" >
+                    <img src="../img/adv/Social/facebookicon3.png" width="100%" alt="Facebook" title="Facebook" class="social-icon" id="shareFbk"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;">
+                <a href="http://twitter.com/share?text=Description <?php echo $url; ?>" target="_blank">
+                    <img src="../img/adv/Social/twitterlogo3.png" width="100%" alt="Twitter" title="Twitter" class="social-icon" id="shareTwitter"/>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 5px;">
+                <a href="https://plus.google.com/share?&hl=en&url=<?php echo $url; ?>" target="_blank">
+                    <img src="../img/adv/Social/googleplus3.png" width="100%" alt="Google+" title="Google+" class="social-icon" id="shareGoogle"/>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>

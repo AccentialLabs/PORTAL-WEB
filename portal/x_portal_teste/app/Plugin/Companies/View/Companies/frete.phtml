@@ -1,0 +1,52 @@
+	<?php 
+		echo $this->Html->script('jquery.validate',array('inline'=>false));
+		echo $this->Html->script('empresas/preferencias');		
+		
+		$display = 'block';
+		if($this->Session->read('CompanyLoggedIn.CompanyPreference.use_correios_api')==1)$display = 'none';
+	?>
+<div class="informes" style="float:left;">
+		Você pode usar a API do Correios que calcula pelo CEP os Valores e as datas das entregas, se você optar em <strong>não</strong> usar a API deve definir uma data e um valor FIXO para suas entregas	
+	</div>
+<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+	<h4><span>Dados dos fretes</span></h4>
+
+
+	
+<?php echo $this->Form->create('CompanyPreference', array('url'=>array('controller'=>'companies','action'=>'preferencias', 'frete')));?>
+	<div class="area-formulario">
+			<input type="hidden" value="<?php echo $this->Session->read('CompanyLoggedIn.CompanyPreference.use_correios_api');?>" name="data[CompanyPreference][use_correios_api]">
+			<div class="etiqueta-on-off">
+				<span>Usando API dos correios</span>
+				<div class="on-off" valor="<?php echo $this->Session->read('CompanyLoggedIn.CompanyPreference.use_correios_api');?>">										
+					<img src="https://secure.trueone.com.br/portal/app/webroot/img/icones/on-off.png">
+					<a href="javascript:void(0);"></a>
+				</div>			
+			</div>
+	</div>
+
+
+
+
+
+<div class="Hidden_ValoresDatas" style="display: <?php echo $display;?>">
+
+
+	<h4><span>Valores para frete</span></h4>	
+
+	<div class="area-formulario" style="width:150px;">
+		<label>Valor Fixo</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.CompanyPreference.shipping_value');?>" name="data[CompanyPreference][shipping_value]">
+	</div>
+	<div class="area-formulario" style="width:150px;">
+		<label>Data Fixa (em dias)</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('CompanyLoggedIn.Company'))echo $this->Session->read('CompanyLoggedIn.CompanyPreference.delivery_time');?>" name="data[CompanyPreference][delivery_time]">
+	</div>
+
+</div><!--Hidden_ValoresDatas-->
+
+	<div class="area-botoes">
+		<button class="envio">Salvar</button>
+		<button>Cancelar</button>
+	</div>
+	<?php echo $this->Form->end();?>

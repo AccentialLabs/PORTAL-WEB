@@ -1,0 +1,55 @@
+<?php echo $this->Html->script('empresas/faq');?>
+<div class="area-faq">
+		<h3>Perguntas Frequentes</h3>
+		<div class="area-formulario"  style="width:100%; border-bottom:1px solid #dfdfdf; background-color:#fbfbfb;">
+			<label style="float:left; margin:6px 10px 0px 10px !important; ">pesquisar</label>
+			<input type="text" class="textbox" style="float:left; width:400px;">	
+		</div>
+
+		<h4>Como faço para comprar produtos no trueOne<img src="imagens/icones/seta-esquerda-link.png" class="seta-prabaixo"></h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel libero nisl. Integer non lectus eget mauris ultricies imperdiet. Morbi a orci sit amet nisl faucibus ultrices. Fusce porttitor nisi vitae orci interdum pretium. Vivamus eu consequat leo. Nullam a urna sit amet tortor laoreet porta at et urna. Ut a arcu mauris, dignissim dapibus quam. Ut dapibus pulvinar consectetur. Mauris id felis et risus consectetur commodo quis ac ipsum. 	
+		</p>
+		<h4>Como faço para comprar produtos no trueOne<img src="imagens/icones/seta-esquerda-link.png" class="seta-prabaixo"></h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel libero nisl. Integer non lectus eget mauris ultricies imperdiet. Morbi a orci sit amet nisl faucibus ultrices. Fusce porttitor nisi vitae orci interdum pretium. Vivamus eu consequat leo. Nullam a urna sit amet tortor laoreet porta at et urna. Ut a arcu mauris, dignissim dapibus quam. Ut dapibus pulvinar consectetur. Mauris id felis et risus consectetur commodo quis ac ipsum. 	
+		</p>
+		<h4>Como faço para comprar produtos no trueOne<img src="imagens/icones/seta-esquerda-link.png" class="seta-prabaixo"></h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel libero nisl. Integer non lectus eget mauris ultricies imperdiet. Morbi a orci sit amet nisl faucibus ultrices. Fusce porttitor nisi vitae orci interdum pretium. Vivamus eu consequat leo. Nullam a urna sit amet tortor laoreet porta at et urna. Ut a arcu mauris, dignissim dapibus quam. Ut dapibus pulvinar consectetur. Mauris id felis et risus consectetur commodo quis ac ipsum. 	
+		</p>
+		<h4>Como faço para comprar produtos no trueOne<img src="imagens/icones/seta-esquerda-link.png" class="seta-prabaixo"></h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel libero nisl. Integer non lectus eget mauris ultricies imperdiet. Morbi a orci sit amet nisl faucibus ultrices. Fusce porttitor nisi vitae orci interdum pretium. Vivamus eu consequat leo. Nullam a urna sit amet tortor laoreet porta at et urna. Ut a arcu mauris, dignissim dapibus quam. Ut dapibus pulvinar consectetur. Mauris id felis et risus consectetur commodo quis ac ipsum. 	
+		</p>
+		<h4>Como faço para comprar produtos no trueOne<img src="imagens/icones/seta-esquerda-link.png" class="seta-prabaixo"></h4>
+		<p>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus vel libero nisl. Integer non lectus eget mauris ultricies imperdiet. Morbi a orci sit amet nisl faucibus ultrices. Fusce porttitor nisi vitae orci interdum pretium. Vivamus eu consequat leo. Nullam a urna sit amet tortor laoreet porta at et urna. Ut a arcu mauris, dignissim dapibus quam. Ut dapibus pulvinar consectetur. Mauris id felis et risus consectetur commodo quis ac ipsum. 	
+		</p>								
+	</div>
+
+
+	<div class="area-palavras">
+		<h3>Ainda tem dúvida?</h3>
+		<p>Se você ainda tem dúvida, pode mandar email para <a href="mailt:faq@trueone.com.br">faq@trueone.com.br</a>, ou preencher o formulário abaixo</p>
+		<?php echo $this->Form->create('Faq', array('url'=>array('controller'=>'companies','action'=>'preCadastro', 'faq')));?>
+		<div class="area-formulario" style="width:90%;">
+			<label>Nome</label>
+			<input type="text" class="textbox" name="nome">	
+		</div>		
+		<div class="area-formulario" style="width:90%;">
+			<label>E-mail</label>
+			<input type="text" class="textbox" name="email">	
+		</div>			
+		<div class="area-formulario" style="width:90%;">
+			<label>Dúvida</label>
+			<textarea class="textarea" name="mensagem" style="height:100px !important; display:block;"></textarea>
+		</div>					
+		<div class="area-botoes" style="width:95%;">
+		
+			<button class="envio">Enviar dúvida</button>
+			<button class="cancelar">Cancelar</button>
+		
+		</div>
+		<?php echo $this->Form->end();?>
+	</div>

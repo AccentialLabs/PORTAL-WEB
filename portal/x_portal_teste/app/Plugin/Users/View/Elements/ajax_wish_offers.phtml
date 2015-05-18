@@ -1,0 +1,49 @@
+<script>
+    $(document).ready(function() {
+        $("#offers-xis").click(function() {
+            $("#wish-mask").fadeOut(100);
+            $("#wish-offers-pop").toggle(200);
+
+        });
+    });
+</script>
+
+<style>
+
+    .item-offer{
+        font-family: Helvetica;
+        margin-top: 5px;
+        margin-left: 5px;
+        border: 1px solid #f4f4f4;
+        padding-top: 3px;
+        color: #333;
+    }
+
+    .item-offer:hover{
+        opacity: 0.6;
+        cursor: pointer;
+    }
+</style>
+
+<div style="margin-top: -70px; background: #f4f4f4; margin-left: 33%; width:40%;
+     height: 400px;">
+
+    <div style="text-align: right; padding-right: 5px; padding-top: 5px;">
+        <span style="cursor: pointer; color: #3399cc; font-family: Helvetica;" id="offers-xis"><strong>X</strong></span>
+    </div>
+    <?php
+    /*
+     * uwc = users wishlist company
+     */
+    //echo $offersWish[0]['Offer']['photo'];
+    foreach ($offersWish as $offer) {
+        ?>
+        <form name="form-<?php echo $offer['Offer']['id']; ?>" action="offerDetail?offer=<?php echo $offer['Offer']['id']; ?>" method="post"></form>
+        <?php
+        // echo "";
+        echo "<div onClick=\"document.forms['form-" . $offer['Offer']['id'] . "'].submit();\" class=\"item-offer\" style=\"cursor: pointer; margin-top:5px; float:left; text-align: center;\">" . $offer['Offer']['title'] . "<br/><img src=\"" . $offer['Offer']['photo'] . "\" width=\"120px;\"  height=\"120px;\"></div>";
+    }
+    ?>
+</div>
+
+

@@ -1,0 +1,207 @@
+<?php
+echo $this->Html->script("bytescoutbarcode128_1.00.07");
+?>
+<html>
+    <head>
+
+        <style>
+            .img-assina{
+                padding: 5px;
+                cursor: pointer;
+            }
+        </style>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function() {
+                $("#content").scroll(function() {
+                    if ($(this).scrollTop() + $(this).height() == $(this).get(0).scrollHeight) {
+
+                        $("#content ul").append("<li>item x</li>");
+                    }
+                });
+
+                //teste
+                $("#content-offers").scroll(function() {
+                    if ($(this).scrollTop() + $(this).height() == $(this).get(0).scrollHeight) {
+                        qtd = $("#input-limite").val();
+                        $("#input-limite").val(10);
+
+                        $.ajax({
+                            type: "POST",
+                            data: {
+                                limite: qtd
+                            },
+                            url: location.href + "/ajax-vitrine",
+                            success: function(result) {
+
+                                var text = jQuery('<div>' + result + '</div>');
+                                alert('sucesso');
+                                $("#content-offers").html(text.find("#cont").html());
+                                $("#input-limite").html(text.find("#limite").html())
+                            },
+                            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                alert('ERROR');
+                            }
+                        });
+                    }
+                });
+
+            });
+
+            function notificationAssina(id) {
+                alert(id);
+                $("#" + id).slideUp(500, function() {
+                    $("#" + id).remove();
+                    $("#second-" + id).remove();
+                    // $("#loading").fadeOut();
+                });
+            }
+
+            function notificationNaoAssina(id) {
+                alert(id);
+                var assina = false;
+                $.ajax({
+                    type: "POST",
+                    data: {
+                        id: id,
+                        assina: assina
+                    },
+                    url: "http://localhost/work/x_portal_teste/user/notification/" + "nao-assina",
+                    success: function(result) {
+                        alert("NAO ASSINA");
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        alert('ERROR');
+                    }
+                });
+            }
+
+        </script>
+        <title>yLog Scroll Tutorial</title>
+    </head>
+    <body>
+        <?php
+        //$code_number = '090102030405060708';
+        //new barCodeGenrator($code_number, 0, 'hello.gif');
+        //new barCodeGenrator('125689365472365458', 0, 'hello.gif', 190, 130, true);
+        ?>
+        <!--        <div id="content" style="width:120; height:100px; overflow-y:scroll;">
+                    <ul style="position: relative;">
+                        <li>item 1</li>
+                        <li>item 2</li>
+                        <li>item 3</li>
+                        <li>item 4</li>
+                        <li>item 5</li>
+                    </ul>
+                </div>-->
+        <?php echo print_r($statistics); ?>
+
+        <div id="content-offers" style='width: 100%; height: 100px; overflow-y:scroll;'>    
+            <div id="cont-offers">
+                <?php foreach ($offers2 as $offer) { ?>
+                    <div style='width: 100%; '>
+                        <?php echo $offer['Offer']['title']; ?><br/>
+                        <img src="<?php echo $offer['Offer']['photo']; ?>" style="width: 50px; height: 50px;" />
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+        <input type="text" id="input-limite" value="<?php echo $limit; ?>"/>
+        <br/>
+
+
+        <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'users', 'action' => 'offersDetail', '198', 'continuar-compra'))); ?>
+
+        <button type="submit" style="padding: 0; border: 0px solid; width: 150px; height: 35px; background: transparent;" >
+            <img src="../img/icones/users-vitrine/bt_detalhe_comprar.png" style="width: 100%; height: 100%;">
+        </button>
+
+        <?php echo $this->Form->end(); ?>
+        <?php echo print_r($retorno); ?>
+
+        <?php echo $loginUrl; ?><br/>
+        <?php echo $userFlow; ?><br/>
+        <?php echo print_r($news); ?>
+
+        <div id="cont-notification" style=" position: absolute;
+             left: 25%;
+             top: 29%;
+             margin-top: 25px;
+             padding: 10px;
+             border: 1px solid #d0d0d0;
+             background: #ffffff;
+             z-index: 999999;
+             font-family: Helvetica;
+             opacity: 0.99;
+             padding: 10px;
+             width: 300px;
+             text-align: center;
+             display: none;">
+            <div id="popheader" style="text-align: right;">
+                <span style="font-size: 18px; color: orange; cursor: pointer;" id="xis"><strong>X</strong></span><br/>
+            </div>
+
+            <div id="popbody" style="text-align: left;">
+                <span style="font-size: 16px; font-weight: bold;"><i>Voce tem <?php echo count($news['OffersToMe']); ?> oferta(s):</i></span><br/><br/>
+
+                <?php foreach ($news['OffersToMe'] as $offerToMe) { ?>
+                    <span><?php echo $offerToMe['Offer']['title']; ?></span>
+                <?php }
+                ?>
+                <hr/>
+
+                <span style="font-size: 16px; font-weight: bold;"><i>Você tem <?php echo count($news['InvitesToMe']); ?> convite(s):</i></span><br/><br/>
+                <table >
+                    <?php foreach ($news['InvitesToMe'] as $invitesToMe) { ?>
+                        <tr id="<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>">
+                            <td colspan="2"><?php echo $invitesToMe['Company']['fancy_name']; ?></td>
+                        </tr>
+                        <tr id="second-<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>">
+                            <td><img src="../img/icones/users-vitrine/bt_more.png" class="img-assina" title="Assinar" onclick="notificationAssina(<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>)"/></td>
+                            <td><img  src="../img/icones/users-vitrine/bt_remove_02.png" class="img-assina" title="Não Assinar" onclick="notificationNaoAssina(<?php echo $invitesToMe['CompaniesInvitationsUser']['id']; ?>)"/></td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
+        </div><br/>
+        <div onload="updateBarcode()">
+            <form action="">
+                Barcode value:
+                <input id="barcodeValue" type="text" name="value" value="abcd123456" />
+                <input type="button" value="Update" onclick="updateBarcode()" />
+            </form>
+            <p>
+                Barcode exported to canvas:
+                <br />
+                <canvas id="barcodeCanvas" width="400" height="100" style="border: solid 1px blue;"></canvas>
+            </p>
+            <script type="text/javascript">
+                function updateBarcode()
+                {
+                    var canvas1 = document.getElementById("barcodeCanvas");
+
+                    var barcode = new bytescoutbarcode128();
+
+                    var value = document.getElementById("barcodeValue").value;
+
+                    barcode.valueSet(value);
+                    barcode.setMargins(5, 5, 5, 5);
+                    barcode.setBarWidth(2);
+                    barcode.setSize(barcode.getMinWidth(), canvas1.height);
+
+                    canvas1.width = barcode.getMinWidth();
+                    barcode.exportToCanvas(canvas1);
+                }
+            </script>
+
+        </div>
+        <?php echo "Intervalo é de {$intervalo->y} anos, {$intervalo->m} meses e {$intervalo->d} dias"; ?><br/>
+        <?php
+        $data = '2014-10-01';
+        echo date('d/m/y', strtotime("+30 days", strtotime($data)));
+        ?>
+        <br/>
+        <?php echo print_r($pagamento); ?>
+    </body>
+</html>

@@ -1,0 +1,485 @@
+<?php
+echo $this->Html->script('jquery.validate', array(
+    'inline' => false
+));
+echo $this->Html->script('empresas/x-pre-cadastro');
+
+echo $this->Html->css("empresas/formulario");
+
+ini_set('default_charset', 'UTF-8');
+?>
+<!-- <script -->
+<!-- src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+<script type="text/javascript">// <![CDATA[
+    $(function() {
+        // hook up placeholder text on any input with a placeholder attribute
+        $('input[placeholder]').inputHints();
+    });
+// ]]></script>
+
+<style>
+
+    #button_enviar{
+        background: #3399cc;
+        color: #fff;
+        width: 20%;
+        height: 40px;
+    }
+
+    #btn-cancel{
+        height: 40px;
+        width: 20%;
+        line-height: 40px;
+        color: #fff;
+        background: #666;
+        cursor: pointer;
+    }
+
+    #mask {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 9000;
+        background-color: #000;
+        display: none;
+        opacity: 0.6;
+    }
+
+    #pop {
+        display: none;
+        position: absolute;
+        left: 50%;
+        margin-left: -150px;
+        margin-top: 100px;
+        padding: 10px;
+        border: 1px solid #d0d0d0;
+        background: #ffffff;
+        z-index: 99999;
+    }
+
+    .div-select {
+        width: 400px;
+        height: 30px;
+        background: orange;
+        color: #ffffff;
+        line-height: 30px;
+        padding-left: 10px;
+        border: 1px solid #fff;
+    }
+
+    li.titulo {
+        width: 400px;
+        height: 30px;
+        background: orange;
+        color: #ffffff;
+        line-height: 30px;
+        padding-left: 10px;
+        border: 1px solid #fff;
+    }
+
+    ul.menu-categorias {
+        list-style: none;
+    }
+
+    li ul#teste {
+        display: none;
+    }
+
+    #corpo {
+        width: 380px;
+        background: #FFFAFA;
+    }
+
+    #corpo li {
+        list-style-type: none;
+        padding: 5px;
+    }
+
+    .subcategorias {
+        display: none;
+    }
+
+    #div-mostra{
+        color: #3399cc;
+    }
+
+    #div-mostra:hover{
+        color: #fff; 
+        background-color: #3399cc;
+    }
+</style>
+
+<script type="text/javascript">
+//escreve categoria
+    $('.titulo').live('click', function(e) {
+        var id = $(this).attr('id');
+        o = document.getElementById('category' + id);
+        var subBody = 'corpo' + id;
+        $("#" + subBody).fadeIn();
+        if (o.checked == true) {
+            var val = $('#test').val();
+            if (val.search(id) == -1) {
+                var valor = $('#test').val() + "," + id;
+                $('#test').val(valor);
+            }
+        }
+        else if (o.checked == false) {
+            var realValor = $('#test').val();
+            var novoValor = realValor.replace("" + id, '');
+        }
+
+        for (i = 0; i <= 19; i++) {
+            if (i == id) {
+            }
+            else {
+                var id2 = 'corpo' + i;
+                $("#" + id2).fadeOut();
+            }
+        }
+    });
+
+    function marcardesmarcar(o) {
+        var id = o.id;
+
+        // category 1
+        if (id == 1) {
+            if (o.checked == true) {
+                var valor = $('#testSub').val() + "1,2,";
+                $('#testSub').val(valor);
+                $("#2").prop("checked", true);
+            } else {
+                $("#2").prop("checked", false);
+                var realValor = $('#testSub').val();
+                var novoValor = realValor.replace("1,2", '');
+                $('#testSub').val(novoValor);
+
+            }
+        }
+        //category 2
+        else if (id == 3) {
+            if (o.checked == true) {
+                $("#4").prop("checked", true);
+                $("#5").prop("checked", true);
+                $("#6").prop("checked", true);
+                $("#7").prop("checked", true);
+            } else {
+                $("#4").prop("checked", false);
+                $("#5").prop("checked", false);
+                $("#6").prop("checked", false);
+                $("#7").prop("checked", false);
+            }
+        }
+
+        //category 3
+        else if (id == 8) {
+
+            if (o.checked == true) {
+                $("#9").prop("checked", true);
+                $("#10").prop("checked", true);
+                $("#11").prop("checked", true);
+                $("#12").prop("checked", true);
+                $("#13").prop("checked", true);
+                $("#14").prop("checked", true);
+                $("#15").prop("checked", true);
+                $("#16").prop("checked", true);
+                $("#17").prop("checked", true);
+                $("#18").prop("checked", true);
+                $("#19").prop("checked", true);
+            } else {
+                $("#9").prop("checked", false);
+                $("#10").prop("checked", false);
+                $("#11").prop("checked", false);
+                $("#12").prop("checked", false);
+                $("#13").prop("checked", false);
+                $("#14").prop("checked", false);
+                $("#15").prop("checked", false);
+                $("#16").prop("checked", false);
+                $("#17").prop("checked", false);
+                $("#18").prop("checked", false);
+                $("#19").prop("checked", false);
+            }
+        } else {
+            //escreve subcategoria
+            if (o.checked == true) {
+                var valor = $('#testSub').val() + "," + id;
+                $('#testSub').val(valor);
+            } else if (o.checked == false) {
+                var realValor = $('#testSub').val();
+                var novoValor = realValor.replace("," + id + ",", '');
+                $('#testSub').val(novoValor);
+            }
+        }
+    }
+</script>
+
+<div id="mask"></div>
+<div class="pre-cadastro-title-body">
+
+    <!-- DIV DOS FIELDS -->
+    <div class="pre-cadastro-form-body">
+        <form action="precadastro-teste/incluir" method="post" enctype="multipart/form-data">
+            <fieldset class="pre-cadastro-form-fieldsetbody">
+                <div id="pre-cadastro-titulo-back">
+
+                    <!-- CONTEUDO DA POP UP -->
+                    <div id="pop">
+                        <a href="#" id="closePop">[Fechar]</a>
+                        <!-- 					<div class="div-select" id="rolha"></div> -->
+                        <ul class="menu-categorias">
+                            <?php foreach ($categorias as $categoria) { ?>
+
+                                <li class="titulo"
+                                    valor="<?php echo $categoria['CompaniesCategory']['id']; ?>"
+                                    id="<?php echo $categoria['CompaniesCategory']['id'] ?>"><input
+                                        id="<?php echo "category" . $categoria['CompaniesCategory']['id'] ?>"
+                                        type="checkbox" name="categoriass[]"
+                                        value="<?php echo $categoria['CompaniesCategory']['id']; ?>"><?php echo $categoria['CompaniesCategory']['name']; ?></li>
+                                <div class="subcategorias"
+                                     id="corpo<?php echo $categoria['CompaniesCategory']['id'] ?>">
+                                         <?php
+                                         $total = count($subCategorias);
+                                         foreach ($subCategorias as $subs) {
+                                             if ($subs ['CompaniesSubCategory'] ['category_id'] == $categoria ['CompaniesCategory'] ['id']) {
+                                                 ?>
+
+                                            <ul id="corpo">
+                                                <li valor="<?php echo $subs['CompaniesSubCategory']['id']; ?>"><input
+                                                        class="seuCheckbox" type="checkbox"
+                                                        onclick="marcardesmarcar(this)" name="teste"
+                                                        value="<?php echo $subs['CompaniesSubCategory']['id']; ?>"
+                                                        id="<?php echo $subs['CompaniesSubCategory']['id']; ?>"><?php echo $subs['CompaniesSubCategory']['name']; ?></li>
+                                            </ul> 
+
+                                            <?php
+                                        }
+                                        ?>
+
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>					
+                        </ul>
+
+                    </div>
+                    <!-- FIM DO CONTEUDO DA POP UP -->
+
+                    <!-- ------------------------------------------------------------------ -->
+                    <font class="pre-cadastro-titulo">Pré-cadastro de empresa</font>
+
+                    <div class="pre-cadastro-interrogacao-titulo">
+                        <div style="float: left;">
+                            <?php echo $this->Html->image('icones/icon-interrogacao.png'); ?>
+                        </div>
+                        <div class="pre-cadastro-central-ajuda">Central de ajuda</div>
+                    </div>
+                </div>
+                <p></p>
+                <hr />
+                <h1><?php echo $varTeste ?></h1>
+                <h3 id="informes">Informações importantes</h3>
+                <p class="infos-descricao">Esse é um pré-cadastro de empresas,
+                    vamos confirmar os dados enviados e depois enviar uma senha para o
+                    usuário responsavel, para que ele possa acessar o sistema e
+                    completar o cadastro, com algumas informações e validações de
+                    documentos para a segurança dos usuários.</p>
+
+                <p class="infos-descricao" id="second-line">
+                    Para mais informações ou dúvidas sobre como funciona o processo
+                    de cadastro, acesse a nossa <a href="javascript:void(0);"
+                                                   onClick="location.href = '<?php echo $this->Html->url('/company/pre-cadastro/faq'); ?>';"
+                                                   id="help">Central de ajuda</a>.
+                </p>
+
+                <!-- INICIA FORMULARIO -->
+
+                <?php
+                if (!empty($mensagem)) {
+                    "<b><h3><font color='red'>" . $mensagem . "</font></h3></b>";
+                }
+                ?>
+                <!-- Campo Dados da empresa -->
+                <div class="input-dados-emp-body">
+                    <h3 id="field-title">Dados da empresa</h3>
+                    <hr />
+                    <p></p>
+                    <div class="input-dados-emp-background-input">
+                        <div class="input-dados-emp-image">
+                            <?php echo $this->Html->image('icones/pre-cadastro/icon-upload.png', array('style', 'margin-left:3px')); ?>
+                        </div>
+                        <input type="file" class="input-dados-emp"
+                               name="data[Company][logo]" />
+                    </div>
+                    <div class="input-dados-emp-warning-body">
+                        <?php echo $this->Html->image('icones/pre-cadastro/exclamacao.png', array('align' => 'left')); ?>
+                        <div class="input-dados-emp-warning-text">Use apenas imagens nos
+                            formatos "jpeg", "png" ou "gif". Recomendamos que tenham
+                            dimensões máximas de 140x140px.</div>
+                    </div>
+
+                    <div class="input-dados-formline">
+                        <input type="text" placeholder="Razao Social"
+                               class="input-dados-form" id="razaosocial"
+                               name="data[Company][corporate_name]" /> <input type="text"
+                               placeholder="Nome Fantasia" class="input-dados-form"
+                               id="nomefantasia" name="data[Company][fancy_name]" />
+                    </div>
+                    <div class="input-dados-formline">
+                        <input type="text" placeholder="CNPJ" class="input-dados-form"
+                               id="cnpj" name="data[Company][cnpj]" /> <input type="text"
+                               placeholder="Telefone" class="input-dados-form" id="tel1"
+                               name="data[Company][phone]" /> <input type="text"
+                               placeholder="Telefone 2" class="input-dados-form" id="tel2"
+                               name="data[Company][phone_2]" /> <input type="text"
+                               placeholder="Email" class="input-dados-form" id="email"
+                               name="data[Company][email]">
+                    </div>
+
+                    <div class="input-dados-formline">
+                        <div style="float: left;">
+                            <input type="text" placeholder="Site" id="site"
+                                   class="input-dados-form" name="data[Company][site]">
+                        </div>
+                        <a href="#" id="mostra"><div id="div-mostra" style="font-family: Helvetica; margin-left: 5px; line-height: 35px; border: 1px solid #dcdcdc; width: 310px; height:32px; float: left; text-align: center; "><b>Categorias e Subcategorias</b></div></a>
+                        <!--<div class="input-dados-div-select"> 
+                                <select class="input-dados-select"> 
+                                        <option>Categoria</option> 
+                                </select> 
+                        </div> -->
+                        <!-- 					<div class="input-dados-div-select"> -->
+                        <!-- 						<select class="input-dados-select"> -->
+                        <!-- 							<option>Sub-categoria</option> -->
+                        <!-- 						</select> -->
+                        <!-- 					</div> -->
+                    </div>
+                </div>
+                <br /> <br />
+                <!-- Campo Respons�vel pela conta -->
+
+                <div class="input-responsavel-body">
+                    <br />
+                    <h3 id="field-title">Responsável pela conta</h3>
+                    <hr />
+                    <p></p>
+                    <div class="input-responsavel-lado-esquerdo">
+                        <div>
+                            <p>
+                                <input type="text" placeholder="Nome" id="RespNome"
+                                       style="border-left: 2px solid red;" class="input-responsavel"
+                                       name="data[Company][responsible_name]">
+                            </p>
+
+                            <fieldset class="input-email-background"
+                                      style="border-left: 2px solid red;">
+                                <div>
+                                    <div class="input-email-image">
+                                        <?php echo $this->Html->image('icones/pre-cadastro/icon-email-small.png'); ?>
+                                    </div>
+                                    <input type="text" title="será usado para acesso ao sistema"
+                                           placeholder="será usado para acesso ao sistema"
+                                           class="input-email" name="data[Company][responsible_email]" />
+                                </div>
+                            </fieldset>
+
+                            <p>
+                                <input type="text" placeholder="CPF"
+                                       class="input-responsavel-smaller"
+                                       style="border-left: 2px solid red;" id="cpf"
+                                       name="data[Company][responsible_cpf]" /> <input type="text"
+                                       placeholder="Telefone" style="border-left: 2px solid red;"
+                                       id="tel1" class="input-responsavel-smaller"
+                                       name="data[Company][responsible_phone]" /> <input type="text"
+                                       placeholder="Telefone 2" class="input-responsavel-smaller"
+                                       id="tel2" name="data[Company][responsible_phone_2]" /> <input
+                                       type="text" placeholder="Celular"
+                                       class="input-responsavel-smaller" id="celular"
+                                       name="data[Company][responsible_cell_phone]" />
+                            </p>
+                        </div>
+                    </div>
+                    <div class="input-responsavel-lado-direito">
+                        <div class="input-email-warning-body">
+                            <div class="input-email-warning-image">
+                                <?php echo $this->Html->image('icones/pre-cadastro/exclamacao.png', array('align' => 'left')); ?>
+                            </div>
+                            <div class="input-email-warning-text" style="text-align: justify;">O
+                                <span style="color: #3399cc;">Adventa</span> utiliza o MOIP como meio de pagamento. Caso a sua empresa
+                                possua conta no MOIP, voce deve usar o mesmo e-mail de cadastro
+                                aqui. Caso não possua, nos abriremos uma para voce
+                                automaticamente.</div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br/>
+                <br/>
+                <br/><br/><br/><br/><br/><br/>
+                <!-- Campo Endere�o -->
+                <div class="input-endereco-body">
+                    <fieldset id="input-endereco-body"
+                              style="border: 1px solid #ffffff; margin-left: -10px;">
+                        <h3 id="field-title">Endereço</h3>
+                        <hr />
+                        <p></p>
+                        <div>
+                            <input type="text" placeholder="CEP"
+                                   style="border-left: 2px solid red;" class="input-endereco"
+                                   id="CEP" name="data[Company][zip_code]"> <input type="text"
+                                   style="border-left: 2px solid red;" placeholder="Rua"
+                                   class="input-endereco" id="Endereco"
+                                   name="data[Company][address]"> <input type="text"
+                                   placeholder="Numero" style="border-left: 2px solid red;"
+                                   class="input-endereco" id="numero" name="data[Company][number]">
+                            <input type="text" placeholder="Complemento"
+                                   class="input-endereco" id="complemento"
+                                   name="data[Company][complement]">
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <input type="text" placeholder="Bairro"
+                                   style="border-left: 2px solid red;" class="input-endereco"
+                                   id="Bairro" name="data[Company][district]"> <input type="text"
+                                   placeholder="Cidade" class="input-endereco" id="Cidade"
+                                   name="data[Company][city]"> <input type="text" placeholder="UF"
+                                   style="border-left: 2px solid red;" class="input-endereco"
+                                   id="Estado" name="data[Company][state]">
+                        </div>
+                        <input type="hidden" id="test" name="catego" > <input type="text"
+                                                                              id="testSub" name="subCatego" style="display: none;">
+                    </fieldset>
+                </div>
+
+                <!-- Campor termo e condi��o -->
+                <div class="termos-body">
+                    <fieldset name="termsfield" class="termos-fieldset">
+
+
+                        <div class="amPmCheckbox">
+                            <input type="checkbox" name="data[Child][remember_me]"
+                                   class="checkboxLabel main_street_input" id="am_2" value="1" /> <label
+                                   for="am_2"></label>
+                        </div>
+
+                        <div class="termos-txt" style="margin-top: 12.5px;">
+                            Eu concordo com os <a href="javascript:void(0);"
+                                                  onClick="location.href = '<?php echo $this->Html->url('#'); ?>';"
+                                                  id="terms">Termos e Condições de uso</a>
+                        </div>
+
+                    </fieldset>
+                </div>
+
+                <div class="botoes-body">
+                    <button type="submit"
+                            style="border: 0; padding: 0px; display: none;"
+                            id="button_enviar">
+                        Cadastrar
+                    </button>
+                    <span class="teeste"></span>
+
+                    <button style="border: 0;padding: 0px;" id="btn-cancel" type="reset">Cancelar</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+

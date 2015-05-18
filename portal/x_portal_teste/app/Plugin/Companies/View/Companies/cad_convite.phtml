@@ -1,0 +1,44 @@
+<?php 
+//verifica se � primeiro acesso
+	if(empty($convites)){		
+		
+?>
+
+ <div align="center"><?php echo $this->Html->image('content_box/convites_.jpg');?></div>
+  
+<?php } ?>
+<div class="informes">
+O TrueOne respeita a privacidade e a escolha de cada usuário do sistema; assim, você poderá fazer quantos convites e perfis de público-alvo quiser, mas é importante lembrar que os usuários que se encaixarem em um determinado perfil que montar, só receberão o convite apenas uma vez. Caso a empresa queira, poderá repetir o convite feito para os usuários que não aceitaram ou não responder ao primeiro convite, mas apenas por mais uma vez e somente após 6 meses do convite inicial
+</div>
+	<div class="area-botoes" style="width:98%; position:relative;">		
+		<button class="envio" onclick="location.href='<?php echo $this->Html->url('/company/convites-usuarios/filtros'); ?>';">Novo Filtro</button>		
+	</div>
+	
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao" style="margin:0px 0px 40px 0px">
+		<caption>Lista de convites efetuados</caption>
+		<thead>
+			<tr>
+				<td>Genero</td>
+				<td>Localidade</td>
+				<td>Faixa Etária</td>
+				<td>Política</td>
+				<td>Relacionamento</td>
+				<td>Religião</td>
+				<td>Data do convite</td>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($convites as $convite){?>
+			<tr>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['gender'];?></td>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['location'];?></td>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['age_group'];?></td>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['political'];?></td>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['relationship_status'];?></td>
+				<td><?php echo $convite['CompaniesInvitationsFilter']['religion'];?></td>
+				<td><?php echo date('d/m/Y', strtotime($convite['CompaniesInvitationsFilter']['date_register']));?></td>
+			</tr>							
+		 <?php } ?>
+		</tbody>
+	</table>
+</div>

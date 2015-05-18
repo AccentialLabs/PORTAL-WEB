@@ -1,0 +1,116 @@
+<?php
+	//pr($_SESSION);exit;
+ 	echo $this->Html->script('bootstrap.min');
+ 	echo $this->Html->script('bootstrap-tab');
+ 	echo $this->Html->script('bootstrap-modal');
+ 	echo $this->Html->script('google-code-prettify/prettify');
+ 	echo $this->Html->script('moip');
+	echo $this->Html->script('transparente');
+
+	
+	//pr($_SESSION);
+	$metricas = json_decode($this->Session->read('Carrinho.Oferta.metrics'), true);
+	if(!empty($metricas)){
+		$chaves = array_keys($metricas);	
+	}else{
+		$metricas = false;
+	}
+		
+	if(empty($token))$token = 0;			
+?>
+<div id="token">
+	<div id="MoipWidget" data-token="<?php echo $token; ?>" callback-method-success="sucesso" callback-method-error="erroValidacao"></div>
+</div>
+
+<div class="area-detalhes">
+	<div class="detalhe-forma-pagamento">
+		<h4>&nbsp;&nbsp;Formas de Pagamento</h4>
+		<div class="refreshzinho">
+			<div class="loading">
+				<?php echo $this->Html->image('Users.loading.gif', array('border' => '0'));?>
+				<p>Aguarde enquanto o <strong>trueOne</strong> <br> carrega o CONTEUDO</p>
+			</div>
+		</div>
+		<div class="alinha">
+		<div id="selecione-o-meio">
+			<h5>Modo de Pagamento</h5>
+			<a href="javascript:void(0);" caminho="boleto-bancario">Boleto</a>
+			<a href="javascript:void(0);" caminho="cartao">Cartão</a>
+		</div>
+		<div id="boleto-bancario">
+			<h5>Boleto Bancário</h5>
+			<div id="pag-boleto">
+				<input type="button" id="boleto" class="btn" valor="" value="Clique para gerar o boleto bancário">
+			</div>
+	 			<span id="link-boleto"></span>	
+		</div>
+		<div id="cartao">
+			<h5>Dados do Cartão</h5>      
+
+<div class="area-escolha-de-cartao">
+
+	<div class="area-formulario" style="width:260px; height:20px !important; display:block !important; z-index:0;">
+		<input type="hidden" id="instituicao" name="instituicao">
+		
+		<div class="radiobutton">
+			<a href="javascript:void(0);" valor="1"><span><img style="position:relative; top:-5px;" src="imagens/icones/visa.gif" for="instituicao"></span></a>
+			<a href="javascript:void(0);" valor="2" class="ativo"><span><img style="position:relative; top:-5px;" src="imagens/icones/master.gif"></span></a>
+			<a href="javascript:void(0);" valor="3"><span><img style="position:relative; top:-5px;" src="imagens/icones/amex.gif"></span></a>
+		</div>
+
+	</div>	
+		<ul class='selecione-metrica'>
+			<li><div><span class="span">Parcelas</span><input type="text" value="Parcelas" readonly="true"></div>
+				<ul>
+					<?php for($i=1; $i<=12; $i++){
+						  $valor = $this->Session->read('Carrinho.Oferta.value_final')/$i;  	
+						?>
+						<li><a href="javascript:void(0);"><?php echo $i;?>x R$ <?php echo number_format($valor, 2, ',', '.');?></a></li>					
+					<?php } ?>					
+				</ul>
+			</li>
+		</ul>		
+
+              <div class="area-dados-de-cartao">
+			
+            <div class="area-formulario" style="width:130px;">
+                <input type="text" class="textbox" id="Numero" name="Numero" value="Número do cartao" style="width:130px;" alt="Número do cartao">
+            </div>
+            <div class="area-formulario" style="width:60px;">
+                <input type="text" class="textbox" id="Expiracao" name="Expiracao" value="Validade" style="width:70px;" alt="Validade">
+             </div>
+            <div class="area-formulario" style="width:60px; float:none;">           
+                <input type="text" class="textbox" id="CodigoSeguranca" name="CodigoSeguranca" value="Cod"  style="width:70px; float:left" alt="Cod">
+            </div>
+            <div class="area-formulario" style="width:260px;">
+                <input class="textbox" type="text" id="Portador" name="Portador" value="Nome gravado no cartão"  style="width:260px;" alt="Nome gravado no cartão">
+            </div>
+            <div class="area-formulario" style="width:180px; float:none;">            
+                <input class="textbox" type="text" id="CPF" name="CPF" value="CPF" alt="CPF" style="width:180px;">
+            </div>
+            <div class="area-formulario" style="width:180px;">
+				<input class="textbox" type="text" id="DataNascimento" name="DataNascimento" style="width:180px;" value="Data de Nascimento" alt="Data de Nascimento">
+            </div>
+            <div class="area-formulario" style="width:180px;">
+                <input class="textbox" type="text" id="Telefone" name="Telefone" style="width:180px; " value="Telefone" alt="Telefone"><br>
+            </div>
+			<!-- <button class="fechar-compra">Confirmar Pagamento</button> -->
+			<!-- <img src="imagens/logo-moip.png" class="copyright-pagamento"> -->
+</div>
+		</div>
+
+
+
+	</div>
+	</div>
+	</div>
+
+	
+	<div class="area-botoes" style="margin:0px auto;">
+		<button class="envio" id="sendToMoip">Confirmar compra</button>				
+		<button class="cancelar" onclick="window.location.href='/portal/user/view-offer/<?php echo $this->Session->read('Carrinho.Oferta.id')?>'">Cancelar Compra</button>
+	</div>
+
+</div>
+	
+

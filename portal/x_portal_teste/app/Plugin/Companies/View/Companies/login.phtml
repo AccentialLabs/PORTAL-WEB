@@ -1,0 +1,24 @@
+
+
+<div class="alinhamento">
+	
+	<?php echo $this->Html->image('logo-login.png', array('class'=>'logo-login'));?>
+	<?php echo "<b><font color='red'>".$this->Session->flash()."</font></b>";?>
+	<div class="area-login">
+		<a href="/portal/" class="nao-logar-agora"></a>
+		<form action='login' method='post'>
+			<div class="text"><input title="Usuário" id="usuario_login" name='data[Company][email]' value="Usuário" type="text" class="usuario"></div>
+			<div class="text"><input title="Senha" id="usuario_senha" name='data[Company][password]' value="Senha" type="password" class="senha"><?php echo $this->Html->image('icones/cadeado-login.png');?></div>
+		
+		
+
+		<?php echo $this->Html->image('icones/linha-login.png', array('class'=>'linha-login'));?>	
+		
+
+			<button class="botao-entrar" type="submit">ENTRAR</button>
+			<a href="#" onClick="location.href='<?php echo $this->Html->url('/company/pre-cadastro'); ?>';" class="cadastrar-novo-usuario">cadastrar minha empresa</a>
+			<!--  <a href="javascript:void(0);" class="esqueci-minha-senha">esqueci minha senha</a>-->
+		</form>
+		<a href="#" class="esqueci-minha-senha" onClick="location.href='<?php echo $this->Html->url('/company/esqueci-minha-senha'); ?>';">Esqueci minha Senha?</a>
+	</div>
+</div>

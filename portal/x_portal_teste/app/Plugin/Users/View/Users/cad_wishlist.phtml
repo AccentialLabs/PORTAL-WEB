@@ -1,0 +1,67 @@
+<?php 
+	if($mensagem==true){		
+		echo "<p><h2><font color='red'>{$mensagem}</font></h2></p>";
+	}
+?>
+<h2><strong>O que você deseja?</strong></h2>
+	<div class="conteudo-esquerda">		 	
+		<div class="area-formulario" tamanho="43%">
+		<?php echo $this->Form->create('UsersWishlist', array('url'=>array('controller'=>'users','action'=>'wishlist', 'cadastro')));?>
+		<input type="hidden" name="data[UsersWishlist][user_id]"  value="<?php echo $this->Session->read('userData.User.id');?>">
+		<input type="hidden" name="data[UsersWishlist][status]" value="ACTIVE">
+		<input type="hidden" name="data[UsersWishlist][date_register]" value="<?php echo date('Y/m/d');?>">
+			<label>Categoria</label>
+			<div class="select">
+				<input type="hidden" name="data[UsersWishlist][category_id]" id="teste">
+				<strong>Selecione</strong>
+				<ul id="categoria">
+					<?php foreach($categorias as $categoria){?>
+						<li valor="<?php echo $categoria['CompaniesCategory']['id'];?>"><?php echo $categoria['CompaniesCategory']['name'];?></li>
+					<?php  } ?>					
+				</ul>
+			</div>
+		</div>
+		
+			<div class="area-formulario" tamanho="43%">
+				<label>Sub Categoria</label>
+				<div class="select">
+					<input type="hidden" name="data[UsersWishlist][sub_category_id]" id="sub-categoria-input">
+					<strong></strong>
+					<div id="categorias"> 
+						<ul id="sub-categoria-ajax">
+							<li valor="teste 1">Selecione</li>						
+						</ul>
+					</div>
+				</div>
+			</div>	
+		
+	<div class="area-formulario" tamanho="90%">
+		<label>Produto</label>
+		<input type="text" class="textbox" name="data[UsersWishlist][name]">
+	</div>
+	<div class="area-formulario" tamanho="42%">
+		<label>Data limite</label>
+		<input type="text" class="textbox" id="calendario-final" name="data[UsersWishlist][ends_at]">
+	</div>
+
+	<div class="area-formulario" tamanho="90%">
+		<label>Descrição</label>
+		<textarea class="textarea" name="data[UsersWishlist][description]"></textarea>
+	</div>
+
+	
+	<div class="area-botoes" style="width:86%;">
+		<button class="envio-2">Cria desejo</button>		
+	</div>
+	</div>
+<?php echo $this->Form->end();?>
+
+	<div class="conteudo-direita">
+		<h3>Produtos mais desejados</h3>
+		<ul>
+			<li><span>Samsung Galaxy 4</span><span class="valor">2</span></li>
+			<li><span>Samsung Galaxy 3</span><span class="valor">2</span></li>
+			<li><span>Nokia</span><span class="valor">2</span></li>
+			<li><span>dolce gusto</span><span class="valor">2</span></li>
+		</ul>
+	</div>

@@ -1,0 +1,79 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('empresas/pre-cadastro');		
+?>
+
+<style type="text/css">
+#interContainer { left:50px !important; width:800px !important; }
+</style>
+
+<?php 
+if($moipFalse==false){?>
+
+	<input type="hidden" id="url" value="<?php echo $url;?>">
+	<link rel="stylesheet" type="text/css" href="/portal/css/empresas/interstitial.css" />
+	<script type="text/javascript" src="/portal/js/empresas/interstitial.js"></script>
+	
+<?php } ?>
+
+<div class="lista-de-ofertas">
+	<div class="alinhamento">
+<!-- Inicio de conteudo destaque principal -->
+	<div class="oferta-destaque-principal">
+	
+		<div class="informes" style="-webkit-border-radius: 40px; -moz-border-radius: 40px; border-radius: 40px;">
+        	<img src="http://secure.trueone.com.br/portal/img/icones/cadastro_ok.png" style="float:left;" />
+			<h2>Empresa cadastrada!<br />
+            <span style="font-size:24px;">Verifique a sua caixa de e-mail para ativar essa conta.</span></h2>
+			<!--<br>
+			<strong>»</strong>comentário aprovado<strong>»</strong>não publicado-->
+		</div>
+	<div class="emailBoasVindas">
+
+<br>
+	<div class="emailBoasVindas_resend">
+		Nao recebeu nosso e-mail de boas vindas<br>
+		<a href="http://secure.trueone.com.br/portal/company/pre-cadastro/email/">
+		<?php echo $this->Html->image('bt_reenviaremail.png');?>		
+		</a>
+	</div><!--emailBoasVindas_resend-->
+
+
+	<div class="emailBoasVindas_search">
+		Verificar dados<br>			
+		<img src="http://secure.trueone.com.br/portal/img/bt_fazerumabusca.png" class="busca_dados">
+	</div><!--emailBoasVindas_search-->
+
+
+	<div class="emailBoasVindas_search_content" style="display: none">
+	<?php echo $this->Form->create('CompanySearch', array('url'=>array('controller'=>'companies','action'=>'preCadastro')));?>
+		<div class="area-formulario"style="width:22%;">
+			<label>CNPJ</label>
+			<input type="text" class="textbox" id="CNPJ" name="cnpj" style="width:150px;">
+		</div>		
+		<div class="area-formulario"style="width:22%;">
+			<label>CPF</label>
+			<input type="text" class="textbox"  id="cpf" name="cpf" style="width:150px;">
+		</div>
+		<div class="area-formulario"style="width:22%;">
+			<label>Telefone 1</label>
+			<input type="text" class="textbox" id="telefone1" name="telefone1" style="width:150px;">
+			<input type="hidden" name="verificar_dados" value="1">
+		</div>
+		<div class="area-botoes" style="width:95%; position:relative;">		
+			<button class="envio"  float:left; margin-top:-40px;">Buscar</button>			
+		</div>
+	<?php echo $this->Form->end();?>
+	</div><!--emailBoasVindas_search-->
+
+
+</div><!--emailBoasVindas-->
+	</div>
+<!-- Fim de conteudo destaque principal -->
+
+
+
+
+	</div>
+</div>
+

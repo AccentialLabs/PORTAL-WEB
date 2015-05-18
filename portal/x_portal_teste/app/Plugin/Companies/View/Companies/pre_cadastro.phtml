@@ -1,0 +1,178 @@
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	echo $this->Html->script('empresas/pre-cadastro');
+
+?>
+
+<div class="item-direita-dados-oferta">
+
+	<?php echo $this->Form->create('Company', array('url'=>array('controller'=>'companies','action'=>'preCadastro'), 'type'=>'file'));?>
+		<div class="area-de-campos">
+
+ <div class="informes" style="width:80% !important;">
+		<h3 style="margin:10px auto; padding:0px;">Informações do pré cadastro</h3>
+		<p>
+			Este é um pré cadastro, vamos confirmar os dados e enviar uma senha para o usuario responsavel, para que ele possa acessar o sistemas e completar o cadastro, com algumas informações e validações de documentos.
+		</p>
+		<p>
+			Para mais informações ou dúvidas acesse o <a href="javascript:void(0);" onClick="location.href='<?php echo $this->Html->url('/company/pre-cadastro/faq'); ?>';">FAQ do <strong>trueOne</strong></a>
+		</p>
+</div>
+
+		<h3>Dados da Empresa</h3>
+		<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+			<div class="area-formulario" tamanho="69%">
+				<?php if(is_array($buscaDadosCadastro)){?>
+                <img style="max-height:100px !important;" alt="" src="<?php echo $buscaDadosCadastro['Company']['logo'];?>"/><?php }?>
+				<label>logo</label><input type="file" class="textbox" name="data[Company][logo]">
+			</div>
+			<div class="area-formulario" tamanho="69%">
+				<label>Razão Social *</label><input type="text" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['corporate_name'];?>"<?php } ?> class="textbox" name="data[Company][corporate_name]">
+			</div>
+	
+			<div class="area-formulario" tamanho="69%">
+				<label>Nome Fantasia *</label><input type="text" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['fancy_name'];?>"<?php } ?> class="textbox" name="data[Company][fancy_name]">
+			</div>	
+			
+			 <div class="area-formulario" tamanho="230">
+				<label>Descricão</label><textarea rows="4" cols="58" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['description'];?>"<?php } ?> name="data[Company][description]"></textarea>
+			</div>	
+			
+					<div style="clear:both;"></div>
+
+			<div class="area-formulario" tamanho="160">
+				<label>CNPJ *</label><input type="text" class="textbox" id="CNPJ" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['cnpj'];?>"<?php } ?>  name="data[Company][cnpj]">
+			</div>													
+			<div class="area-formulario" tamanho="110">
+				<label>Telefone 1 *</label><input type="text" class="textbox" id="telefone1" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['phone'];?>"<?php } ?> name="data[Company][phone]">
+                <span class="exemplo">será mostrado nas ofertas</span>
+			</div>													
+			
+            <div class="area-formulario" tamanho="110">
+				<label>Telefone 2</label><input type="text" class="textbox" id="telefone2" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['phone_2'];?>"<?php } ?> name="data[Company][phone_2]">
+			</div>
+
+
+<div style="clear:both;"></div>
+
+
+            <div class="area-formulario" tamanho="230">
+				<label>Email *</label><input type="text" class="textbox" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['email'];?>"<?php } ?> name="data[Company][email]">
+                <span class="exemplo">será mostrado nas ofertas</span>
+			</div>
+			
+            <div class="area-formulario" tamanho="230">
+				<label>Site</label><input type="text" class="textbox" name="data[Company][site]">
+			</div>		
+			
+			
+
+	<h3>Endereço</h3>
+	<div class="detalhe-endereco-entrega">
+		<div class="area-formulario" style="width:100px;">
+                <label>CEP *</label>                
+                <input type="text" class="textbox" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['zip_code'];?>"<?php } ?>  id="CEP" name="data[Company][zip_code]" value="" size="15" maxlength="9" alt="Digite seu CEP">
+        </div>      
+			<div class="detalhes-do-endereco">	
+                <div class="area-formulario">
+                	<label>Endereco *</label><input class="textbox" type="text" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['address'];?>"<?php } ?> id="Endereco" name="data[Company][address]" value="" style="width:600px;">
+                </div>
+                <div class="area-formulario" style="width:100px;">
+                	<label>Número *</label><input class="textbox" type="text" id="Numero" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['number'];?>"<?php } ?> name="data[Company][number]" value="" size="6" style="width:100px;">
+                </div>
+                <div class="area-formulario" style="width:120px;">
+                	<label>Complemento</label><input class="textbox" type="text" id="Complemento" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['complement'];?>"<?php } ?> name="data[Company][complement]" value="" style="width:130px;">
+                </div>
+                <div class="area-formulario" style="width:120px;">	
+               		<label>Bairro *</label><input class="textbox" type="text" id="Bairro" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['district'];?>"<?php } ?> name="data[Company][district]" value="" style="width:198px;" size="9">
+                </div>
+                <div class="area-formulario" style="width:120px;">
+                	<label>Cidade *</label><input class="textbox" type="text" id="Cidade" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['city'];?>"<?php } ?> name="data[Company][city]" value="" style="width:180px;">
+                </div>
+                <div class="area-formulario" style="width:40px;">	                	
+                	<label>UF *</label><input class="textbox" type="text" id="Estado" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['state'];?>"<?php } ?> name="data[Company][state]" value="" size="9">
+ 				</div>
+ 			</div>
+
+	</div>			
+		
+		<h3>Responsável da Empresa</h3>	
+			<div class="area-formulario" tamanho="285">
+				<label>Responsável *</label><input type="text" class="textbox" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_name'];?>"<?php } ?>  name="data[Company][responsible_name]">
+			</div>					
+			<div class="area-formulario" tamanho="125">
+				<label>CPF *</label><input type="text" class="textbox" id="cpf" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_cpf'];?>"<?php } ?> name="data[Company][responsible_cpf]">
+			</div>		
+			<div class="area-formulario" tamanho="240">
+				<label>Email *</label><input type="text" class="textbox" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_email'];?>"<?php } ?> name="data[Company][responsible_email]">
+				<span class="exemplo">E-mail que será usado para acesso ao sistema</span>
+
+
+                <div style="width: 140px; height: 60px; border: 1px dashed rgb(163, 175, 144); background: rgb(255, 253, 200); font-size: 12px; color: #333; position: absolute; left: 270px; top: 20px; padding: 10px; -webkit-border-radius: 10px; -moz-border-radius: 10px; border-radius: 10px;">
+                 Caso a sua empresa possua conta no <strong style="color:#900;">MOIP</strong>, você <strong style="color:#900;">deve usar o mesmo e-mail</strong> de cadastro aqui!
+                </div>
+
+
+			</div>	
+
+					<div style="clear:both;"></div>
+
+			<div class="area-formulario" tamanho="110">
+				<label>Telefone 1 *</label><input type="text" class="textbox" id="telefone1" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_phone'];?>"<?php } ?> name="data[Company][responsible_phone]">
+			</div>
+			<div class="area-formulario" tamanho="110">
+				<label>Telefone 2</label><input type="text" class="textbox" id="telefone2" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_phone_2'];?>"<?php } ?> name="data[Company][responsible_phone_2]">
+			</div>
+			<div class="area-formulario" tamanho="120">
+				<label>Celular</label><input type="text" class="textbox" id="celular" <?php if(is_array($buscaDadosCadastro)){?>value="<?php echo $buscaDadosCadastro['Company']['responsible_cel_phone'];?>"<?php } ?> name="data[Company][responsible_cell_phone]">
+			</div>
+			<?php if(is_array($buscaDadosCadastro)){?>
+				<input type="hidden" id="idCompany" name="data[Company][id]" value="<?php echo $buscaDadosCadastro['Company']['id']; ?>">
+				<input type="hidden" id="idCompany" name="data[Company][login_moip]" value="<?php echo $buscaDadosCadastro['Company']['login_moip']; ?>">
+				<input type="hidden" id="idCompany" name="logo" value="<?php echo $buscaDadosCadastro['Company']['logo']; ?>">				
+			<?php }?>
+
+	<div class="area-formulario" style="width:600px;">
+		<label></label>
+		<input type="hidden" id="checkbox_value">
+		<div class="checkbox">
+			<a href="javascript:void(0);" valor="1"><span style=" float:left;">Eu concordo com os</span></a>
+		</div>
+        
+        <div style="float:left; line-height:20px;"><a href="javascript:void(0);">Termos e Condições de uso</a></div>
+        
+	</div>	
+	<!--<div class="politica-privacidade">
+		<a href="politica-de-privacidade.php">clique aqui para consultar nossos Termos e Condições</a>
+	</div>-->
+
+	<div class="area-botoes" style="width:95%; position:relative;">		
+			<button class="envio" style="display: none; float:left; margin-top:-40px;">Enviar</button>
+				
+	</div>
+<?php echo $this->Form->end();?>
+
+		</div>							
+
+
+	<div class="area-de-informacoes" style="position:fixed; right:0px;">
+		<h3>Informacões do cadastro</h3>
+		<p>Somente empresas legalmente constituidas podem ofertas no <strong>trueOne</strong></p>
+		<p>Por isso as informações cadastradas devem ser as mesmas do contrato social, elas serão utilizadas em em duas etapas</p>
+		
+		<p>
+			<strong>1º- validação trueOne</strong><br>
+			Para garantiar que os usuários do trueOne tenham segurança nas ofertas e nas compras que realizarem é necessário confirmar suas informações cadastrais. O trueOne utiliza bureaus de informações (como serasa por exemplo) para isto.
+		</p>
+		<p>
+			<strong>2º- Validação <span class="tip_true" informacoes="O Moip é mais que um intermediador de pagamentos online, garantindo segurança e conversão em suas vendas.">Moip</span></strong><br>
+			O trueOne utiliza o moip como meio de pagamento, um sistema seguro e prático para seus clientes realizarem suas compras.
+		</p>
+		<p>
+			Para isso, o moip precisará validar suas informações através do envio de documentos digitalizados.
+		</p>
+	</div>
+
+
+
+</div>

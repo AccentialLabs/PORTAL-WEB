@@ -1,0 +1,130 @@
+
+
+
+
+<style type="text/css">
+	.area-formulario  { padding-top:0px !important; }
+	.area-conteudo h4 { margin-top: 40px !important; margin-bottom: -5px !important; }
+</style>
+
+
+
+
+<?php 
+	echo $this->Html->script('jquery.validate',array('inline'=>false));
+	
+	//pr($_SESSION);
+	if($this->Session->read('userData.User.gender')=='male'){
+		$sexo = "Masculino";
+	}elseif($this->Session->read('userData.User.gender')=='female'){
+		$sexo = "Feminino";
+	}else{
+		$sexo = "Selecione";
+	}
+		
+?>
+<h4 style="margin-bottom:5px !important;"><span>Dados Principais</span></h4>
+<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+<?php echo $this->Form->create('User', array('url'=>array('controller'=>'users','action'=>'dados_cadastrais')));?>
+
+
+	<div class="area-formulario" style="width: 50px; border: 1px dotted #CCC; padding: 10px !important; text-align: center; background-color: #F0EDED; line-height: 0px;">
+		<label>Foto</label>
+		<?php if($this->Session->check('userData.User.photo'));?><img src="<?php echo $this->Session->read('userData.User.photo');?>"
+        style="border:1px solid #999;"> 
+	</div>
+
+
+	<div class="area-formulario" style="width:22%;">
+		<label>Nome</label>
+		<input type="text" class="textbox" id="nome-teste" value="<?php if($this->Session->check('userData.User.name'))echo $this->Session->read('userData.User.name');?>" name="data[User][name]">
+	</div>
+	<div class="area-formulario"style="width:15%;">
+		<label>Data de nascimento</label>
+		<input type="text" class="textbox" value="<?php if($this->Session->check('userData.User.birthday'))echo $this->Session->read('userData.User.birthday');?>" id="data-nascimento" name="data[User][birthday]" style="width:150px;">
+	</div>
+	<div class="area-formulario"style="width:22%;">
+		<label>Sexo</label>
+		<select name="data[User][gender]" style="padding:8px; border:1px dotted #999;">
+			<option value="<?php echo $this->Session->read('userData.User.gender');?>"><?php echo $sexo;?></option>
+			<option value="male">Masculino</option>
+			<option value="female">Feminino</option>
+		</select>	
+	</div>
+
+
+	<h4><span>Contato</span></h4>
+	<div class="area-formulario" style="width:200px;">
+		<label>Email</label>
+		<input type="text" readonly=îreadonlyî class="textbox" value="<?php if($this->Session->check('userData.User.email'))echo $this->Session->read('userData.User.email');?>" name="data[User][email]" style="width:425px;">
+	</div>
+	
+	<h4><span>Endere√ßo</span></h4>	
+
+	<div class="area-formulario" style="width:100px;">
+		<label>CEP</label>		
+		<input type="text" class="textbox" maxlength="9" id="CEP" value="<?php if($this->Session->check('userData.User.zip_code'))echo $this->Session->read('userData.User.zip_code');?>" name="data[User][zip_code]">
+		<a href="javascript:void(0);" id="buscar_cep_dados_cadastrais"
+        style=" color: #999393; font-size: 11px; line-height: 30px; background: #E4DDDD; padding: 2px; text-decoration: none;
+				border: 1px dotted; margin-left: 8px;">Buscar endereco</a>			
+	</div>
+
+
+	<div style="clear:both;"></div>
+
+
+<div class="Hidden_Endereco">
+
+	<div class="area-formulario" style="width:250px">
+		<label>Endere√ßo</label>
+		<input type="text" class="textbox" id="Endereco"  value="<?php if($this->Session->check('userData.User.address'))echo $this->Session->read('userData.User.address');?>" name="data[User][address]" style="width:510px;">
+	</div>
+
+
+	<div style="clear:both;"></div>
+
+
+<div class="area-formulario" style="width:20px;">
+		<label>N√∫mero</label>
+		<input type="text" class="textbox" maxlength="8" value="<?php if($this->Session->check('userData.User.number'))echo $this->Session->read('userData.User.number');?>" name="data[User][number]" style="width:100px;">
+	</div>
+
+	<div class="area-formulario" style="width:150px;">
+		<label>Bairro</label>
+		<input type="text" id="Bairro" class="textbox" value="<?php if($this->Session->check('userData.User.district'))echo $this->Session->read('userData.User.district');?>" name="data[User][district]">
+	</div>			
+	<div class="area-formulario" style="width:40px; margin-right:20px;">
+		<label>UF</label>
+		<input type="text" id="Estado" class="textbox" maxlength="2" value="<?php if($this->Session->check('userData.User.state'))echo $this->Session->read('userData.User.state');?>" name="data[User][state]">
+	</div>		
+	<div class="area-formulario" style="width:150px;">
+		<label>Cidade</label>
+		<input type="text" class="textbox" id="Cidade"  value="<?php if($this->Session->check('userData.User.city'))echo $this->Session->read('userData.User.city');?>" name="data[User][city]">
+	</div>
+
+
+</div><!--Hidden_Endereco-->
+<!-- --
+
+<h4><span>Senha</span></h4>
+	<div class="area-formulario" style="width:150px;">
+		<label>Digite sua senha atual</label>
+		<input type="password" class="textbox" value="" name="password">
+	</div>
+	<div class="area-formulario" style="width:150px;">
+		<label>Nova senha</label>
+		<input type="password" class="textbox" value="" name="new_password" >
+	</div>
+	<div class="area-formulario" style="width:150px;">
+		<label>Confirmar senha</label>
+		<input type="password" class="textbox" value="" name="new_password_confirm">
+	</div>
+ -->
+ 
+ 
+	<input type="hidden" value="<?php echo $this->Session->read('userData.User.id');?>" name="data[User][id]">
+	<div class="area-botoes">
+		<button class="enviar">Salvar</button>
+		<button>Cancelar</button>
+	</div>
+<?php echo $this->Form->end();?>

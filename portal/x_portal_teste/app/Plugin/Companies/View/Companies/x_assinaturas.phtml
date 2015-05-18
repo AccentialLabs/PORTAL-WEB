@@ -1,0 +1,336 @@
+<?php
+$server = $_SERVER['SERVER_NAME'];
+$endereco = $_SERVER ['REQUEST_URI'];
+$userType = $this->Session->read('userLoggedType');
+?>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script>
+
+    function offerToUser(userId) {
+        //alert(userId);
+        var url2 = location.href + "/redirect";
+        $.ajax({
+            type: "POST",
+            data: {
+                userId: userId},
+            url: location.href + "/offerPersonalizada",
+            success: function(result) {
+                window.location = url2;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                //alert(errorThrown);
+            }
+        });
+    }
+
+    function mostra(id) {
+
+        var id2 = $(this).attr(id);
+        var iddadiv = "details" + id;
+
+        $('.item-grade-detalhe').fadeOut(0);
+        $("#" + iddadiv).fadeIn(0);
+    }
+
+
+</script>
+<script>
+    $(document).ready(function() {
+
+        $("#btn-ativas").click(function() {
+            $("#grade-canceladas").fadeOut(0);
+            $("#grade").fadeIn(1000);
+
+        });
+
+        $("#btn-canceladas").click(function() {
+            $("#grade").fadeOut(0);
+            $("#grade-canceladas").fadeIn(1000);
+
+
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+
+    function showInfo() {
+        document.getElementById('infos1').style.display = "block";
+    }
+
+</script>
+
+<style>
+    
+    .signature-img{
+        width: 59px;
+        height: 62px; 
+        border: 1px solid #dcdcdc;
+        cursor: pointer;
+    }
+
+    .signature-img:hover{
+        opacity: 0.6;
+    }
+
+    .inferior-botao-hover{
+        background: #f37165;
+        color: #ffffff;
+        width: 10%;
+        text-align: center;
+        height: 25px;
+        line-height: 30px;   
+    }
+
+    .signatures-inferior-botao-click{
+        color: #ffffff;
+        background-color: #f37165;
+    }
+
+    .signatures-inferior-botao:hover{
+        background-color: #f37165;
+        cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+</style>
+<div class="signatures-body">
+
+    <div class="signatures-title">
+        <br> <span class="title-signatures" style="color: #808080;">Assinaturas</span><br />
+        <div class="subtitle-signatures">Usuários assinando suas ofertas.</div>
+
+        <a href="<?php echo $this->Html->url('/company/convites-facebook'); ?>" >
+            <div class="signatures-button-plus">
+                <div id="title-signatures">Faça convites de assinatura</div>
+                <div id="plus-signatures" style="background: #3399cc;">
+                    <img src="../img/icones/assinaturas/button-seta.png"
+                         class="plus-image">
+                </div>
+            </div>
+        </a>
+    </div>
+    <br />
+    <hr />
+
+    <!-- NAO H� REGISTROS -->
+    <?php if (!is_array($assinaturas)) { ?> 
+        <div id="signatures-vazio" >
+            <div class="signatures-lado-esquerdo">
+                <img src="../img/icones/adv-company-imagem.png"
+                     class="signatures-image" width="500px" style=""/>
+            </div>
+
+
+            <div class="signatures-lado-direito">
+                <p>
+                    Aqui, voce encontra quem são os usuários que optaram <br /> por
+                    receber suas ofertas e comunicações.
+                </p>
+
+                <p>
+                    Voce pode fazer novos convites sempre que desejar. <br /> Para
+                    isso, basta clicar em <span
+                        class="signatures-lado-direito-texto-destaque" style="color: #3399cc;">Faça convites de
+                        assinatura</span> , <br />para convidar seus seguidores para
+                    instalarem TRUEONE <br /> e passarem a receber suas ofertas
+                    também.
+                </p>
+
+                <p>
+                    Se sua empresa é usuária ativa do Facebook, voce também <br />pode
+                    usar o TRUEONE Empresas por lá. Procure por ele <br />nas páginas
+                    de aplicações e instale já!
+                </p>
+            </div>
+
+            <div class="signatures-lado-direito-second">
+                <img src="../img/icones/assinaturas/seta-azul.png" class="offers-image" />
+            </div>
+
+            <div class="signatures-inferior">
+                <div class="div-select">
+                    <select class="select-signatures ">
+                        <option>2014</option>
+                        <option>2015</option>
+                    </select>
+                </div>
+                <div class="signatures-inferior-botao">ativas</div>
+                <div class="signatures-inferior-botao">canceladas</div>
+                <hr class="linha-cinza" />
+
+                <span class="signatures-tabela-not-found">Não há registros</span>
+            </div>
+        </div>
+    <?php } else { ?>
+
+
+        <!-- TABELA COM REGISTROS -->
+        <div id="signatures-registros" style="display: block; height: 100%; background: #fff;">
+            <div class="signatures-inferior" id="header" style="height: 100%; overflow: auto;">
+                <div class="div-select">
+                    <select class="select-signatures ">
+                        <?php
+                        foreach ($assinaturas as $assinatura) {
+                            if (date("Y", strtotime($assinatura['CompaniesUser']['date_register'])) != $anterior) {
+                                ?>
+                                <option><?php echo date("Y", strtotime($assinatura['CompaniesUser']['date_register'])); ?></option>
+                                <?php
+                                $anterior = date("Y", strtotime($assinatura['CompaniesUser']['date_register']));
+                            }
+                        }
+                        ?>
+
+                    </select>
+                </div>
+                <a href="#" id="btn-ativas"><div class="signatures-inferior-botao" id='btn-ativas'>ativas</div></a>
+                <a href="#" id="btn-canceladas"><div class="signatures-inferior-botao" id='btn-canceladas'>canceladas</div></a>
+                <hr class="linha-cinza" />
+
+                <!-- ASSINATURAS ATIVAS DO ANO LETIVO -->
+                <div id="grade" class="grade" style="height: 87%;">
+                    <?php
+                    if (is_array($assinaturas)) {
+                        foreach ($assinaturas as $assinatura) {
+                            ?>
+                            <div class="item-grade" id="<?php echo $assinatura['CompaniesUser']['id']; ?>" onclick="mostra(this.id);">
+                                <img class="signature-img" src="<?php echo $assinatura['User']['photo']; ?>"/>
+                                <div class="item-grade-detalhe"  style="width: 170px; margin-top: -65px; height: 125px;" id="details<?php echo $assinatura['CompaniesUser']['id']; ?>">
+                                    <div class="item-grade-info-direita">
+                                        <div class="item-grade-text-body">
+                                            <span class="item-grade-nome-sobrenome" style="font-family: Helvetica; font-size: 14px;"><?php echo substr($assinatura['User']['name'], 0, 14); ?></span><br />
+                                           <!-- <span class="item-grade-nome-sobrenome">Sobrenome</span><br />-->
+                                            <p id="item-grade-p">
+                                                <span class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px;">em <?php echo date('d/m/Y', strtotime($compra['CompaniesUser']['date_register'])); ?></span><br /> <span
+                                                    class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px">de <?php echo substr($assinatura['User']['city'], 0, 6) . '...'; ?> - <?php echo $assinatura['User']['state']; ?></span><br /> <span
+                                                    class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px">
+                                                        <?php
+                                                        if ($assinatura['User']['idade'] == date('Y')) {
+                                                            echo "Idade nao informada";
+                                                        } else {
+                                                            echo "tem " . $assinatura['User']['idade'] . " anos";
+                                                        }
+                                                        ?>
+                                                </span><br />
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <?php
+                                    if ($this->Session->read('secondUserLogado') == false or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                        ?>
+                                        <?php if ($userType == 1) { ?>
+                                            <div class="item-grade-info-inferior" style="margin-top: 65px;">
+                                                <a href="javascript: void(0);" onclick="offerToUser(<?php echo $assinatura['User']['id']; ?>)">
+                                                    <div class="item-grade-botao" id="verde" style="background: #3399cc;">
+                                                        <div id="texto-botao" style="font-family: Helvetica; margin-top: 2px; background: #3399cc;">
+                                                            Criar oferta <br /> para este assinante
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                                <input type="hidden" name="id_user" value="<?php echo $assinatura['User']['id']; ?>" />
+                                                <a href="javascript: void(0);" onclick="offerToUser(<?php echo $assinatura['User']['id']; ?>)">
+                                                    <div class="item-grade-botao" id="laranja" style="background: #f37165;">
+                                                        <div id="texto-botao" style="font-family: Helvetica; margin-top: 2px; background: #f37165;">
+                                                            Criar oferta <br /> para o perfil <br /> do assinante
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+
+
+                <!-- ASSINATURAS CANCELADAS -->
+                <div id="grade-canceladas" class="grade" style="height: 500px; overflow: auto; display: none;">
+
+                    <?php
+                    if (is_array($assinaturasCanceladas)) {
+                        foreach ($assinaturasCanceladas as $assinatura) {
+                            ?>
+                            <div class="item-grade" id="<?php echo $assinatura['CompaniesUser']['id']; ?>" onclick="mostra(this.id);">
+                                <img class="signature-img" src="<?php echo $assinatura['User']['photo']; ?>"/>
+                                <div class="item-grade-detalhe"  style="width: 170px; margin-top: -65px; height: 125px;" id="details<?php echo $assinatura['CompaniesUser']['id']; ?>">
+                                    <div class="item-grade-info-direita">
+                                        <div class="item-grade-text-body">
+                                            <span class="item-grade-nome-sobrenome" style="font-family: Helvetica; font-size: 14px;"><?php echo $assinatura['User']['name']; ?></span><br />
+                                           <!-- <span class="item-grade-nome-sobrenome">Sobrenome</span><br />-->
+                                            <p id="item-grade-p">
+                                                <span class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px;">em <?php echo date('d/m/Y', strtotime($compra['CompaniesUser']['date_register'])); ?></span><br /> <span
+                                                    class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px">de <?php echo substr($assinatura['User']['city'], 0, 10) . '...'; ?> - <?php echo $assinatura['User']['state']; ?></span><br /> <span
+                                                    class="item-grade-sub-text" style="font-family: Helvetica; font-size: 11px">
+                                                        <?php
+                                                        if ($assinatura['User']['idade'] == date('Y')) {
+                                                            echo "Idade nao informada";
+                                                        } else {
+                                                            echo "tem " . $assinatura['User']['idade'] . " anos";
+                                                        }
+                                                        ?>
+                                                </span><br />
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <?php
+                                    if ($this->Session->read('secondUserLogado') == false or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                            $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                        ?>
+                                        <?php if ($userType == 1) { ?>
+                                            <div class="item-grade-info-inferior" style="margin-top: 65px;">
+                                                <?php echo $this->Form->create('Signature', array('url' => array('controller' => 'companies', 'action' => 'layoutAssinaturas', 'offerPersonalizada'))); ?>
+                                                <a href="javascript: void(0);" onclick="offerToUser(<?php echo $assinatura['User']['id']; ?>)">
+
+                                                    <div class="item-grade-botao" id="verde" style="background: #3399cc;">
+                                                        <div id="texto-botao" style="font-family: Helvetica; margin-top: 2px; background: #3399cc;">
+                                                            Criar oferta <br /> para este assinante
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                                <input type="hidden" name="data[user_id]" value="<?php echo $assinatura['User']['id']; ?>" />
+                                                <a href="javascript: void(0);" onclick="offerToUser(<?php echo $assinatura['User']['id']; ?>)">
+
+                                                    <div class="item-grade-botao" id="laranja" style="background: #f37165;">
+                                                        <div id="texto-botao" style="font-family: Helvetica; margin-top: 2px; background: #f37165;">
+                                                            Criar oferta <br /> para o perfil <br /> do assinante
+                                                        </div>
+                                                    </div>
+
+                                                </a>
+                                                <?php echo $this->Form->end(); ?>
+                                            </div>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <?php
+                        }
+                    }
+                    ?>
+                </div>
+
+            </div>
+        </div>
+    <?php } ?> 
+
+
+</div>

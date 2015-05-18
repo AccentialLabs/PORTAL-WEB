@@ -1,0 +1,167 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+?>
+<style>
+    .input {
+	border: 1px solid #DCDCDC;
+	height: 35px;
+	width: 570px;
+	padding-left: 5px;
+	font-family: Helvetica35-Thin;
+	font-size: 16px;
+	color: #666666;
+	margin-left: 15px;
+        border-left: 2px solid red;
+        margin-top: 10px;
+}
+
+.boxSelec{
+    border: 1px solid #DCDCDC;
+	height: 35px;
+	width: 270px;
+        line-height: 35px;
+        margin-left: 15px;
+        margin-top: 10px;
+}
+
+ .selectbox {
+        background: transparent;
+        width: 270px;
+        padding: 5px;
+        font-size: 16px;
+        line-height: 1;
+        border: 0;
+        border-radius: 0;
+        height: 30px;
+        -webkit-appearance: none;
+        font-family: Helvetica35-Thin;
+        color: #666666;
+       
+    }
+    table{
+        margin-top: 10px;
+        margin-left: 15px;
+    }
+    tr{
+        padding: 10px;
+        text-align: center;
+        font-family: Helvetica;
+        font-size: 12px;
+    }
+    </style>
+<!-- a classe da div não interfere no funcionamento da página e/ou da funcionalidade -->
+<div class="offers-body">
+    
+    <div class="offers-title">
+        <br> <span class="title-offers">Cadastro de Usuários Secundários</span><br />
+        <div class="subtitle-offers">Cadastre usuários e controle as permissões devidas de cada um.</div>
+
+    </div>
+    <br />
+    <hr />
+   
+    <div style="border: 1px solid; height:80%; width: 96.5%; margin-left: 1.5%; margin-right: 1.5%; ">
+        <span style="margin-left: 15px; font-family: Helvetica; font-size: 16px; color: orange;">  <?php if(!empty($mensagem)){
+            echo $mensagem;
+            }?><br/></span>
+        <?php echo print_r($select);?>
+         <?php echo $this->Form->create('Offer', array('url' => array('controller' => 'companies', 'action' => 'cadSecondaryUsers', 'insert'), 'type' => 'file')); ?>
+        <input type="text" placeholder="Nome Completo" class="input" name="data[SecondaryUser][name]"/><br/>
+        <input type="text" placeholder="Email" class="input" name="data[SecondaryUser][email]" /> <br />
+        <div  class="boxSelec" style=" border-left: 2px solid red;">
+
+                            <select id="selectboxY" name="data[SecondaryUser][type]" class="selectbox" >
+                                <option>Cargo do Usuário </option>
+                                <?php foreach ($tiposUsuarios as $usuario) { ?>
+                                    <option id="<?php echo $usuario['secondary_users_types']['id'];?>" value="<?php echo $usuario['secondary_users_types']['id']; ?>"><?php echo $usuario['secondary_users_types']['name']; ?></option>
+<?php } ?>
+                            </select>
+                        </div>
+        
+        <table>
+            <tr>
+                <th>Cargos</th>
+                <th>Ofertas</th>
+                <th>Assinaturas</th>
+                <th>Vendas</th>
+                <th>Wishlist</th>
+            </tr>
+            
+            <?php foreach($tiposUsuarios as $usuario){?>
+            <tr>
+                <td><?php echo $usuario['secondary_users_types']['name'];?></td>
+                <td><?php 
+                                switch ($usuario['secondary_users_types']['assignment_offers']) {
+                                    case 1:
+                                           echo 'Permissão Geral';
+                                        break;
+                                    case 2:
+                                           echo 'Incluir e Consultar dados';
+                                        break;
+                                    case 3:
+                                           echo 'Somente Consultar dados';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                    ?></td>
+                <td><?php 
+                                switch ($usuario['secondary_users_types']['assignment_signatures']) {
+                                    case 1:
+                                           echo 'Permissão Geral';
+                                        break;
+                                    case 2:
+                                           echo 'Incluir e Consultar dados';
+                                        break;
+                                    case 3:
+                                           echo 'Somente Consultar dados';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                    ?></td>
+                <td><?php 
+                                switch ($usuario['secondary_users_types']['assignment_checkouts']) {
+                                    case 1:
+                                           echo 'Permissão Geral';
+                                        break;
+                                    case 2:
+                                           echo 'Incluir e Consultar dados';
+                                        break;
+                                    case 3:
+                                           echo 'Somente Consultar dados';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                    ?></td>
+                 <td><?php 
+                                switch ($usuario['secondary_users_types']['assignment_wishlist']) {
+                                    case 1:
+                                           echo 'Permissão Geral';
+                                        break;
+                                    case 2:
+                                           echo 'Incluir e Consultar dados';
+                                        break;
+                                    case 3:
+                                           echo 'Somente Consultar dados';
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                    ?></td>
+                  
+            </tr>
+            <?php }?>
+        </table>
+        <button type="submit">SALVAR</button>
+        <?php echo $this->Form->end(); ?>
+    </div>
+    
+    
+</div>

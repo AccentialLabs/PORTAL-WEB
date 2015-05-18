@@ -1,0 +1,66 @@
+ 	
+<?php 
+	if(is_array($company)){
+?>
+<div class="opcoes-de-lista-de-compras">
+		<a href="javascript:void(0)" class="opcoes" title="ACTIVE">ATIVO</a>
+		<a href="javascript:void(0)" class="opcoes" title="INACTIVE">INATIVO</a>		
+		<a href="javascript:void(0)" class="opcoes ativo" title="tudinho">TODAS</a>
+
+<div class="opcoes-de-filtros">
+		<a href="javascript:void(0);" class="link-de-opcoes">Opções de filtro</a>
+		<div class="area-dos-filtros">
+			<div class="alinha">
+				<label>Data Inicial</label><input type="text" id="calendario-inicio" alt="Data Inicial" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Inicial">
+				<label>Data Final</label><input type="text" id="calendario-fim" alt="Data Final" class="textbox" style="width:115px; float:left; margin:0px 5px 5px 0px" value="Data Final">
+				<label>Produto</label><input type="text" alt="Produto" class="textbox pesquisaproduto" style="width:332px; float:left; margin:0px 5px 5px 0px" value="Produto">
+				<label>Comprador</label><input type="text" alt="Comprador" class="textbox pesquisacomprador" style="width:332px; float:left; margin:0px 5px 5px 0px" value="Comprador">
+				<div class="area-botoes" style="width:432px">
+					<button class="envio">Filtrar</button>
+					<button class="cancelar">cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</div>	
+	
+	<table cellpadding="0" cellspacing="0" class="tabela-padrao" style="margin:0px 0px 40px 0px" align="left">
+		<caption>Lista com compras efetuadas</caption>
+		<thead>
+			<tr>
+				<td>Titulo</td>
+				<td>Valor</td>
+				<td>Inicio</td>
+				<td>Final</td>
+				<td>Status</td>
+				<td>Editar</td>
+				<td>Facebook</td>
+			</tr>
+		</thead>
+		<tbody>
+	
+	<?php foreach($company as $offer){
+				$status = 'ATIVA';
+				if($offer['Offer']['status']=='INACTIVE')$status = 'INATIVA';
+				if(date('Y-m-d')>$offer['Offer']['ends_at']) $status = 'INATIVA';
+				if($offer['Offer']['percentage_discount'] > 0){
+					$valor = ($offer['Offer']['value'] * (100 - $offer['Offer']['percentage_discount'])) / 100;					
+				}else{
+					$valor = $offer['Offer']['value'];
+				}
+			?>		
+			<tr status="<?php echo $status;?>">
+				<td><?php echo $offer['Offer']['title'];?></td>
+				<td>R$ <?php echo number_format($valor,2,',','.');?></td>
+				<td><?php echo date('d/m/Y', strtotime($offer['Offer']['begins_at']));?></td>
+				<td><?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at']));?></td>
+				<td><?php echo $status;?></td>				
+				<td class="comentario"><?php echo $this->Html->link('Editar Oferta', array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'resume', $offer['Offer']['id']));?></td>
+				<td class="comentario"><a href="javascript:void(0);" onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo $url;?>?title=facebook','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');" class="chama-compartilhar-oferta"><span>compartilhar oferta</span></a></td>				
+			</tr>						
+		<?php  } ?>							
+		</tbody>		
+	</table>
+<?php } ?>
+<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>

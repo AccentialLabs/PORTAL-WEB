@@ -1,0 +1,46 @@
+<?php 
+	unset($offers[0]);
+	  $i = 0;
+	  foreach($offers as $offer){
+		if($offer['Offer']['percentage_discount'] > 0){
+			$valor = ($offer['Offer']['value'] * (100 - $offer['Offer']['percentage_discount'])) / 100;	
+		}else{
+			$valor = $offer['Offer']['value'];
+		}
+	  	if($i>3)$i=0;
+		if($i<2){
+			$div = '-impar';	
+		}else{
+			$div = false;				
+		} 	
+?>		
+
+	<div class="oferta-destaque<?php echo $div;?>">
+		<div class="descricoes">
+			<h2><?php echo $offer['Offer']['title'];?></h2>
+			<p class="marca">válido até <?php echo date('d/m/Y', strtotime($offer['Offer']['ends_at']));?></p>
+			<p class="principal"><?php echo $offer['Offer']['resume'];?></p>
+			<p class="valor-de">de R$ <?php echo number_format($offer['Offer']['value'], 2, ',', '.'); ?></p>
+			<p class="valor-por">R$ <?php echo number_format($valor, 2, ',', '.'); ?></p>
+			<form action="user/detalhe-da-compra" method="POST">
+				<input type="hidden" value="<?php echo $offer['Offer']['id'];?>" name="id_oferta" id="id_oferta">
+				<button class="botao-comprar">comprar<strong>agora</strong>	</button>
+				<div class="seta-de-ofertas">			
+					<?php 
+						echo $this->Html->link(
+						$this->Html->image('Users.icones/seta-de-ofertas.png', array('border' => '0')),
+						array('controller' => 'users', 'action' => 'viewOffer', 'plugin' => 'users', $offer['Offer']['id']),
+						array('escape' => false, 'title'=>'Ofertas')
+					);
+					?>					
+					<span>mais informações</span>
+					</div>										
+			</form>				
+		</div>
+		<div class="imagem_destaque">
+			<img src="<?php echo $offer['Offer']['photo'];?>">
+		</div>
+	</div>
+<?php $i++;} ?>	
+<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>
+

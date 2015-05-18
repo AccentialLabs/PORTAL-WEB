@@ -1,0 +1,54 @@
+<?php
+$valor = $valor * $qtd;
+?>
+
+<!-- Muda o frete de acordo com a quantidade -->
+<table id="table-frete" style='width: 100%;'>
+    <tr id='title' class="title-entrega">
+        <th colspan='4'>Forma de Entrega<input type="text" id="valor-do-frete" readonly="true" style="display: none;"/></th>
+    </tr>
+    <tr class="forma-entrega">
+        <td id='correios' style="text-align: left;">Pac</td>
+        <td id='correios'> <?php echo $fretePac[1]; ?> dias</td>
+        <td id='correios'>  R$ <?php echo $fretePac[0]; ?></td>
+        <td id='correios'>
+            <input type="radio" id="pac" class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $fretePac[0]; ?>' onclick="escolheFrete(this.value, <?php echo $fretePac[1] ?>)"/>
+            <label for="pac"
+                   class="css-label" style="margin-left: -10px;"></label>
+        </td>
+    </tr>
+
+    <tr class="forma-entrega">
+        <td id='correios' style="text-align: left;">Sedex</td>
+        <td id='correios'> <?php echo $freteSedex[1]; ?> dias</td>
+        <td id='correios'>  R$ <?php echo $freteSedex[0]; ?></td>
+        <td id='correios'> <input type="radio" id="sedex" class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $freteSedex[0]; ?>' onclick="escolheFrete(this.value, <?php echo $freteSedex[1] ?>)"/>
+            <label for="sedex"
+                   class="css-label" style="margin-left: -10px;"></label></td>
+    </tr>
+
+    <tr class="forma-entrega">
+        <td id='correios' style="text-align: left;">Sedex a Cobrar</td>
+        <td id='correios'>  <?php echo $freteSedexCobrar[1]; ?> dias</td>
+        <td id='correios'>  R$ <?php echo $freteSedexCobrar[0]; ?></td>
+        <td id='correios'>
+            <input type="radio" id="sedex-cobra"  class="css-checkbox" name="data[Carro][delivery_form]" value='<?php echo $freteSedexCobrar[0]; ?>' onclick="escolheFrete(this.value, <?php echo $freteSedexCobrar[1] ?>)"/>
+            <label for="sedex-cobra"
+                   class="css-label" style="margin-left: -10px;"></label>
+        </td>
+    </tr>
+</table>
+<!-- -->
+
+<div style="" id="total">
+    <scan>
+        Frete: R$ <?php echo number_format($frete, 2, ',', '.'); ?>
+    </scan>
+    <br />
+    <scan id="test">
+        TOTAL: R$ <strong id="total"><?php $total = $frete + $valor;
+        echo number_format($total, 2, ',', '.');
+?></strong>
+    </scan>
+
+</div>

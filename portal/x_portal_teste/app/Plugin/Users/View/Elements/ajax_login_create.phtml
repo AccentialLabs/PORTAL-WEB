@@ -1,0 +1,118 @@
+<?php ?>
+<style>
+    ::-webkit-input-placeholder {
+        color: #fff;
+
+    }
+
+    :-moz-placeholder {
+        color: #fff;
+
+    }
+
+    ::-moz-placeholder {
+        color: #fff;  
+
+    }
+
+    :-ms-input-placeholder {  
+        color: #fff;  
+
+    }
+    .input-create{
+        background-position: 10px 20px;
+        font-family: Helvetica;
+        padding-bottom: 10px;
+        width: 85%;
+        border: 0px;
+        border-bottom: 1px solid #fff;
+        background: transparent;
+        font-size: 14px;
+        outline: none;
+        color: #fff;
+        margin-top: 10px;
+
+        margin-left: 5px;
+    }
+
+    .button-entrar{
+        background: #3399cc; 
+        width: 85%;
+        height: 40px;
+        font-family: Helvetica;
+        color: #fff;
+        line-height: 42px;
+        text-align: center;
+        cursor: pointer;
+        border: 0px;
+        margin-top: 5px;
+    }
+
+    .button-voltar{
+        background: transparent; 
+        width: 85%;
+        height: 40px;
+        font-family: Helvetica;
+        color: #fff;
+        line-height: 42px;
+        text-align: center;
+        cursor: pointer;
+        border: 1px solid #fff;
+        margin-top: 5px;
+    }
+
+    .create-text1{
+        color: #333;
+        font-family: Helvetica;
+        font-size: 11px;
+    }
+
+    .create-text2{
+        color: #000;
+        font-weight: bold;
+        font-size: 11px;
+        font-family: Helvetica;
+    }
+
+    #cabecalho-adv{
+        display: none;
+    }
+
+    #adv-title-bar{
+        display: none;
+    }
+
+    .adv-logo{
+        margin-left: 25%;
+        width: 50%;
+        margin-top: 5%;
+    }
+</style>
+
+<div style="position: absolute; top: 0; background: url('../img/adv/Login/adventa_background_resize.png') no-repeat center; 
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+     width: 316px; height: 506px;">
+    <div style="cursor: pointer; background: url('../img/icones/users-vitrine/fechar.png') transparent; width: 12px; height: 12px; float: right; margin-right: 20px; margin-top: 20px; opacity: 0.8;" id="xis-login"></div>
+    <div><div id='recebe-retorno'></div></div>
+    <br/>
+    <img src="../img/adv/Adventa Logo/Adventa-2.png" class="adv-logo"/>
+
+    <div style="width: 100%; position: absolute; text-align: center; margin-top: 65px;">
+        <input type="text" class="input-create" id="input-create-nome" style="" placeholder="Nome"/>
+        <input type="text" class="input-create" id="input-create-email" style="" placeholder="Email"/>
+        <input type="password" class="input-create" id="input-create-pass" style="" placeholder="Senha"/>
+
+        <div style="cursor: pointer; margin-left:25px; background: #3b5998; width: 85%; font-size: 13px; color: #fff; line-height: 40px; font-family: Helvetica; height: 40px; margin-top: 50px;">
+            Cadastrar com o Facebook
+        </div>
+
+        <button type="button" class="button-entrar" onclick="createUser()">Cadastrar</button>
+        <button type="button" class="button-voltar" >Voltar</button>
+
+    </div>
+
+</div>
+

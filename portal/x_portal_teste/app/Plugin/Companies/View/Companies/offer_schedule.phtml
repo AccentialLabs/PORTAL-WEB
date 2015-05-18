@@ -1,0 +1,62 @@
+<?php echo $this->Html->script('jquery.validate',array('inline'=>false));?>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	// navegacão entre as etapas
+	var offerDetails = "<?php echo $this->Session->read('addOffer.offerDetails'); ?>";
+	var offerFilters = "<?php echo $this->Session->read('addOffer.offerFilters'); ?>";
+	var offerSchedule = "<?php echo $this->Session->read('addOffer.offerSchedule'); ?>";
+
+	if(offerDetails == '1') {
+		$('a.etapa1').addClass('ativo');
+	} else {
+		$('a.etapa1').attr('href','#');
+	}
+	if(offerFilters == '1') {
+		$('a.etapa2').addClass('ativo');
+	} else {
+		$('a.etapa2').attr('href','#');
+	}
+	if(offerSchedule == '1') {
+		$('a.etapa3').addClass('ativo');
+	} else {
+		$('a.etapa3').attr('href','#');
+	}
+});
+
+</script>
+
+<div class='ofertas'>
+
+	<div class="etapas">
+		<?php echo $this->Html->link('etapa 1',array('action'=>'addOffer','offerDetails'),array('class'=>'etapa1 ativo'));?>
+		<?php echo $this->Html->link('etapa 2',array('action'=>'addOffer','offerFilters'),array('class'=>'etapa2'));?>
+		<?php echo $this->Html->link('etapa 3',array('action'=>'addOffer','offerSchedule'),array('class'=>'etapa3'));?>
+	</div>	
+		
+	<h2 class="principal" ><span>Agendamento da Oferta</span></h2>
+	<br>&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;
+	
+	<?php echo $this->Form->create('Offer',array('url'=>array('controller'=>'companies','action'=>'addOffer','resume')));?>
+
+		<div class="area-formulario">
+			<label>vinculação da oferta</label>
+			<input type='text' id='calendario-vinculacao' class='calendario' name='data[begins_at]' value="<?php echo (!empty($this->request->data['begins_at']) ? $this->request->data['begins_at'] : ''); ?>" />
+			<?php echo $this->Form->input('begins_at', array('type'=>'hidden')); ?>
+		</div>
+		<div class="area-formulario">
+			<label>validade da oferta</label>
+			<input type='text' id='calendario-final' class='calendario' name='data[ends_at]' value="<?php echo (!empty($this->request->data['ends_at']) ? $this->request->data['ends_at'] : ''); ?>" />
+			<?php echo $this->Form->input('ends_at', array('type'=>'hidden')); ?>
+		</div>
+		
+		<div class="area-botoes">
+			<?php echo $this->Form->submit('Resumir Oferta',array('class'=>'salvar'));?>
+			<?php echo $this->Html->link('Etapa Anterior',array('action'=>'addOffer','offerFilters'),array('class'=>'cancelar'));?>
+		</div>
+
+	<?php echo $this->Form->end();?>
+
+</div>

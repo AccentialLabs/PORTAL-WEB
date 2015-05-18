@@ -1,0 +1,23 @@
+<?php //echo $loginUrl;exit;?>
+<div class="alinhamento">
+<?php echo "<b><font color='red'>".$this->Session->flash()."</font></b>";?>
+<img src="../img/logo-login.png" class="logo-login">
+<?php echo $this->Form->create('User');?>
+	<div class="area-login">
+		<a href="<?php echo $loginUrl;?>" onClick="loginFacebook();"  class="login-facebook">login facebook</a>
+		<div class="text"><input title="Usuário" id="usuario_login" value="Usuario" name='data[User][email]' type="text" class="usuario"></div>
+		<div class="text"><input title="Senha" id="usuario_senha" value="Senha" name='data[User][password]' type="password" class="senha"></div>
+		<a href="https://secure.trueone.com.br/portal" class="esqueci-minha-senha">não logar agora</a>
+		<a href="#" onClick="location.href='<?php echo $this->Html->url('/user/esqueci-minha-senha'); ?>';" class="cadastrar-novo-usuario">Esqueci minha senha?</a>
+
+		<img src="../img/icones/linha-login.png" class="linha-login">
+
+		<?php echo $this->Html->link('Cadastrar Novo Perfil', array('controller' => 'users', 'action' => 'cad_perfil', 'plugin' => 'users'), array('class'=>'botao-novo-usuario'));?>
+		<button class="botao-entrar">ENTRAR</button>
+				
+		<a href="https://secure.trueone.com.br/portal" class="nao-logar-agora"></a>
+	</div>	
+<?php echo $this->Form->end();?>
+</div>
+
+ 

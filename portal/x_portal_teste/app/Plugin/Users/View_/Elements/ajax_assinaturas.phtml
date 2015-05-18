@@ -1,0 +1,29 @@
+<table cellpadding="0" cellspacing="0" class="tabela-padrao tabela-assinaturas">
+		<caption>Gerencias de assinaturas</caption>
+		<thead>
+			<tr>
+				<td>Empresa</td>
+				<td style="width:100px;"></td>
+			</tr>
+		</thead>		
+		<tbody>			
+					
+			<?php if(is_array($companies)){ 
+					foreach($companies as $company){?>
+			<tr>
+				<td><strong><?php echo $company['Company']['corporate_name'];?></strong><br><?php echo $company['Company']['fancy_name'];?>.<?php echo $company['Company']['email'];?>. </td>
+				<?php if(!empty($company['CompaniesUser']['id'])){?>
+				<td><a href="javascript:void(0);" update="0" alt="<?php if($company['CompaniesUser']['status']=='ACTIVE'){echo "ativado";}else{echo"inativo";}?>" class="ativo-inativo <?php if($company['CompaniesUser']['status']=='ACTIVE'){echo "ativado";}?>" title="<?php if($company['CompaniesUser']['status']=='ACTIVE'){echo "Desativar Assinatura";}else{echo"Assinar Empresa";}?>" id="<?php echo $company['CompaniesUser']['id'];?>">Ativar ou Desativar</a></td>
+				<?php }else{?>
+				<td><a href="javascript:void(0);" alt="inativo" class="ativo-inativo" title="Assinar Empresa" update="1" id="<?php echo $company['Company']['id'];?>">Ativar ou Desativar</a></td>
+				<?php }?>
+			</tr>							
+			<?php }
+			}else{
+				echo $companies;
+			}
+			?>
+			
+		</tbody>
+		
+	</table>

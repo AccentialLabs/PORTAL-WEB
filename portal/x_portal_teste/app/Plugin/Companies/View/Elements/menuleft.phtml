@@ -1,0 +1,176 @@
+
+<h1>
+<div class="img"><?php echo $this->Html->image('icones/menu/'.$menu['icone']);?></div>
+<span><strong><?php echo $menu['nome'];?></strong><?php echo $menu['desc'];?></span></h1>
+
+<div class="area-esquerda">
+	<ul>			
+		<?php if($menu['tipo']=='ofertas'){?>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-ofertas.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'offers', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'OFERTAS CADASTRADAS')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-publico-alvo.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'publico', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'SEU PUBLICO')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-dados-ofertas.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'addOffer', 'plugin' => 'companies', 'detalhes', 'nova-oferta'),
+					array('escape' => false, 'title'=>'CADASTRO DE OFERTA')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-sair.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'home', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'VOLTAR PARA HOME')
+				);
+			?>
+		</li>	
+		<?php }else if($menu['tipo']=='cadastro'){?>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-ofertas.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'offers', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'OFERTAS CADASTRADAS')
+				);
+			?>
+		</li>
+		
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-sair.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'publico', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'VOLTAR PARA HOME de Ofertas')
+				);
+			?>
+		</li>
+		<?php }else if($menu['tipo']=='pre-cadastro'){?>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-tabela.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'preCadastro', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'CADASTRE SUA EMPRESA')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-faq.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'preCadastro', 'plugin' => 'companies', 'faq'),
+					array('escape' => false, 'title'=>'FAQ')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-pin.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'login', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'LOGIN')
+				);
+			?>
+		</li>			
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-ofertas.png', array('border' => '0')),
+					array('controller' => 'portal', 'action' => 'home', 'plugin'=>''),
+					array('escape' => false, 'title'=>'PORTAL')
+				);
+			?>
+		</li>	
+		<?php }else if($menu['tipo']=='preferencias'){?>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-dados-cadastrais.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'preferencias', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'DADOS CADASTRAIS')
+				);
+			?>
+		</li>		
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-frete.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'preferencias', 'plugin' => 'companies', 'frete'),
+					array('escape' => false, 'title'=>'FRETE')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-tabela.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'preferencias', 'plugin' => 'companies', 'alterar-senha'),
+					array('escape' => false, 'title'=>'ALTERAR SENHA')
+				);
+			?>
+		</li>		
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-voltar-home.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'home', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'VOLTAR PARA HOME')
+				);
+			?>
+		</li>		
+	<?php }else{ ?>
+	<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-ofertas.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'offers', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'OFERTAS')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-dashboard.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'home', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'DASHBOARD')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-assinaturas.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'signatures', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'ASSINATURAS')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-compras.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'listPurchase', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'COMPRAS')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-convites.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'cadConvite', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'ENCONTRE NOVOS PUBLICOS')
+				);
+			?>
+		</li>
+		<li class="icone-ofertas">
+			<?php echo $this->Html->link(
+					$this->Html->image('icones/menu/icone-desejo.png', array('border' => '0')),
+					array('controller' => 'companies', 'action' => 'wishlist', 'plugin' => 'companies'),
+					array('escape' => false, 'title'=>'DESEJOS')
+				);
+			?>
+		</li>	
+		<?php } ?>		    	
+	</ul>
+</div>

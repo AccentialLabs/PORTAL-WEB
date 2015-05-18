@@ -1,0 +1,8 @@
+<input type="hidden" name="seila" id="sub-categoria-ajax-input">
+					<strong>Selecione uma Sub Categoria</strong>
+					<ul id="sub-categoria-ajax">
+						<?php foreach($sub_categorias as $categoria){?>
+							<li valor="<?php echo $categoria['CompaniesSubCategory']['id'];?>"><?php echo $categoria['CompaniesSubCategory']['name'];?></li>
+						<?php  } ?>					
+					</ul>
+			

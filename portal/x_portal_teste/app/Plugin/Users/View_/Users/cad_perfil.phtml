@@ -1,0 +1,38 @@
+
+<?php if(!empty($mensagem))echo "<b><h3><font color='red'>{$mensagem}</font></h3></b>";?>
+<div class="alinhamento">
+
+<?php if(!empty($mensagem))echo "<h3 style='color:red;text-align:center'><strong>{$mensagem}</strong></h3>";?>
+
+<img src="../img/logo-login.png" class="logo-login">
+
+<?php echo $this->Form->create('User', array('url'=>array('controller'=>'users','action'=>'cad_perfil')));?>
+
+	<div class="area-login">
+		<!--<a href="<?php echo $loginUrl;?>" onClick="loginFacebook();"  class="login-facebook">login facebook</a>-->
+		<p>Cadastrar novo usu&aacute;rio</p>
+
+		<div class="text" style="margin:10px auto 0 !important;">
+			<input title="" id="nome" name="data[User][name]" value="Nome" type="text" class="usuario">
+		</div>		
+		<div class="text" style="margin:10px auto 0 !important;">
+			<input title="" value="E-mail" id="email" name="data[User][email]" type="text" class="usuario">
+		</div>
+		<div class="text" style="margin:10px auto 0 !important;">
+			<input title="Senha" value="Senha" id="password" name="data[User][password]" type="password" class="usuario">
+		</div>
+		
+<!--
+<a href="/portal/" class="esqueci-minha-senha">n‹o logar agora</a>
+<img src="../img/icones/linha-login.png" class="linha-login">-->
+
+		<?php echo $this->Html->link('Cancelar', array('action'=>'login','plugin'=>'users'), array('class'=>'botao-cancelar'));?>
+		<button class="botao-novo-usuario">Cadastrar Novo Perfil</button>
+		<a href="/portal/" class="nao-logar-agora"></a>
+	</div>	
+
+<?php echo $this->Form->end();?>
+
+</div>
+
+ 

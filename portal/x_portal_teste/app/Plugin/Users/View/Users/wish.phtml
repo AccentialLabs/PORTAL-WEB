@@ -1,0 +1,450 @@
+<?php
+//Os arquivos foram nomeados da mesma forma para facilitar futuras manutenções
+echo $this->Html->css('usuarios/x-wish');
+echo $this->Html->script('usuarios/x-wish');
+?>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script>
+    $(document).ready(function() {
+        //fecha tela de incluir desejo
+        $("#adv-addv-xis").click(function() {
+            $("#cont-add-wishlist").toggle(500);
+            $("#wish-mask").fadeOut(200);
+        });
+
+        //abre tela de incluir desejo
+        $("#adv-add-wish").click(function() {
+            $("#wish-mask").fadeIn(200);
+            $("#cont-add-wishlist").toggle(500);
+            $("#helper").fadeOut(200);
+        });
+
+        $("#xis").click(function() {
+            $("#wish-mask").fadeOut(200);
+            $("#cont-notification").fadeOut(500);
+        });
+
+        $("#offers-xis").click(function() {
+            $("#wish-mask").fadeOut(100);
+            $("#wish-offers-pop").toggle(200);
+
+        });
+
+        $("#helper-closer").click(function() {
+            $("#helper").toggle(200);
+        });
+    });
+
+    function wishesOffers(wishId) {
+        $("#loading").fadeIn();
+
+        $.ajax({
+            type: "POST",
+            data: {
+                id: wishId},
+            url: location.href + "/offers",
+            success: function(result) {
+                $("#wish-offers-pop").html(result);
+                $("#loading").fadeOut();
+                $("#wish-offers-pop").toggle(200);
+                $("#wish-mask").fadeIn(100);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+
+    function editarr(desejoId) {
+        $("#loading").fadeIn();
+        $.ajax({
+            type: "POST",
+            data: {
+                id: desejoId},
+            url: location.href + "/editar",
+            success: function(result) {
+                $("#popbody").html(result);
+                $("#loading").fadeOut();
+                $("#cont-notification").toggle(500);
+                $("#wish-mask").fadeIn(200);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+    }
+
+
+</script>
+<style>
+
+    #helper-closer{
+        width: 25px;
+        height: 25px;
+        z-index: 999;
+        position: absolute;
+        top: 23px;
+        right: 17px;
+        cursor: pointer;
+    }
+
+    .helper{
+        position: absolute;
+        top: 13%;
+        right: 0.5%;
+    }
+
+    .helper-text{
+        color: #fff;
+        font-family: Myriad Pro Light;
+        position: absolute;
+        top: 50px;
+        font-size: 20px;
+        left: 35px;
+        text-align: center;
+    }
+
+    table#wish{
+        width: 99.5%;
+        border-collapse: collapse;
+    }
+
+    table#wish td{
+        border: 1px solid #e6e6e6;
+        font-family: Helvetica;
+        padding: 10px;
+        color: gray;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    table#wish th{
+        background: #FDCB99;
+        color: #AC5804;
+        font-family: Helvetica;
+        font-size: 16px;
+        text-decoration: none;
+        font-weight: normal;
+        padding: 5px;
+    }
+
+    table#adv-menu{
+
+    }
+
+    strong{
+        color: #666;
+    }
+
+    table#adv-menu img{
+        cursor: pointer;
+        padding-top: 15px;
+        width: 100%;
+    }
+
+    #cont-add-wishlist{
+        position: absolute;
+        left: 33%;
+        top: 25%;
+        width: 450px;
+        margin-top: 25px;
+        padding: 10px;
+        display: none;
+        background: #ffffff;
+        z-index: 99999;
+        font-family: Helvetica;
+        opacity: 0.99;
+        padding: 10px;
+        text-align: center;
+    }
+    .input-cadastrais#data{
+        width: 150px;
+        float: left;
+        margin-left: 15px;
+    }
+
+    #desc{
+        width: 420px;
+        font-size: 14px;
+        max-width: 420px;
+        max-height: 320px;
+    }
+
+    #categoria{
+        width: 435px;
+        margin-left: 10px;
+        border: 1px solid #ccc;
+    }
+
+    #categorias{
+        width: 435px;
+        border: 1px solid #ccc;
+        margin-left: 10px;
+    }
+
+    #add-product-name{
+        width: 425px;
+        margin-left: 10px;
+        font-size: 14px;
+    }
+
+    #wish-mask {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 9999;
+        background-color: #000;
+        opacity: 0.6;
+        display: none;
+    }
+
+    #adv-wish-list-style{
+        padding: 10px;
+        width: 100%;
+        position: fixed;
+        top: 90px;
+    }
+
+    #adv-wish-title{
+        font-family: Tahoma;
+        color: #808080;
+        text-align: center;
+        margin-right: 85px;
+    }
+
+    #adv-wish-title-campo{
+        margin-left: 23%;
+        width: 50%;
+        font-size: 16px;
+        color: #000;
+    }
+
+    #adv-wish-desc-campo{
+        margin-left: 12%;
+        width: 70%;
+        margin-top: 3px;
+        margin-bottom: 5px;
+    }
+
+    #adv-wish-begin-campo{
+        width: 30%;
+        text-align: center;
+        font-size: 14px;
+        float: left;
+
+    }
+
+    #adv-wish-end-campo{
+        width: 30%;
+        text-align: center;
+        font-size: 14px;
+        float: left;
+
+    }
+
+    #adv-wish-offers-campo{
+        width: 29%;
+        text-align: center;
+        font-size: 14px;
+        float: left;        
+    }
+
+    strong#offers{
+        color: #f37165;
+    }
+
+    #wish-item-bar{
+        width: 101.5%;
+        height: 1px;
+        margin-top: 5px;
+        float: left;
+        background: #cccccc;
+        margin-bottom: 10px;
+    }
+
+    #adv-wish-opcoes{
+        float: left;
+        width:10%;
+    }
+
+    #adv-menu-icon-wish{
+        background-image: url('../img/adv/Wishlist/Adventa icones-Whislist-2.png');
+    }
+
+    a#qtd-offers{
+        color: #808080;
+    }
+    a#qtd-offers:hover{
+        color: #3399cc;
+    }
+
+    #wish-offers-pop{
+        width: 98%;
+        height: 400px;
+        position: absolute;
+        z-index: 99999;
+        top: 25%;
+        //left: 30%;
+        display: none;
+    }
+
+</style>
+
+<div id="wish-mask"></div>
+<div id="cada-uma"></div>
+<div id="loading">
+    <img src="http://www.cead.ufop.br/external/form_05/carregando.gif" style="width: 100%; height: 100%;"/>
+</div>
+<div style="width: 100%; height: 100%;  padding-top: 3.5px;">
+
+    <div title="Add Desejo" id="adv-add-wish" style="left: 75px; margin-top: -35px;  z-index: 999; position: absolute; color: #fff; font-size: 28px; cursor: pointer;"><strong style="color: #fff;">+</strong></div>
+
+    <div style="width: 96%; height: 86%; left: 4%; top:95px;  position: absolute;">
+
+
+        <table id="adv-wish-list-style">
+            <?php foreach ($lista_desejos as $desejo) { ?>
+                <tr id="linha-<?php echo $desejo['UsersWishlist']['id']; ?>">
+                    <!-- item assinatura -->
+                    <td>
+                        <div id="adv-wish-title">
+                            <div id="adv-wish-title-campo">
+                                <strong> <?php echo $desejo['UsersWishlist']['name']; ?></strong>
+                            </div>
+
+                            <div  id="adv-wish-desc-campo">
+                                <?php echo $desejo['UsersWishlist']['description']; ?>
+                            </div>
+
+                            <br />
+
+                            <div id="adv-wish-begin-campo">
+                                <strong>Data Criacao</strong><br/>
+                                <?php echo date("d/m/Y", strtotime($desejo['UsersWishlist']['date_register'])); ?>
+                            </div>
+
+                            <div id="adv-wish-end-campo">
+                                <strong>Vencimento</strong><br/>
+                                <?php echo date("d/m/Y", strtotime($desejo['UsersWishlist']['ends_at'])); ?>
+                            </div>
+
+                            <div id="adv-wish-offers-campo">
+                                <strong id="offers">Ofertas</strong></br>
+                                <span style="font-size: 18px;">
+                                    <?php if (!empty($desejos[2][$desejo['UsersWishlist']['id']]['QtdOffers'])) { ?>
+                                        <a href="javascript:void(0)" id="qtd-offers" onclick="wishesOffers(<?php echo $desejo['UsersWishlist']['id']; ?>)">  <?php echo $desejos[2][$desejo['UsersWishlist']['id']]['QtdOffers']; ?> </a>
+                                        <?php
+                                    } else {
+                                        echo '0';
+                                    }
+                                    ?>
+                                </span>
+                            </div>
+
+                            <!-- imagens  -->
+                            <div id="adv-wish-opcoes">
+                                <img src="../img/adv/Wishlist/config_1.png"  onclick="editarr(<?php echo $desejo['UsersWishlist']['id']; ?>)" style="width: 35%; float: left; cursor: pointer;"/>
+                                <a class="exclui" id="linha-<?php echo $desejo['UsersWishlist']['id']; ?>" link="http://localhost/work/x_portal_teste/user/wish/excluir?id=<?php echo $desejo['UsersWishlist']['id']; ?> " href="javascript:void(0);"/> <img src="../img/adv/Wishlist/excluir_3.png" style="width: 35%; float: left; cursor: pointer; margin-left: 3px;"/></a>
+                            </div>
+
+                            <div id="wish-item-bar"> 
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            <?php } ?>
+        </table>
+
+    </div>
+</div>
+
+<!-- POP UP PARA EDITAR DESEJO-->
+<div id="cont-notification" style=" position: absolute;
+     left: 38%;
+     top: 25%;
+     width: 300px;
+     margin-top: 25px;
+     padding: 10px;
+     border: 1px solid #d0d0d0;
+     background: #ffffff;
+     z-index: 99999;
+     font-family: Helvetica;
+     opacity: 0.99;
+     padding: 10px;
+     text-align: center;
+     display: none;">
+    <div id="popheader">
+        <div style="top: 0; left: 0; width: 100%; color: #fff; background: #3399cc; opacity: 0.6; position: absolute; padding-bottom: 10px; padding-top: 10px;">
+            Editando Desejo...
+            <span style="float: right; font-size: 16px; margin-right: 10px; color: #fff; cursor: pointer;" id="xis"><strong style="color: #fff;">X</strong></span>
+
+        </div>
+
+    </div>
+    <br/>
+    <br/>
+
+    <div id="popbody">
+        <input type="text" />
+    </div>
+</div>
+
+<!-- A D D - W I S H L I S T - A D V-->
+<div id="cont-add-wishlist">
+
+    <div style="top: 0; left: 0; width: 100%; color: #fff; background: #3399cc; opacity: 0.6; position: absolute; padding-bottom: 10px; padding-top: 10px;">
+        Cadastro de Desejo 
+        <span style="float: right; margin-right: 10px; font-size: 16px; color: #fff; cursor: pointer;" id="adv-addv-xis" title="Cancelar"><strong style="color: #ffffff;">X</strong></span>
+
+    </div>
+    <br/>
+    <br/>
+    <div id="popbody">
+        <div class="area-form">
+            <?php echo $this->Form->create('UsersWishlist', array('url' => array('controller' => 'users', 'action' => 'wish', 'save'))); ?>
+
+            <select id="categoria" name="data[UsersWishlist][category_id]">
+                <option>Categoria</option>
+                <?php foreach ($categorias as $categoria) { ?>
+                    <option value="<?php echo $categoria['CompaniesCategory']['id']; ?>"><?php echo $categoria['CompaniesCategory']['name']; ?></option>
+                <?php } ?>
+            </select>
+            <br/>
+
+            <select id="categorias" name="data[UsersWishlist][sub_category_id]" >
+                <option>SubCategoria</option>
+            </select>
+            <br/>
+            <input type="text" placeholder="Nome do produto" name="data[UsersWishlist][name]" class="input-cadastrais" id="add-product-name"/>
+            <br/>
+
+            <textarea placeholder="Descrição" name="data[UsersWishlist][description]" id="desc"></textarea><br/>
+            <input type="date" placeholder="Data limite" name="data[UsersWishlist][ends_at]" class="input-cadastrais" id="data"/>
+            <button type="submit" style="cursor: pointer; float:right; margin-right: 5px; margin-top: 10px; height: 30px; border: 0px; background: #3399cc ; color: #fff;">CADASTRAR</button>
+
+            <?php echo $this->Form->end(); ?>
+        </div>
+    </div>
+</div>
+
+<div id="wish-offers-pop">
+
+</div>
+
+
+<!-- helper div -->
+<?php if (empty($lista_desejos)) { ?>
+    <div class='helper' id='helper'>
+        <img src='../img/adv/Wishlist/box-help.png' usemap='#helpmap'/>
+        <div id='helper-closer'></div>
+        <div class='helper-text'>
+            Clique aqui e cadastre <br/>
+            seus desejos.
+        </div>
+
+    </div>
+    <?php
+}?>

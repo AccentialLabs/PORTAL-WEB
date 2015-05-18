@@ -1,0 +1,55 @@
+<?php 
+?>
+<style>
+     #edit-desc{
+        margin-top: 10px;
+        height: 105px;
+        font-family: Helvetica;
+        color: #666666;
+        padding-top: 5px;
+        padding-left: 10px;
+        width: 96%;
+        max-width: 96%;
+        max-height: 300px;
+        float: left;
+    }
+    
+    button{
+        background: transparent;
+        padding: 10px;
+        border: 0px;
+        color: #fff;
+        float: left;
+        margin-top: 10px;
+        background: orange;
+    }
+    
+    button#salvar{
+         background: #3399cc;
+        padding: 10px;
+        border: 0px;
+        color: #fff;
+        float: left;
+        margin-top: 10px;
+    }
+    
+     button#cancelar{
+         background: #cccccc;
+        padding: 10px;
+        border: 0px;
+        color: #fff;
+        float: left;
+        margin-top: 10px;
+        margin-left: 5px;
+    }
+</style>
+<div style="text-align: center;">
+    
+    <input type="hidden" id="edit-id" value="<?php echo $desejo[0]['UsersWishlist']['id'];?>"/>
+    <input class="input-cadastrais" type="text" id="edit-titulo" value="<?php echo $desejo[0]['UsersWishlist']['name']?>"><br/>
+    <textarea id="edit-desc"><?php echo $desejo[0]['UsersWishlist']['description']; ?></textarea><br/>
+<!--    <input class="input-cadastrais" type="text" id="edit-datalimite" value="<?php echo date("d/m/Y", strtotime($desejo[0]['UsersWishlist']['ends_at']));?>"/>-->
+    
+    <button type="button" onclick="updateWish()" id="salvar">Salvar</button>
+    <button type="button" onclick="cancelEdit()" id="cancelar">Cancelar</button>
+</div>

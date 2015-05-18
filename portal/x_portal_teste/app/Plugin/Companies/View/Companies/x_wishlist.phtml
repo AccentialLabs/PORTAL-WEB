@@ -1,0 +1,215 @@
+<?php
+echo $this->Html->script('empresas/x_wishlist');
+$userType = $this->Session->read('userLoggedType');
+?>
+<style>
+    .wish-body-comp {
+        background: #ffffff;
+        width: 90%;
+        height: 100%;
+    }   
+
+    select{
+        -webkit-appearance: none;
+        border: 0;
+        width: 45%;
+        font-family: Helvetica;
+        color: #666666;
+        font-size: 13px;
+        height: 30px;
+        padding-left: 10px;
+        border-left: 2px solid red;
+        margin-top: 15px;
+        float: left;
+        background: url('../companies/img/icones/seta-select-two.png') no-repeat
+            right #fff;
+    }
+
+    .detalhes-titulo{
+        color: #454142;
+        font-size: 15px;
+    }
+
+    .enviar-oferta{
+        float: left;
+        color: #f8f8f8;
+        height: 30px;
+        font-family: Helvetica;
+        line-height: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: center;
+        background: #8cdc95;
+        margin-left: 15px;
+        margin-top: 15px;
+        font-size: 14px;
+        cursor: pointer; /*IE*/
+        cursor: hand; /*FF e demais*/
+    }
+
+    .cadastrar-nova{
+        float: left;
+        color: #f8f8f8;
+        height: 30px;
+        font-family: Helvetica;
+        line-height: 30px;
+        padding-left: 30px;
+        padding-right: 30px;
+        text-align: center;
+        background: #f37f0a;
+        margin-left: 15px;
+        margin-top: 16px;
+        font-size: 14px;
+        cursor: pointer; /*IE*/
+        cursor: hand; /*FF e demais*/
+    }
+
+    .linha_detalhe_desejos{display: none;}
+</style>
+
+<script type="text/javascript">
+    function mudancaSelecao(elemento) {
+        var selecionada = elemento.options[elemento.options.selectedIndex];
+        document.getElementById("id_oferta").value = selecionada.value;
+    }
+
+    function mostraLinha(id) {
+
+        var id2 = $(this).attr(id);
+        var iddadiv = "details" + id;
+
+        $('.linha_detalhe_desejos').fadeOut(0);
+        $("#" + iddadiv).fadeIn(1000);
+    }
+
+    $(function() {
+
+        $('#linha').live('dblclick', function(e) {
+            $('.linha_detalhe_desejos').fadeOut(100);
+        });
+
+    });
+
+
+</script>
+
+<div class="wish-body-comp" >
+
+    <!-- TITULO -->
+    <div class="wish-title">
+        <br> <span class="title-wish" style="color: #808080;">Lista de desejos para sua empresa</span><br />
+        <div class="subtitle-wish">Aqui voc&#234; recebe os pedidos de ofertas de
+            usuários assinantes da sua empresa</div>
+    </div>
+    <hr />
+
+    <!-- LISTA - TABELA -->
+
+    <div class="wish-body-table">
+        <div class="table-header">
+            <div class="header-table-title" style="background: #3399cc;">
+                <span class="header-title-text">O que seu cliente deseja?</span>
+            </div>
+            <div class="header-orange-number" style="background: #2F2F4F;"><?php echo count($desejos); ?></div>
+        </div>
+
+
+        <table class="table-wish" style="max-height: 580px;overflow: auto; ">
+            <tr>
+                <th id="cliente">CLIENTE</th>
+                <th id="produto">PRODUTO</th>
+                <th id="dataSolicitacao">DATA DA <br />SOLICITACAO
+                </th>
+                <th id="dataLimite">DATA LIMITE <br />PARA OFERTA
+                </th>
+                <th id="voceTem">VOCE TEM?</th>
+            </tr>
+        </table>
+
+        <table class="table-wish" style="max-height: 580px;overflow: auto; ">
+            <tr>
+                <th id="cliente"></th>
+                <th id="produto"></th>
+                <th id="dataSolicitacao">
+                </th>
+                <th id="dataLimite">
+                </th>
+                <th id="voceTem"></th>
+            </tr>
+
+            <?php
+            if (is_array($desejos)) {
+                foreach ($desejos as $desejo) {
+                    ?>
+                    <tr id="linha" style="color: #333333;">
+                        <td class="td-wish" style="width: 13%;"><span id="clienteNome"><?php echo $desejo['User']['name'] ?></span><br/> <span
+                                id="clienteLocal" style="color:#666666;"><?php echo $desejo['User']['city'] ?> - <?php echo $desejo['User']['state'] ?></span></td>
+
+                        <td class="td-wish" ><span id="produto"><?php echo $desejo['UsersWishlist']['name'] ?> </span><br /> <span
+                                id="descPedido" style="color:#666666;"><?php echo $desejo['UsersWishlist']['description'] ?></span></td>
+
+                        <td class="td-wish" id="data" style="color:#666666;" style="width: 13%;"><span><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['date_register'])); ?></span></td>
+
+                        <td class="td-wish" id="data" style="color:#666666;" style="width: 13%;"><span><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['ends_at'])); ?></span></td>
+
+                        <td class="td-wish" style="text-align: center;" style="width: 13%;">
+                            <?php if ($userType == 1) { ?>
+                                <?php
+                                if ($this->Session->read('secondUserLogado') == false or
+                                        $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 1 or
+                                        $this->Session->read('SecondaryUserLoggedIn.0.secondary_users.type') == 2) {
+                                    ?>
+                                    <a href="javascript:void(0);" alt="eu tenho" title="eu tenho" class="eu-tenho" id="<?php echo $desejo['UsersWishlist']['id'] ?>" onclick="mostraLinha('<?php echo $desejo['UsersWishlist']['id'] ?>');"><button type="submit"  style="border: 0; background: transparent; padding: 0px; width: 40px;">
+
+                                            <img src="../img/icones/wishlist/adv-confirm-button.png" width="100%; " />
+                                        </button></a>
+
+                                    <a href="javascript:void(0);"  alt="não tenho" title="não tenho" class="nao-tenho" id_linha_registro="<?php echo $desejo['UsersWishlistCompany']['id']; ?>" >
+                                        <button type="submit"  style="border: 0; background: transparent; padding: 0px; " id="tenho-nao">
+                                            <?php echo $this->Html->image('icones/wishlist/decline-button.png'); ?>
+                                        </button>
+                                    </a>
+                                <?php } ?>
+                            <?php } ?>
+                        </td>
+                    </tr>
+
+                    <!-- eu tenho -->
+                    <tr class="linha_detalhe_desejos" id="details<?php echo $desejo['UsersWishlist']['id']; ?>">
+                        <td colspan="5" class="td-wish" style="background: #FFFAFA;">
+                            <?php echo $this->Form->create('Wishlist', array('url' => array('controller' => 'companies', 'action' => 'layoutWishlist'))); ?>
+                            <div style="width: 100%;">
+                                <span class="detalhes-titulo">Eu tenho a oferta certa!</span>  <br/>
+
+                                <select onchange=" mudancaSelecao(this)">
+                                    <option value="0" id="0">Selecione uma oferta para esse desejo</option>
+                                    <?php
+                                    if (is_array($ofertas)) {
+                                        foreach ($ofertas as $oferta) {
+                                            ?>
+                                            <option value="<?php echo $oferta['Offer']['id']; ?>"><?php echo $oferta['Offer']['title']; ?></option> 
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                                <input type="hidden" name="id_oferta" id="id_oferta">
+                                <input type="hidden" name="id_linha" value="<?php echo $desejo['UsersWishlistCompany']['id']; ?>">
+                                <input type="hidden" name="id_user" value="<?php echo $desejo['User']['id']; ?>"
+                                       <!-- enviar esta oferta -->
+                                       <a href="#"> <button type="submit" style="border: 0; background: transparent; padding: 0px; float: left;"><div class="enviar-oferta" style="background: #f37165;">Enviar esta oferta</div></button></a>
+                                <button type="submit" style="border: 0; background: transparent; padding: 0px; float: left;"><div class="cadastrar-nova" style="background: #3399cc;">+ Cadastrar uma nova oferta</div></button>
+
+                            </div>
+                            <?php echo $this->Form->end(); ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+            ?>
+        </table>
+
+
+    </div>
+</div>

@@ -1,0 +1,149 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 20/10/2014, 11:16:39
+    Author     : Matheus Odilon
+*/
+.input-qtd-signs{
+    width: 20px;
+    font-family: Helvetica;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    background: transparent;
+    border: 0px;
+}
+
+.input-cadastrais {
+    height: 25px;
+    width: 80%;
+    padding-left: 5px;
+    font-family: Helvetica;
+    color: #666666;
+    font-size: 16px;
+    outline: none;
+    margin-top: 5px;
+}
+
+.sign-header{
+    width: 100%;
+    height: 35%;
+}
+
+.header-left{
+    height: 100%;
+    background: #FF8C00;
+    width: 65%;
+    float: left;
+    padding-left: 10px;
+}
+
+.header-right{
+    height: 100%;
+    width: 33.5%;
+    float: left;
+    text-align: center;
+}
+
+.header-left-title{
+    font-family: Helvetica;
+    color: #fff;
+    font-size: 20px;
+}
+
+.header-right-title{
+    font-family: Helvetica;
+    color: #000;
+    font-size: 16px;
+}
+
+ul{
+    margin-left: -15px;
+    font-family: Helvetica;
+    color: #fff;
+    font-size: 16px;
+}
+
+li{
+    margin-top: 10px;
+}
+
+.barra-qtd{
+    width: 97.5%;
+    text-align: center;
+    background: #C96705;
+    padding: 13px;
+    font-size: 20px;
+    font-family: Helvetica;
+    color: #fff;
+}
+
+.barra-title-tabela{
+    background: #FDCB99;
+    color: #AC5804;
+    font-family: Helvetica;
+    font-size: 16px;
+    font-weight: normal;
+    padding: 5px;
+    padding-left: 15px;
+}
+
+.comp-logo{
+    width: 110px;
+    height: 45px;
+    border: 1px solid #dcdcdc;
+    margin-right: 10px;
+}
+
+strong{
+    color: #000;
+    font-size: 16px;
+}
+
+td#botoes{
+    text-align: center;
+    padding-right: 23px;
+    padding-left: 23px;
+}
+
+a{
+    color: gray;
+}
+.td-detalhe{display:none}
+
+#botoes{
+    width: 40px;
+}
+.qtd-offers{
+    color: #C96705;
+}
+
+.qtd-offers-bold{
+    font-family: Helvetica;
+    font-weight: bold;
+}
+
+.ver-offers{
+    color: #FF8C00;
+    cursor: pointer;
+}
+
+hr{
+
+    background-color: #dcdcdc;
+
+    height: 2px;
+}
+
+#loading{
+    position: absolute;
+    left: 47%;
+    top: 35%;
+    width: 100px;
+    height: 100px;
+    display: none;
+    z-index: 99999;
+}

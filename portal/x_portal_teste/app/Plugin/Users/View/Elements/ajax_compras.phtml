@@ -1,0 +1,93 @@
+<div id="div-content">
+	
+
+<table cellpadding="0" cellspacing="0" class="tabela-padrao">
+		<caption>Minhas Compras</caption>
+		<thead>
+			<tr>
+				<td>Nº Pedido</td>
+				<td>Produtos</td>
+				<td>Data da Compra</td>
+				<td>Valor</td>
+				<td>Status</td>
+			</tr>
+		</thead>
+		
+		<tbody>
+		<?php foreach($checks as $check){
+			$img = 'yellow';
+			if($check['PaymentState']['moip_code']==4)$img = 'green';									
+		 ?>
+			<tr>
+				<td><?php echo $check['Checkout']['id'];?></td>
+				<td><strong><?php echo $check['Offer']['title'];?></strong><br><?php echo $check['Offer']['resume'];?></td>
+				<td><?php echo date('d/m/Y', strtotime($check['Checkout']['date']));?></td>
+				<td>R$ <?php echo number_format($check['Checkout']['total_value'], 2, ',', '.');?></td>
+				<td class="status" status='<?php echo $img;?>'><?php echo $check['PaymentState']['name'];?></td>
+			</tr>
+			<tr class="linha_detalhe_">
+				<td colspan="5">
+					<img src="<?php echo $check['Offer']['photo'];?>" style="float:left;" width="140" height="140">
+					<div style="width:40%; float:left; position:relative; top:0px;">						
+						<p>previsão de entrega: <strong><b><?php echo $check['Checkout']['delivery_time'];?></b> dias uteis</strong></p>																					
+						<p>Pagamento <strong><?php echo $check['PaymentMethod']['type']."-".$check['PaymentMethod']['name'];?> em <?php echo $check['Checkout']['installment'];?>x</strong></p>
+						<p>Codigo MOIP <strong><?php echo $check['Checkout']['transaction_moip_code'];?></strong></p>
+						<p>Empresa <strong><?php echo $check['Company']['fancy_name'];?></strong></p>
+						<p>Email e telefone para contato <strong><?php echo $check['Company']['email']." - ".$check['Company']['phone'];?></strong></p>					
+					</div>
+					<?php if($check['PaymentState']['moip_code']==4){?>
+					<div style="width:40%; float:left; position:relative; top:0px;">
+						<?php if($check['Checkout']['comment']==false){?>
+							<a href="javascript:void(0);" class="linkpopup" id="compraspopup" id_oferta="<?php echo $check['Offer']['id'];?>" id_comentario="0">Agora que seu produto ja chegou você pode dar sua opinião sobre ele</a>
+						<?php }else{?>
+						<p>
+							<strong>Titulo : </strong> <?php echo $check['Checkout']['comment']['OffersComment']['title'];?>
+						</p>
+						<p>
+							avaliação: <strong><?php echo $check['Checkout']['comment']['OffersComment']['evaluation'];?></strong>
+						</p>	
+						<p>
+							<?php echo $check['Checkout']['comment']['OffersComment']['description'];?>
+						</p>					
+						<a href="javascript:void(0);" class="linkpopup" id="compraspopup" id_oferta="<?php echo $check['Offer']['id'];?>" id_comentario="<?php echo $check['Checkout']['comment']['OffersComment']['id'];?>">Alterar Comentário</a>
+						<?php } ?>
+					</div>
+					<?php } ?>
+				</td>
+			</tr>				
+			<?php  } ?>												
+		</tbody>
+		<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>
+	</table>
+	<div id="popescondido" style="display:none">
+
+<h2><span>De sua Opinião</span><a href="javascript:void(0);" class="fechar" id="limpar-form"><img src="../img/icones/close.png"></a></h2>
+	<p style="width:98%; margin:20px 0px 0px 20px;">De sua opinião sobre o produto que você recebeu.</p>
+	<div class="area-formulario" style="margin:0px 0px 0px 20px;">
+		<label>Título da Opinião</label>
+		<input type="text" class="textbox" id="opiniao">		
+	</div>	
+	<div class="area-formulario" style="width:30%; float:left; margin-left:20px;">
+		<label>Avaliação</label>
+			<div class="select">
+			<strong>Avaliação</strong>
+			<ul>
+				<li valor="Otimo">ótima</li>
+				<li valor="Bom">boa</li>
+				<li valor="Regular">regular</li>
+				<li valor="Ruim">ruim</li>
+			</ul>
+			</div>
+	</div>
+	<input type="hidden" id="avaliacao">
+	<input type="hidden" id="id_comentario">
+	<input type="hidden" id="id_oferta" name="id_oferta">								
+	<div class="area-formulario" style="width:98%; position:relative; margin:0px 0px 0px 20px !important;">
+		<label>Opinião</label>
+		<textarea class="textarea" style="width:100% !important; height:50px !important;"></textarea>
+	</div>	
+	<div class="area-botoes" style=" margin:0px 0px 0px 20px; width:94%; float:left;">
+		<button class="envio fechar">Salvar Opnião</button>		
+	</div>
+</div>	
+</div>

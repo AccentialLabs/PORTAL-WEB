@@ -1,0 +1,205 @@
+<?php
+echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+echo $this->Html->script('jquery.roundabout.min'); 
+echo $this->Html->script('oferta-detalhada');
+
+ 	//pr($offers);
+	$server   = $_SERVER['SERVER_NAME'];
+	$endereco = $_SERVER ['REQUEST_URI'];
+	$url = "http://".$server . $endereco;
+	
+	if($offers['Offer']['percentage_discount'] > 0){
+		$valor = ($offers['Offer']['value'] * (100 - $offers['Offer']['percentage_discount'])) / 100;	
+	}
+	else{
+		$valor = $offers['Offer']['value'];
+	}
+	
+	if(!empty($offers['Offer']['metrics'])){		
+		$metricas = json_decode($offers['Offer']['metrics'], true);
+		$chaves = array_keys($metricas);	
+	}else{
+		$metricas = false;
+	}
+	if(!empty($offers['OffersComment'])){
+		$countOpiniao = count($offers['OffersComment']);
+		if($countOpiniao <=9) $countOpiniao = "0".$countOpiniao;
+	}else{
+		$countOpiniao = 0;
+	}	
+	
+?>
+
+		
+<div id="popescondido" style="display:none">
+
+<h2><span>O que há de novo</span><a href="javascript:void(0);" class="fechar"><img src="../../users/img/icones/close.png"></a></h2>
+
+	<div class="area-metricas" style="z-index:999; margin: 0px auto 0px auto !important; float:none; width:90%; top:-20px;">
+	<h3>Opções da peça</h3>
+	
+						<ul class='selecione-metrica'>
+							<li><div><span>Cor</span><input type="text" value="selecione" readonly="true"></div>
+								<ul>
+									<li><a href="javascript:void(0);">Azul</a></li>
+									<li><a href="javascript:void(0);">Preto</a></li>
+									<li><a href="javascript:void(0);">Branco</a></li>
+									<li><a href="javascript:void(0);">Roxo</a></li>
+									<li><a href="javascript:void(0);">Azul Banana</a></li>
+								</ul>
+							</li>
+						</ul>
+								
+			</div>
+	
+		<div class="area-botoes" style="margin:0px auto; z-index:9;">
+			<button class="envio" onclick="javascript:window.location.href = 'detalhe-da-compra';">Confirmar compra</button>
+			<button class="cancelar">Cancelar compra</button>
+		</div>
+	
+			
+		</div>
+
+
+
+
+<div class="oferta-detalhada">
+	
+	<h3><?php echo $offers['Offer']['title'];?></h3>
+
+
+
+	<div class="area-fotos">
+		<div class="seta-esquerda"></div>
+		<div class="seta-direita"></div>
+		<ul class="fotos-do-item">	
+			
+			<?php foreach($offers['OffersPhoto'] as $photo){?>
+				<li><img src="<?php echo $photo['photo'];?>"></li>
+			<?php } ?>
+		</ul>
+	</div>
+	<div class="area-descricoes">
+		<div class="descricoes">
+			<div class="valor-do-produto">
+				<form action="/user/detalhe-da-compra" method="POST">
+					<input type="hidden" value="<?php echo $offers['Offer']['id'];?>" name="id_oferta" id="id_oferta">
+					<button type="submit"><img src="../../users/img/botao-compre-agora.png"></button>
+				</form>
+				<span class="valor-antigo">R$ <?php echo number_format($offers['Offer']['value'], 2, ',', '.'); ?></span>
+				<span class="valor">R$ <?php echo number_format($valor, 2, ',', '.'); ?></span>
+				<!--
+					RETIRANDO FUNCIONALIDADES PARA PRIMEIRA ENTREGA
+				<span class="parcelamento">parcele em até <strong>10x de R$ 29,00</strong></span> 
+				-->
+				<span class="validade">oferta válida até <strong><?php echo $offers['Offer']['dias'];?> dias</strong></span>
+			</div>
+			<div class="texto-descritivos">
+				<h4>Empresa Anunciante - <?php echo $offers['Company']['fancy_name'];?></h4>
+				<p><?php echo $offers['Offer']['resume'];?> </p>				
+			</div>
+		</div>	
+
+		<div class="opcoes">
+			<ul>
+				<li>
+					<a href="javascript:void(0);" onclick="window.open('http://www.facebook.com/sharer.php?u=<?php echo $url;?>','ventanacompartir', 'toolbar=0, status=0, width=650, height=450');" class="chama-compartilhar-oferta"><img src="../../users/img/icones/share-facebook.png"><span>compartilhar oferta</span></a>
+						<div class="compartilhar-oferta">
+	
+							<div class="area-icones">
+								<a href="javascript:void(0);" alt="por-email"><img src="../../users/img/icones/compartilhamento/email.png"></a>
+								<a href="javascript:void(0);" alt="por-twitter"><img src="../../users/img/icones/compartilhamento/twitter.png"></a>
+								<a href="javascript:void(0);" alt="por-facebook"><img src="../../users/img/icones/compartilhamento/facebook.png"></a>
+							</div>
+							<div class="por-email">
+								<input type="text" value="email">
+								<input type="text" value="senha">
+								<button>enviar</button>
+								<button class="cancelar">cancelar</button>
+							</div>
+							<div class="por-twitter">
+								twitter
+								<button class="cancelar">cancelar</button>
+							</div>
+							<div class="por-facebook">
+								facebook
+								<button class="cancelar">cancelar</button>
+							</div>						
+	
+							<a href="javascript:void(0);" class="nao-agora">não compartilhar agora</a>
+						</div>
+				</li>
+				<!-- RETIRANDO FUNCIONALIDADES PARA PRIMEIRA ENTREGA
+				<li><strong>05</strong><span>Nota média do produto</span></li>-->
+				
+				<li><strong><?php echo $countOpiniao;?></strong><span>opniões do produto</span></li>
+			</ul>
+		</div>
+
+
+	</div>
+
+
+
+
+<?php if($metricas==true){?>
+		<div class="area-metricas">
+			<h4>Opções da peça</h4>
+			  <?php foreach($chaves as $chave){?>																   
+				<ul class='selecione-metrica'>
+					<li><div><span class="chave"><?php echo $chave;?></span><input type="text" value="Selecione" readonly="true"></div>
+					<ul>
+						<?php foreach($metricas[$chave] as $metrica){?>														
+							<li><a href="javascript:void(0);" tipo="<?php echo $chave;?>"><?php echo $metrica;?></a></li>
+						<?php } ?>							
+					</ul>
+				  </li>
+				</ul>
+				<?php } ?>					
+			</div>	
+	 <?php } ?>
+
+
+	<div class="area-informacoes-do-item">
+
+<ul class="abas">
+	<li class="ativo"><a alt="informacoes" href="javascript:void(0);">Informações</a></li>
+	<li><a alt="opnioes" href="javascript:void(0);">Especificações</a></li>
+	<li><a alt="descricoes" href="javascript:void(0);">Opniões</a></li>
+</ul>
+
+
+
+
+
+<div class="area-abas">
+		<div class="informacoes">
+			<p><?php echo $offers['Offer']['description'];?></p>
+		</div>
+	
+		<div class="opnioes conteudo-oculto">
+			<p>
+				<p><?php echo $offers['Offer']['specification'];?></p>
+			</p>			
+		</div>
+		
+		
+		<div class="descricoes conteudo-oculto">
+			<?php foreach($offers['OffersComment'] as $result){?>
+				<p>
+					<strong style="font-size:18px;">"</strong> <?php echo $result['description'];?><strong style="font-size:18px;">"</strong>
+                    	<br />
+                    
+					<strong style="font-size:11px;">Por:</strong>
+                    <span style="font-size:11px;"><?php echo $result['nome'];?></span>
+                     <strong style="font-size:11px;">em </strong>
+                     <span style="font-size:11px;"><?php echo date('d/m/Y', strtotime($result['date_register']));?></span>
+				</p>
+			<?php } ?>
+		</div>
+</div>
+
+
+</div>
+
+

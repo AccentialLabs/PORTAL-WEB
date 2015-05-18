@@ -1,0 +1,48 @@
+<?php echo $this->Html->link('CRIAR NOVO PEDIDO', array('controller' => 'users', 'action' => 'wishlist', 'plugin' => 'users', 'cadastro'));?>
+<table cellpadding="0" cellspacing="0" class="tabela-padrao">
+		<caption>Lista dos teus desejos</caption>
+		<thead>
+			<tr>
+				<td>Cliente</td>
+				<td>Produto</td>
+				<td>Categoria</td>
+				<td>Sub Categoria</td>
+				<td>Data da Solicitação</td>	
+				<td>Data Limite</td>
+				<td>Excluir</td>			
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach($lista_desejos as $desejo){
+					
+					$total_ofertas = 0;
+					//verifica quantidade de ofertas para cada desejo
+					foreach($desejo['UsersWishlistCompany'] as $wishlistCompany){						
+						if($wishlistCompany['status']=='ACTIVE'){
+							$total_ofertas++;
+						}
+					}
+				?>
+			<tr>
+				<td><strong><?php echo $desejo['User']['name'];?></strong><br><em><?php echo $desejo['User']['city'];?>, <?php echo $desejo['User']['state'];?></em></td>
+				<td><strong><?php echo $desejo['UsersWishlist']['name'];?></strong><br><?php echo $desejo['UsersWishlist']['description'];?></td>
+				<td><?php echo $desejo['CompaniesCategory']['name'];?></td>
+				<td><?php echo $desejo['CompaniesSubCategory']['name'];?></td>
+				<td><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['date_register']));?></td>
+				<td><?php echo date('d/m/Y', strtotime($desejo['UsersWishlist']['ends_at']));?></td>	
+				<td>
+					<a href="javascript:void(0);"  alt="eu tenho" title="eu tenho" id_desejo="<?php echo $desejo['UsersWishlist']['id'];?>" class="eu-tenho excluir_desejo">eu tenho</a>					
+				</td>			
+			</tr>
+			<tr class="linha_detalhe_desejos" style="display:none">
+				<td colspan="5">					
+					<div style="width:40%; float:left; position:relative; top:0px;">						
+						<?php echo $this->Html->image('Users.ofertas-para-voce.png');?>
+						<?php if($total_ofertas > 0){?><span><a href="">Voce recebeu <strong><?php echo $total_ofertas;?></strong> Oferta(s) com o teu desejo</a></span><?php }else{?><span> Nenhuma Oferta recebida para esse desejo</span><?php } ?>					
+					</div>					
+				</td>
+			</tr>	
+		<?php } ?>
+	</tbody>
+	</table>
+	<div id="id" data-token="<?php echo $limit; ?>" contador="<?php echo $contador;?>" update="<?php echo $update;?>"></div>

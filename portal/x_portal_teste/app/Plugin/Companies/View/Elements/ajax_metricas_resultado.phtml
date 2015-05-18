@@ -1,0 +1,11 @@
+<?php 
+	$metricas = json_decode($this->Session->read('addOffer.Offer.metrics'), true);
+					//pr($metricas);	
+					foreach($metricas as $metrica => $values){
+						echo "<strong style='margin-right:5px; text-transform:uppercase;'> {$metrica}: </strong>";
+						foreach($values as $value){
+							echo $value;	
+						}	
+						echo "<br>";
+					}
+?>

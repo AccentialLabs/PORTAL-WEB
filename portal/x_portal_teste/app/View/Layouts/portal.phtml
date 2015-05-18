@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+	<head>
+	<meta charset="UTF-8">	
+	<TITLE>Detalhe da compra - trueOne</TITLE>	
+	<!--###META TAGS###-->
+	<META NAME="DESCRIPTION" CONTENT="" />
+	<META NAME="KEYWORDS" CONTENT="" />
+	
+	<?php 
+		echo $this->Html->css('usuarios/portal.css');
+		echo $this->Html->css('usuarios/refresh');		
+		echo $this->fetch('css');
+		
+		echo $this->Html->script('jqueryTunado');
+		echo $this->Html->script('jquery-ui-1.9.1.custom.min');
+		echo $this->Html->script('javascript.lib');
+		echo $this->Html->script('jquery.stringify');
+		echo $this->Html->script('complete');	
+		echo $this->Html->script('Users');
+		echo $this->Html->script('refresh');
+		echo $this->fetch('script');
+	?>
+	
+	</head>
+
+	<body>
+		<?php echo $this->element("topo");?>	
+		<?php echo $this->element("menuleft");?>
+		<div class="area-conteudo">
+			<?php echo $this->fetch('content');?>
+		</div>					
+	</body>	
+</html>
